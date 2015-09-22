@@ -1,3 +1,8 @@
 # type-systems-scala
 
-scala version
+Implementations of various type systems in Scala.
+
+The original code was written in OCaml.
+
+https://github.com/tomprimozic/type-systems.git
+
