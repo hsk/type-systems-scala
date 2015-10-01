@@ -87,6 +87,7 @@ object Printing {
       case var_names => "forall[" + var_names.mkString(" ") + "] " + ty_str
     }
   }
+
   def string_of_ty_ann[A](string_of_expr:A=>String, ty:Ty[A]) : String = {
     val (var_names, ty_str) = string_of_ty_with_var_names(string_of_expr, ty)
     var_names match {
@@ -140,6 +141,7 @@ object Printing {
         case expr => simple_expr(expr)
       }
     }
+
     def simple_expr(s:s_expr):String = {
       s match {
         case SVar(name) => name
@@ -208,6 +210,7 @@ object Printing {
           simple_expr(expr) + " : " + string_of_t_ty_ann(ty) + " if " + complex_expr(contract_expr)
       case _ => simple_expr(expr)
     }
+
     def simple_expr(expr:t_expr):String = {
       expr.shape match {
         case EVar(name) => name
@@ -229,6 +232,7 @@ object Printing {
         case _ => "(" + complex_expr(expr) + ")"
       }
     }
+
     complex_expr(expr)
   }
   

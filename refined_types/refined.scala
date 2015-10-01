@@ -39,12 +39,14 @@ object Refine {
     type env = Map[String,(LocalEnv.env, t_ty)]
 
     val empty : env = Map()
+
     def extend(name:String, local_env_and_ty:(LocalEnv.env, t_ty), env:env):env = {
       if (env.contains(name))
         error ("duplicate variable name \"" + name + "\"")
       else
         env + (name -> local_env_and_ty)
     }
+
     def lookup(name: String, env: env):(LocalEnv.env, t_ty) = env(name)
   }
 
@@ -57,7 +59,6 @@ object Refine {
         names + name 
     }
 
-  
   val uninterpreted =
     Core.uninterpreted.foldLeft(Set[String]()) {
       case (names, (name, ty_str)) =>
@@ -76,13 +77,14 @@ object Refine {
 
   val translate_int = (_:Int).toString
 
-  def translate_ty[A](ty:Ty[A]):String =
+  def translate_ty[A](ty:Ty[A]):String = {
     real_ty(ty) match {
       case TConst("int") => "Int"
       case TConst("bool") => "Bool"
       case TConst(_) | TApp(_,_) | TVar(_) => "Other"
       case TArrow(_,_) => error("cannot translate function types")
     }
+  }
 
   def translate_builtin_and_uninterpreted(
     fn_name:String, translated_arg_list:List[String]):String = {
@@ -102,16 +104,13 @@ object Refine {
     }
   }
 
-  // val declare_var : string -> 'a Expr.ty -> unit
   def declare_var[A](name:String, ty:Ty[A]) {
     val translated_ty = translate_ty(ty)
     Smt.write("(declare-const " + name + " " + translated_ty + ")")
   }
 
-  // val var_name_map : (string, int) Hashtbl.t
   var var_name_map = Map[String,Int]()
 
-  // val declare_new_var : 'a Expr.ty -> string
   def declare_new_var[A](ty:Ty[A]):String = {
     val var_name = real_ty(ty) match {
       case TConst(name) => name.substring(0, 1)
@@ -143,7 +142,6 @@ object Refine {
   }
   */
 
-  // val assert_true : string -> unit
   def assert_true(translated_expr:String) {
     Smt.write("(assert " + translated_expr + ")")
   }

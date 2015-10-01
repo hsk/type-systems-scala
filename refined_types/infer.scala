@@ -33,7 +33,6 @@ object Infer {
     def lookup(name:String, env:env):t_ty = {
       env(name)
     }
-    //     val map : ('a -> 'b) -> 'a StringMap.t -> 'b StringMap.t
 
     def map[A,B](f:(A)=>B, env:Map[String, A]):Map[String,B] = {
       env.toList.foldLeft(Map[String,B]()){
@@ -41,9 +40,6 @@ object Infer {
       }
     }
 
-    // val fold :
-    //(StringMap.key -> 'a -> 'b -> 'b) -> 'a StringMap.t -> 'b -> 'b
-    
     def fold[A,B](env:Map[String, A], init:B)(f:(String, A, B)=>B):B = {
       env.foldLeft(init){
         case(b, (k, a)) =>
@@ -149,9 +145,6 @@ object Infer {
     f(ty)
   }
 
-  // val match_fun_ty :
-  //   int -> 'a Expr.ty -> 'a Expr.refined_ty list * 'a Expr.refined_ty
-
   // Type inference and typed tree construction
   def match_fun_ty(num_params:Int, ty:t_ty):(List[t_refined_ty],t_refined_ty) = {
     ty match {
@@ -179,9 +172,6 @@ object Infer {
     }
   }
 
-  // val infer_expr :
-  //   Env.env ->
-  //   Expr.level -> Expr.s_expr -> Expr.t_expr
   def infer_expr(env:Env.env, level:level, s:s_expr):t_expr = {
     s match {
       case SVar(name) =>
@@ -249,18 +239,10 @@ object Infer {
     }
   }
 
-
-
-// val instantiate_and_infer_ty :
-//   Env.env -> Expr.level -> Expr.s_ty -> Expr.t_ty
-
   def instantiate_and_infer_ty(env:Env.env, level:level, ty:s_ty):t_ty = {
     infer_ty(env, level, instantiate(level, ty))
   }
 
-// val infer_ty :
-//   Env.env ->
-//   Expr.level -> Expr.s_expr Expr.ty -> Expr.t_ty
   def infer_ty(env:Env.env, level:level, ty:Ty[s_expr]):t_ty = {
     ty match {
       // Transforms a s_ty into a t_ty, infering the types of contracts along the way.
@@ -282,20 +264,12 @@ object Infer {
     }
   }
 
-// val infer_contract :
-//   Env.env ->
-//   Expr.level -> Expr.s_expr -> Expr.t_expr
   def infer_contract(env:Env.env, level:level, s_expr:s_expr):t_expr = {
     val t_expr = infer_expr(env, level, s_expr)
     unify(t_expr.ty, t_bool)
     t_expr
   }
 
-// val infer_r_ty :
-//   Env.env ->
-//   Expr.level ->
-//   Expr.s_expr Expr.refined_ty ->
-//   Env.env * Expr.t_expr Expr.refined_ty
   def infer_r_ty(env:Env.env, level:level, r:refined_ty[s_expr]):(Env.env,refined_ty[t_expr]) = {
     r match {
       case Plain(s_ty) => (env, Plain(infer_ty(env, level, s_ty)))
@@ -311,10 +285,6 @@ object Infer {
     }
   }
 
-// val infer_function :
-//   Env.env ->
-//   Expr.level ->
-//   Expr.s_param list -> Expr.s_refined_ty option -> Expr.s_expr -> Expr.t_expr
   def infer_function(env:Env.env, level:level, s_param_list:List[s_param],
     maybe_return_s_r_ty:Option[s_refined_ty], body_s_expr:s_expr):t_expr = {
     val (new_env:Env.env, rev_t_param_list, rev_param_t_r_ty_list) =

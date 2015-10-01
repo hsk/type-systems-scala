@@ -125,7 +125,7 @@ of type links as we follow them, but our `generalize` function takes care of tha
 ここにあるScalaに移植したものです。
 
 
-	sbt ~run
+    sbt ~run
 
 で実行します。
 
@@ -135,38 +135,38 @@ of type links as we follow them, but our `generalize` function takes care of tha
 これは、OCamlの多相的な型推論のレベルを使った高速化されているものです。
 重要なのは、infer.scalaですので、infer.scalaを見てみましょう。
 
-	object Infer {
+    object Infer {
 
-	  import Expr._
-	  val current_id = Ref(0)
+      import Expr._
+      val current_id = Ref(0)
 
-	  def next_id():Int = {
-	    val id = current_id.a
-	    current_id.a = id + 1
-	    id
-	  }
+      def next_id():Int = {
+        val id = current_id.a
+        current_id.a = id + 1
+        id
+      }
 
-	  def reset_id() {
-	    current_id.a = 0
-	  }
+      def reset_id() {
+        current_id.a = 0
+      }
 
-	  def new_var(level:level):Ty = TVar(Ref(Unbound(next_id(), level)))
+      def new_var(level:level):Ty = TVar(Ref(Unbound(next_id(), level)))
 
-	  def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
+      def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
 
-	  def error(msg:String) { throw new Exception(msg) }
+      def error(msg:String) { throw new Exception(msg) }
 
-	  object Env {...}
+      object Env {...}
 
-	  def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:Ty) {...}
-	  def iter2[A,B](a:List[A],b:List[B],f:(A,B)=>Unit) {...}
-	  def unify(ty1:Ty, ty2:Ty) {...}
-	  def generalize(level:level, ty:Ty):Ty = {...}
-	  def instantiate(level:level, ty:Ty):Ty = {...}
-	  def match_fun_ty(num_params: Int, ty: Ty): (List[Ty], Ty) = {...}
-	  def infer(env:Env.env, level:level, expr:Expr):Ty = {...}
+      def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:Ty) {...}
+      def iter2[A,B](a:List[A],b:List[B],f:(A,B)=>Unit) {...}
+      def unify(ty1:Ty, ty2:Ty) {...}
+      def generalize(level:level, ty:Ty):Ty = {...}
+      def instantiate(level:level, ty:Ty):Ty = {...}
+      def match_fun_ty(num_params: Int, ty: Ty): (List[Ty], Ty) = {...}
+      def infer(env:Env.env, level:level, expr:Expr):Ty = {...}
 
-	}
+    }
 
 next\_id, reset\_id は新しいIDを作ったり、IDのリセットを行います。
 new\_var は新しい変数、new\_gen_varはGenericな新しい変数。errorはエラー関数。
@@ -182,3 +182,30 @@ inferが型推論のエントリポイントになります。
 OCamlからの移植なので、プログラムは上からボトムアップ的に書かれています。トップダウン的に見たければ、最後の関数から読んで行くと良いでしょう。
 
 ここに来るまでの詳しい話は、[oleg](http://okmij.org/ftp/ML/generalization.html)が詳しいです。
+
+
+## EBNF
+
+    ident       ::= [_A-Za-z][_A-Za-z0-9]*
+    integer     ::= [0-9]+
+
+    expr        ::= app_expr
+                  | "let" ident "=" expr "in" expr
+                  | "fun" rep1(ident) "->" expr
+
+    app_expr    ::= simple_expr rep("(" rep1sep(expr, ",") ")")
+
+    simple_expr ::= ident
+                  | "(" expr ")"
+
+    ty_forall   ::= ty
+                  | "forall" "[" rep1(ident) "]" ty
+
+    ty          ::= app_ty "->" ty
+                  | app_ty
+                  | "(" repsep(ty, ",") ")" "->" ty
+
+    app_ty      ::= simple_ty rep("[" rep1sep(ty, ",") "]")
+
+    simple_ty   ::= ident
+                  | "(" ty ")"

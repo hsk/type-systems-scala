@@ -255,12 +255,9 @@ object Test_refined {
   }
 
   def apply() {
-//    for(i <- 0 until 100) {
-//        println(i)
-        test_cases.foreach {
-          case (a,b) => make_single_test_case(a, b)
-        }        
-//    }
+    test_cases.foreach {
+      case (a,b) => make_single_test_case(a, b)
+    }
     Smt.stop()
   }
 }

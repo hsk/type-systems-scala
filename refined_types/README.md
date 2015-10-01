@@ -389,3 +389,104 @@ The system presented in [4] instead uses *weakest precondition generation* to pr
 [smtlib]: http://www.smtlib.org/ "The Satisfiability Modulo Theories Library"
 [robinson-arithmetic]: http://en.wikipedia.org/wiki/Robinson_arithmetic "Robinson arithmetic"
 [algorithm-w]: https://github.com/tomprimozic/type-systems/tree/master/algorithm_w
+
+
+--------
+
+## EBNF
+
+    ident           ::= [A-Za-z][_A-Za-z0-9]*
+    int             ::= [0-9]+
+    expr            ::= app_expr ":" ty opt("if" expr)
+                      | "let" ident "=" expr "in" expr
+                      | boolean_expr
+                      | fun_expr
+                      | "if" expr "then" expr "else" expr
+
+    boolean_expr    ::= "not" relation_expr
+                      | relation_expr opt(("and"|"or") relation_expr)
+
+    relation_expr   ::= arithmetic_expr rep(relation_op arithmetic_expr)
+
+    arithmetic_expr ::= mul_expr rep(("+"|"-") mul_expr
+    mul_expr        ::= unary_expr rep(("*"|"/"|"%") unary_expr
+
+    unary_expr      ::= "-" unary_expr
+                      | app_expr
+
+    app_expr        ::= simple_expr rep("(" repsep(expr, ",") ")")
+
+    simple_expr     ::= ident
+                      | int
+                      | "true"
+                      | "false"
+                      | "(" expr ")"
+
+    relation_op     ::= "<=" | ">=" | "<" | ">" | "==" | "!="
+
+    fun_expr        ::= "fun" ident "->" expr 
+                      | "fun" "(" param_list ")" opt(":" return_ty) "->" expr
+
+    param_list      ::= repsep(param, ",")
+
+    param           ::= ident ":" ty opt("if" expr)
+                      | ident
+
+    return_ty       ::= some_simple_ty
+                      | "(" ident ":" ty ")"                  
+                      | "(" ident ":" ty "if" expr ")"
+
+    ident_list      ::= rep1(ident)
+
+    ty_forall       ::= ty
+                      | "forall" "[" ident_list "]" ty
+
+    ty              ::= function_ty
+                      | simple_ty
+                      | "some" "[" ident_list "]" ty
+
+    function_ty     ::= "(" ")" "->" function_ret_ty
+                      | simple_ty "->" function_ret_ty
+                      | "(" refined_ty ")" "->" function_ret_ty
+                      | "(" param_ty "," param_ty_list ")" "->" function_ret_ty
+
+    function_ret_ty ::= ty
+                      | "(" refined_ty ")"
+
+    param_ty_list   ::= rep1sep(param_ty, ",")
+
+    param_ty        ::= refined_ty
+                      | ty
+
+    refined_ty      ::= ident ":" ty opt("if" expr)
+
+    some_simple_ty  ::= simple_ty
+                      | "some" "[" ident_list "]" simple_ty
+
+    simple_ty       ::= ident "[" rep1sep(ty, ",") "]"
+                      | ident
+                      | "(" ty ")"
+
+
+## ソースファイル一覧
+
+- expr.scala データ定義
+- parser.scala パーサ
+- core.scala 定数定義
+- infer.scala 型推論
+- printing.scala 文字列出力
+- refined.scala refined type
+- smt.scala SMTソルバのZ3呼び出し
+
+- test.scala テスト
+- test_parser.scala 構文解析のテスト
+- test_infer.scala 推論のテスト
+- test_refined.scala refined typeのテスト
+
+
+## 処理内容
+
+parser.scalaで構文木の`s_expr`を読み込む。
+infer.scalaで`s_expr`から`t_expr`に変換する。
+refined.scalaでZ3を呼び出して、`t_expr`の依存型の情報の整合性をチェックする
+

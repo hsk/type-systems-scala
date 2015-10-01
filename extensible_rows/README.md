@@ -355,3 +355,42 @@ TODO:
 > 	| IDENT COLON ty                    { [($1, $3)] }
 > 	| ty_row COMMA IDENT COLON ty       { ($3, $5) :: $1 }
 
+
+## EBNF
+
+    ident                   ::= [_A-Za-z][_A-Za-z0-9]*
+    integer                 ::= [0-9]+
+
+    expr                    ::= simple_expr rep(app_rep)
+                              | "let" ident "=" expr "in" expr
+                              | "fun" rep1(ident) "->" expr                                   
+
+    record_label_expr_list  ::= rep1sep(ident "=" expr, ",")
+
+    app_rep                 ::= "(" rep1sep(expr, ",") ")"
+                              | "." ident
+
+    simple_expr             ::= ident
+                              | "(" expr ")"
+                              | "{" "}"
+                              | "{" record_label_expr_list "|" expr "}"
+                              | "{" record_label_expr_list "}"
+                              | "{" expr "-" ident "}"
+
+    ty_forall               ::= ty
+                              | "forall" "[" rep1(ident) "]" ty
+
+    ty:Parser[Ty]           ::= app_ty "->" ty
+                              | app_ty
+                              | "(" repsep(ty, ",") ")" "->" ty
+
+    ty_row                  ::= rep1sep(ident ":" ty, ",")
+
+    app_ty                  ::= simple_ty rep("[" rep1sep(ty, ",") "]")
+
+    simple_ty               ::= ident
+                              | "(" ty ")"
+                              | "{" "}"
+                              | "{" ident "}"
+                              | "{" ty_row "|" ty "}"
+                              | "{" ty_row "}"
