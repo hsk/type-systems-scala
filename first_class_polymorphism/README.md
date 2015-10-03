@@ -1,3 +1,7 @@
+TODO:
+
+- [ ] テストを追わせる
+
 First-class polymorphism
 ========================
 

@@ -3,7 +3,14 @@ package dhm
 object Expr {
 
   type name = String
-  
+
+  def compare_label(label1:name, label2:name):Int = {
+    val compare_length = label1.length - label2.length
+    if (compare_length == 0)
+      label1.compareTo(label2)
+    else compare_length
+  }
+
   sealed trait Expr
   case class Var(a:name) extends Expr // variable
   case class Call(a:Expr,b:List[Expr]) extends Expr // application
@@ -44,13 +51,15 @@ object Expr {
     }
   }
 
-
-  def merge_label_maps[A,B](label_map1:Map[A, B], label_map2:Map[A,B]):Map[A,List[B]] = {
+//   'a list LabelMap.t -> 'a list LabelMap.t -> 'a list LabelMap.t
+  def merge_label_maps[A,B](label_map1:Map[A, List[B]], label_map2:Map[A,List[B]]):Map[A,List[B]] = {
     val merged = label_map1.toSeq ++ label_map2.toSeq
     val grouped = merged.groupBy(_._1)
-    val cleaned = grouped.mapValues(_.map(_._2).toList)
+    val cleaned = grouped.mapValues(_.map(_._2).flatten.toList)
     cleaned
   }
+
+//val match_row_ty : row -> ty list LabelMap.t * ty
   
   // Returns a label map with all field types and the type of the "rest",
   // which is either a type var or an empty row.
@@ -70,6 +79,9 @@ object Expr {
     }
   }
 
+//val add_distinct_labels :
+//  'a LabelMap.t -> (LabelMap.key * 'a) list -> 'a LabelMap.t
+
   // Adds new bindings to a label map. Assumes all bindings (both
   // new and existing) are distinct.
   def add_distinct_labels(label_el_map:Map[name,List[Ty]], label_el_list:List[(name,List[Ty])]):Map[name,List[Ty]] = {
@@ -79,6 +91,8 @@ object Expr {
         label_el_map + (label -> el)
     }
   }
+
+//val label_map_from_list : (LabelMap.key * 'a) list -> 'a LabelMap.t
 
   def label_map_from_list(label_el_list: List[(name,List[Ty])]): Map[name,List[Ty]] = {
     add_distinct_labels(Map[name,List[Ty]](), label_el_list)
@@ -155,17 +169,6 @@ object Expr {
         case TVar(Ref(Link(ty))) => f(is_simple, ty)
         case TRecord(row_ty) => "{" + f(false, row_ty) + "}"
         case TRowEmpty => ""
-        case TRowExtend(label, ty, row_ty) =>
-          def g(str: String, t:Ty): String = {
-            t match {
-              case TRowEmpty => str
-              case TRowExtend(label, ty, row_ty) =>
-                g(str + ", " + label + " : " + f(false, ty), row_ty)
-              case TVar(Ref(Link(ty))) => g(str, ty)
-              case other_ty => str + " | " + f(false, other_ty)
-            }
-          }
-          g(label + " : " + f(false, ty), row_ty)
         case TRowExtend(_,_) =>
             val (label_ty_map, rest_ty) = match_row_ty(ty)
             val label_ty_str =
