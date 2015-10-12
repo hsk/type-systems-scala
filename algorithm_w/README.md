@@ -125,6 +125,7 @@ Function `instantiate` duplicates the input type, transforming any polymorphic v
 
 |English|日本語|
 | --- | --- |
+|state-of-the-art|最先端|
 |avoid|避ける|
 |for the sake of|のために|
 |during|中に|
