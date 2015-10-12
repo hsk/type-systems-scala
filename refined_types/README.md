@@ -212,7 +212,7 @@ To do this, expressions of the source program must be translated into SMT-LIB fo
 Some expressions, such as integer constants and applications of built-in operators (e.g. `+`, `%`, `>=`, `==` and `or`), have precise values or interpretations in SMT theories and can be translated literally.
 Others, such as function parameters and the return value of a `random1toN(10)` call, don't have specific values and we can only make certain more-or-less precise assertions about them.
 
-洗練された型チェックの目的は、*証明は*関数契約のいずれもが実行時に破損しないことが可能です。
+Refined型チェックの目的は、*証明は*関数契約のいずれもが実行時に破損しないことが可能です。
 これを行うには、ソースプログラムの表現は、SMT-LIB式に翻訳されなければならないので、SMTソルバーによって証明中について推論することができます。
 このような整数定数と組み込み演算子のアプリケーションなどの一部の表現 (例えば、 `+`、`%`、`>=`、`==`と`or`)、 SMT理論で正確な値または解釈を持ってすることができます直訳。
 このような関数のパラメータと `random1toN(10)`呼び出しの戻り値として、他のものは、特定の値を持っていないと私たちはそれらについて一定の多かれ少なかれ正確なアサーションを行うことができます。
@@ -220,7 +220,7 @@ Others, such as function parameters and the return value of a `random1toN(10)` c
 We can use the SMT-LIB representation of an expression to check if a contract is satisfied.
 For a simple example, let's examine the SMT-LIB script generated during refined type-checking of the function `test`:
 
-我々は契約が成立しているかどうかを確認するために、式のSMT-LIB表現を使用することができます。簡単な例では、のは、関数 `test`の洗練された型チェックの際に生成されたSMT-LIBスクリプトを調べてみましょう：
+我々は契約が成立しているかどうかを確認するために、式のSMT-LIB表現を使用することができます。簡単な例では、のは、関数 `test`のrefined 型チェックの際に生成されたSMT-LIBスクリプトを調べてみましょう：
 
 ```typescript
 function test(x : int if x > 3) : (z : int if z > 0) {
@@ -337,14 +337,14 @@ Finally, it would be useful to alert the user when there can be no functions inh
 More substantial extensions would be adding a function effect system, which would prohibit the use of functions with side-effects (such as non-determinism or I/O) in refined types, and including built-in operations for additional datatypes, such as arrays, modular integers and bitvectors, which can also be reasoned about by some SMT solvers.
 To make the language practical, it would also need to support imperative features such as loops and mutable local variables and data structures.
 
-より実質的な拡張は、そのようなアレイなどの追加データ型の組込み操作など、洗練されたタイプであり、（例えば非決定論やI/ Oなど）の副作用を持つ関数の使用を禁止する機能効果システムを追加することになります、モジュラー整数と、いくつかのSMTソルバー約推論することができますビットベクトル。
+より実質的な拡張は、そのようなアレイなどの追加データ型の組込み操作など、refined タイプであり、（例えば非決定論やI/ Oなど）の副作用を持つ関数の使用を禁止する機能効果システムを追加することになります、モジュラー整数と、いくつかのSMTソルバー約推論することができますビットベクトル。
 言語は、実用的にするために、それはまた、ループおよび可変ローカル変数およびデータ構造として不可欠の機能をサポートする必要があります。
 
 A very useful extension would be to allow refined types within algebraic datatypes, for example `array[i : int if i ≥ 0]`.
 This would require the ability to instantiate polymorphic types with refined base types, so that we could use `get : forall[a] (array[a], i : int) → a` to extract a non-negative value from this array.
 A related idea is *predicate polymorphism* [6]: we want to support types such as `array_max : forall[p : int → bool] array[i : int if p(i)] → (k : int if p(k))`.
 
-非常に便利な拡張機能は、例えば、`array[i : int if i ≥ 0]`のために、代数的データ型内の洗練されたタイプを許可することであろう。
+非常に便利な拡張機能は、例えば、`array[i : int if i ≥ 0]`のために、代数的データ型内のrefinedタイプを許可することであろう。
 私たちはこの配列からの非負の値を抽出するために `get : forall[a] (array[a], i : int) → a` を使用することができるようにこれは、洗練された基本型と多形型をインスタンス化する能力を必要とするであろう。
 関連したアイデアがある *述語多型* [6]：私たちは、`array_max : forall[p : int → bool] array[i : int if p(i)] → (k : int if p(k))`などの型をサポートします。
 

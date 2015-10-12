@@ -131,6 +131,7 @@ object Infer {
 
 
   def unify(ty1:ty, ty2:ty) {
+    println("unify "+ty1+" "+ty2)
     if (ty1 == ty2) return
     (ty1, ty2) match {
       case (TConst(name1), TConst(name2)) if (name1 == name2) => ()
@@ -267,6 +268,7 @@ object Infer {
   }
 
   def infer(env:Env.env, level:level, expr:expr):ty = {
+    println("infer "+expr)
     expr match {
     case Var(name) =>
         try {

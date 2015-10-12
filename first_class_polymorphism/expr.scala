@@ -23,23 +23,23 @@ object Expr {
 
   def unlink(t:ty):ty = {
     t match {
-    case TVar(tvar@Ref(Link(ty))) =>
+      case TVar(tvar@Ref(Link(ty))) =>
         val ty1 = unlink(ty)
         tvar.a = Link(ty1)
         ty1
-    case ty => ty
+      case ty => ty
     }
   }
 
   def is_monomorphic(t:ty):Boolean = {
     t match {
-    case TForall(_,_) => false
-    case TConst(_) => true
-    case TVar(Ref(Link(ty))) => is_monomorphic(ty)
-    case TVar(_) => true
-    case TApp(ty, ty_arg_list) =>
+      case TForall(_,_) => false
+      case TConst(_) => true
+      case TVar(Ref(Link(ty))) => is_monomorphic(ty)
+      case TVar(_) => true
+      case TApp(ty, ty_arg_list) =>
         is_monomorphic(ty) && ty_arg_list.forall(is_monomorphic)
-    case TArrow(param_ty_list, return_ty) =>
+      case TArrow(param_ty_list, return_ty) =>
         param_ty_list.forall(is_monomorphic) && is_monomorphic(return_ty)
     }
   }
@@ -55,9 +55,9 @@ object Expr {
 
   def is_annotated(e:expr):Boolean = {
     e match {
-    case Ann(_, _) => true
-    case Let(_, _, body) => is_annotated(body)
-    case _ => false
+      case Ann(_, _) => true
+      case Let(_, _, body) => is_annotated(body)
+      case _ => false
     }
   }
 
@@ -81,33 +81,33 @@ object Expr {
   def string_of_ty_with_bound_tvars(name_map:Map[id, String], ty:ty):String = {
     def complex(name_map:Map[id, String], t:ty):String = {
       t match {
-      case TArrow(param_ty_list, return_ty) =>
+        case TArrow(param_ty_list, return_ty) =>
           val param_ty_list_str = param_ty_list match {
             case List(param_ty) => simple(name_map, param_ty)
             case _ => "(" + param_ty_list.map(complex(name_map, _)).mkString(", ") + ")"
           }
           val return_ty_str = complex(name_map, return_ty)
           param_ty_list_str + " -> " + return_ty_str
-      case TForall(var_id_list, ty) =>
+        case TForall(var_id_list, ty) =>
           val (name_list, name_map1) = extend_name_map(name_map, var_id_list)
           val name_list_str = name_list.mkString(" ")
           "forall[" + name_list_str + "] " + complex(name_map1, ty)
-      case TVar(Ref(Link(ty))) => complex(name_map, ty)
-      case ty => simple(name_map, ty)
+        case TVar(Ref(Link(ty))) => complex(name_map, ty)
+        case ty => simple(name_map, ty)
       }
     }
     def simple(name_map:Map[id, String], t:ty):String = {
       t match {
-      case TConst(name) => name
-      case TApp(ty, ty_arg_list) =>
+        case TConst(name) => name
+        case TApp(ty, ty_arg_list) =>
           val ty_str = simple(name_map, ty)
           val ty_arg_list_str = ty_arg_list.map(complex(name_map,_)).mkString(", ")
           ty_str + "[" + ty_arg_list_str + "]"
-      case TVar(Ref(Unbound(id, _))) => "@unknown" + id
-      case TVar(Ref(Bound(id))) => name_map(id)
-      case TVar(Ref(Generic(id))) => "@generic" + id
-      case TVar(Ref(Link(ty))) => simple(name_map, ty)
-      case ty => "(" + complex(name_map, ty) + ")"
+        case TVar(Ref(Unbound(id, _))) => "@unknown" + id
+        case TVar(Ref(Bound(id))) => name_map(id)
+        case TVar(Ref(Generic(id))) => "@generic" + id
+        case TVar(Ref(Link(ty))) => simple(name_map, ty)
+        case ty => "(" + complex(name_map, ty) + ")"
       }
     }
     complex(name_map, ty)
@@ -129,7 +129,7 @@ object Expr {
   def string_of_expr(expr:expr) : String = {
     def complex(e:expr):String = {
       e match {
-      case Fun(param_list, body_expr) =>
+        case Fun(param_list, body_expr) =>
           val param_list_str =
               param_list.map{ case (param_name, maybe_ty_ann) =>
                 maybe_ty_ann match {
@@ -138,19 +138,19 @@ object Expr {
                 }
               }.mkString(" ")
           "fun " + param_list_str + " -> " + complex(body_expr)
-      case Let(var_name, value_expr, body_expr) =>
+        case Let(var_name, value_expr, body_expr) =>
           "let " + var_name + " = " + complex(value_expr) + " in " + complex(body_expr)
-      case Ann(expr, (ty,ann)) =>
+        case Ann(expr, (ty,ann)) =>
           simple(expr) + " : " + string_of_ty_ann(ty, ann)
-      case expr => simple(expr)
+        case expr => simple(expr)
       }
     }
     def simple(e:expr):String = {
       e match {
-      case Var(name) => name
-      case Call(fn_expr, arg_list) =>
+        case Var(name) => name
+        case Call(fn_expr, arg_list) =>
           simple(fn_expr) + "(" + arg_list.map(complex).mkString(", ") + ")"
-      case expr => "(" + complex(expr) + ")"
+        case expr => "(" + complex(expr) + ")"
       }
     }
     complex(expr)

@@ -26,7 +26,7 @@ object Test_infer {
     "fun x -> x" -> OK("forall[a] a -> a"),
     "pair" -> OK("forall[a b] (a, b) -> pair[a, b]"),
     "fun x -> let y = fun z -> z in y" -> OK("forall[a b] a -> b -> b"),
-    "let f = fun x -> x in let id = fun y -> y in eq(f, id)" -> OK("bool"),
+    "let f = fun x -> x in let id = fun y -> y in eq(f, id)" -> OK("bool")/*,
     "let f = fun x -> x in let id = fun y -> y in eq_curry(f)(id)" -> OK("bool"),
     "let f = fun x -> x in eq(f, succ)" -> OK("bool"),
     "let f = fun x -> x in eq_curry(f)(succ)" -> OK("bool"),
@@ -131,7 +131,7 @@ object Test_infer {
     "apply(fun f -> choose(id_id, f), id_id : (forall[a] a -> a) -> (forall[a] a -> a))" ->
       fail,
     "rev_apply(id_id : (forall[a] a -> a) -> (forall[a] a -> a), fun f -> choose(id_id, f))" ->
-      fail
+      fail*/
   )
 
   def string_of_result(r:Result):String = {
@@ -164,7 +164,7 @@ object Test_infer {
       case OK(ty_str) => OK(string_of_ty(Parse.ty_eof(ty_str)))
       case x => x
     }
-    /*
+    
     val result = {
       try {
         Infer.reset_id()
@@ -174,7 +174,7 @@ object Test_infer {
         case e:Exception => Fail(Some(e.getMessage()))
       }
     }
-    assert_equal(code, expected_result1, result)*/
+    assert_equal(code, expected_result1, result)
   }
   def apply() {
     test_cases.foreach{
