@@ -71,6 +71,12 @@ Syntax sugar for `{x = false | {y = zero | {}}}` is `{x = false, y = zero}`.
 The type of rows similarly consists of empty rows `<>` and row extensions `<a : _ | ...>`.
 A record type is a wrapper for the type of row; other wrappers could exist (Daan gives example of sum/variant types).
 
+
+|English|日本語|
+| --- | --- |
+|enclosing|囲む|
+|handled|扱う、取り扱う|
+
 The core of the type inference is implemented in functions `unify` and `rewrite_row`.
 The function `unify` unifies record types by unifying their enclosing rows, and unifies an empty row only with itself.
 If a row extension `<a : t | r>` is unified with another row, the function `rewrite_row` rewrites the second row by searching for the first field with label `a` and unifies its type with `t`.
