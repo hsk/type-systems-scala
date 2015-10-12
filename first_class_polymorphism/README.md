@@ -8,6 +8,7 @@ First-class polymorphism
 ========================
 
 |English|日本語|
+| --- | --- |
 |intuitive|直感的な|
 |manner|やり方、方法|
 
@@ -24,6 +25,7 @@ Overview
 
 |English|日本語|
 | --- | --- |
+|although|だけれども、しかし、であるが|
 |quite|非常に|
 |limited|限られた|
 |neither|どちらでもない|
