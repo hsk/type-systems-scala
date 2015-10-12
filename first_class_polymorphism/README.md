@@ -11,7 +11,7 @@ First-class polymorphism
 | --- | --- |
 |intuitive|直感的な|
 |manner|やり方、方法|
-
+|impredicative|非可述的|
 
 This in an extension of ordinary Damas-Hindley-Milner type inference that supports first-class (impredicative) and higher-rank polymorphism in a very simple and intuitive manner, requiring only minimal type annotations.
 
@@ -29,6 +29,7 @@ Overview
 |quite|非常に|
 |limited|限られた|
 |neither|どちらでもない|
+|above|上記、上に|
 |undecidable|否定出来ない、申し分ない|
 |complicated|複雑な|
 |capable|能力のある, 可能な, 有能な|

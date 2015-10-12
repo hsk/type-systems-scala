@@ -82,6 +82,12 @@ Finally, the type of a *call* expression is inferred by first matching the type 
 *let*式の型は最初にletの値の型を推論し、次に型の一般化し、そして拡張された型環境でlet本体の型を推論することによって推論されます。
 最後、*call* 式の型は、最初の`match_fun_ty`関数を使用して呼び出されている式の型にマッチした後、引数の型を推論し、関数パラメータの型とそれらを単一化することにより推論されます。
 
+|English|日本語|
+| --- | --- |
+|i.e.|つまり、すなわち|
+|determine|決定|
+|identical|同一の|
+
 The function `unify` takes two types and tries to *unify* them, i.e. determine if they can be equal.
 Type constants unify with identical type constants, and arrow types and other structured types are unified by unifying each of their components.
 After first performing an "occurs check", unbound type variables can be unified with any type by replacing their reference with a link pointing to the other type.
@@ -95,6 +101,9 @@ After first performing an "occurs check", unbound type variables can be unified 
 |English|日本語|
 | --- | --- |
 |adjust|整える|
+|diverge|発散する、分岐する|
+|ensuring|確保する|
+|correctly|正しく|
 
 The function `occurs_check_adjust_levels` makes sure that the type variable being unified doesn't occur within the type it is being unified with.
 This prevents the algorithm from inferring recursive types, which could cause naively-implemented type checking to diverge.
@@ -113,6 +122,18 @@ Function `instantiate` duplicates the input type, transforming any polymorphic v
 ## Possible optimizations
 
 ## 可能な最適化
+
+|English|日本語|
+| --- | --- |
+|avoid|避ける|
+|for the sake of|のために|
+|during|中に|
+|adjustment|調整、補正|
+|deal|取引、契約|
+|arise|生じる、起こる、発生する|
+|further|さらに|
+|condensing|凝縮します|
+|take care of|面倒を見る|
 
 Although this implementation is reasonably efficient, state-of-the-art implementations of HM type inference employ several more advanced techniques which were avoided in this implementation for the sake of clarity.
 As outlined in Oleg's article, OCaml's type checker marks *every* type with a type level, which is the maximum type level of the type variables occuring within it, to avoid traversing non-polymorphic types during instantiation.
