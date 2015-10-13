@@ -10,7 +10,7 @@ object Test_parser {
   case object Fail extends Result
 
 
-  val test_cases = Map(
+  val test_cases = List(
     "" -> Fail,
     "a" -> OK(Var("a")),
     "f(x, y)" -> OK(Call(Var("f"), List(Var("x"), Var("y")))),

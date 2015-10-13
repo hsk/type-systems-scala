@@ -11,7 +11,7 @@ object Test_infer {
   val fail = Fail(None)
   def error(msg:String):Result = Fail(Some(msg))
 
-  val test_cases = Map(
+  val test_cases = List(
     // Hindley-Milner
     "id" -> OK("forall[a] a -> a"),
     "one" -> OK("int"),

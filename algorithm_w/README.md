@@ -16,7 +16,7 @@ Algorithm W の適当な訳
 |English|日本語|
 | --- | --- |
 |principal|主要な|
-|although|であるが　だが|
+|although|であるが、だが|
 |explicit|明確な、厳格な、自明の|
 |substitution|代入、置換|
 |permit|許可する,可能にする|
