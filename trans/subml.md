@@ -4,7 +4,7 @@
 
 https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorphism-subtyping-and-type-inference-in-mlsub.pdf
 
-<sup><sub>
+> <sup><sub>
 |superset|上位集合|
 |parametric|パラメトリック|
 </sub></sup>
@@ -31,7 +31,7 @@ https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorph
 
 ### Introduction 1
 
-<sup><sub>
+> <sup><sub>
 |descendants|子孫|
 |practical|実用的な|
 |sporting|スポーツの、公正な、変種の、勝負事|
@@ -45,7 +45,7 @@ https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorph
 
 MLとこれらの子孫のヒンドリミルナ型システムは人気があり実用的で、決定可能な型推論と実用的な型をもつ変種である。
 
-<sup><sub>
+> <sup><sub>
 |extending|延長|
 |preserving|保存|
 |problematic|問題|
@@ -59,7 +59,7 @@ MLとこれらの子孫のヒンドリミルナ型システムは人気があり
 
 ### Introduction 2
 
-<sup><sub>
+> <sup><sub>
 |but also|だけでなく|
 |expose|暴露する、公開する|
 |such|そのような|
@@ -103,7 +103,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 ### Introduction 3
 
-<sup><sub>
+> <sup><sub>
 |strange|奇妙な|
 |demands|要求|
 |whatever|どのような|
@@ -130,7 +130,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 ### Introduction 4
 
-<sup><sub>
+> <sup><sub>
 |examine|調べます|
 |actual|実際|
 </sub></sup>
@@ -143,7 +143,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 	arguments to p <- v -> result <- d
 
-<sup><sub>
+> <sup><sub>
 |ignoring|無視する|
 |orientation|向き|
 |edges|エッジ|
@@ -159,7 +159,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 上記のエッジの向きを無視することのみで我々はpの引数からdが流れていると結論付ける事が出来る。
 
-<sup><sub>
+> <sup><sub>
 |Indeed|確かに|
 |exactly|正確に|
 |equality|平等|
@@ -178,7 +178,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 たしかに、これはMLについて正確だ:
 タイプ間で等価性制約内でデータフローから回す事で、データフローの方向の情報ついて無視する。
 
-<sup><sub>
+> <sup><sub>
 |Since|以来、いるので|
 |equality|平等|
 |treated|治療|
@@ -201,7 +201,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 部分型サポートはデータフローの方向について気にする事だ。
 
-<sup><sub>
+> <sup><sub>
 |provide|提供します|
 |least|最低|
 |guarantees|保証|
@@ -216,7 +216,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 ### Introduction 6
 
-<sup><sub>
+> <sup><sub>
 |noticed|気づいた|
 |separation|分離|
 |bipartite|二分|
@@ -243,7 +243,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 ### Introduction 7
 
-<sup><sub>
+> <sup><sub>
 |insight|洞察力|
 |further|さらにまた|
 |religious|宗教的な|
@@ -271,7 +271,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 # 2 Input and output types
 
-<sup><sub>
+> <sup><sub>
 |form|形成する|
 |lattice|格子|
 |least-upper-bound|最小上限|
@@ -312,7 +312,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 もしもプログラムがランダムに選んで生成されたτ1か型τ2の1つのうちどちらかのオブジェクトの場合、実際の出力型はτ1 ⨆ τ2です。
 
 
-<sup><sub>
+> <sup><sub>
 |Similarly|同様に|
 |again|再び|
 |arises|生じる|
@@ -336,7 +336,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 一般的に、出力に記載されたときのみが⨆発生し、入力中に記載された時のみ⨅が発生する。
 
-<sup><sub>
+> <sup><sub>
 |similar vein|同じような文脈|
 |Thus|このように|
 |distinguish|区別|
@@ -375,7 +375,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 ### 3.1
 
-<sup><sub>
+> <sup><sub>
 |relies|依存している|
 |dealing|取扱う|
 |equations|方程式|
@@ -410,7 +410,7 @@ Damas-Milner型推論アルゴリズム[1]のコアの操作は単一化です�
 
 ### 3.2
 
-<sup><sub>
+> <sup><sub>
 |for instance|たとえば|
 |dual|の二重|
 </sub></sup>
@@ -440,7 +440,7 @@ DamasMilner型推論が単一化を使う中で３つの異なる状況があり
 
 ２つ目は最初と重なりますが、型がλ束縛変数(使う型は全て同じ型)のときの２つの必要な入力の式を単一化することです。
 
-<sup><sub>
+> <sup><sub>
 |correspond|対応します|
 |respectively|それぞれ|
 |disparate|異種|
@@ -475,7 +475,7 @@ MLsubでは、これらは失敗できません:
 
 ### 3.3
 
-<sup><sub>
+> <sup><sub>
 |For instance|たとえば|
 |routing|経路|
 |tends|期待して|
@@ -515,7 +515,7 @@ MLsubでは、これらは失敗できません:
 
 ### 3.4
 
-<sup><sub>
+> <sup><sub>
 |demand|要望|
 |domain|ドメイン|
 |ensure|確保|
@@ -548,7 +548,7 @@ MLsubでは、これらは失敗できません:
 
 ### 3.5
 
-<sup><sub>
+> <sup><sub>
 |restriction|制限|
 |analagous|類推の|
 |dub|吹き替えのせりふを入れる|
@@ -565,7 +565,7 @@ MLsubでは、これらは失敗できません:
 
 この構文的な制限は我々に我々が置き換えるbiunification単一化の類推アルゴリズムを定義する事を許可します。
 
-<sup><sub>
+> <sup><sub>
 |exclude|除外|
 </sub></sup>
 
@@ -579,7 +579,7 @@ MLsubでは、これらは失敗できません:
 
 ### 3.6
 
-<sup><sub>
+> <sup><sub>
 |broadly|広い意味|
 |We then|それから|
 |in place of|変わりに|
@@ -598,7 +598,7 @@ MLsubでは、これらは失敗できません:
 
 ### 4.1
 
-<sup><sub>
+> <sup><sub>
 |Much|多くの|
 |previous work|以前の研究|
 |containing|含みます|
@@ -616,7 +616,7 @@ MLsubでは、これらは失敗できません:
 
 ### 4.2
 
-<sup><sub>
+> <sup><sub>
 |leads|先駆け|
 |surprisingly|驚くほど|
 |finicky|気難しいです|
@@ -626,7 +626,7 @@ MLsubでは、これらは失敗できません:
 
 この先駆けは驚く程気難しいサブタイピングで多相的な型と関係しています。
 
-<sup><sub>
+> <sup><sub>
 |Quantifying|定量|
 |admits|認めている|
 |proving|証明|
@@ -637,7 +637,7 @@ MLsubでは、これらは失敗できません:
 
 グランド型上の定量化は多相型の間のサブタイピング関係の証明できる意味の型上の解析できるケースを許可します。
 
-<sup><sub>
+> <sup><sub>
 |Essentially|基本的に|
 |bakes|焼く|
 |closed-world|閉じた世界|
@@ -650,7 +650,7 @@ MLsubでは、これらは失敗できません:
 
 ### 4.3
 
-<sup><sub>
+> <sup><sub>
 |Instead|代わりに|
 |reformulate|再公式化する|
 |axiomatisation|公理atisation|
@@ -660,7 +660,7 @@ MLsubでは、これらは失敗できません:
 
 かわりに、われわれはサブタイピングを与えられたサブタイピングの代数的公理によって再公式化します。
 
-<sup><sub>
+> <sup><sub>
 |whose|その|
 |counterintuitive|直観に反した|
 |relies|依存している|
@@ -673,7 +673,7 @@ MLsubでは、これらは失敗できません:
 
 いくつかの直感に反した正しい依存している一定の型に非存在のサブタイピング関係はそれによって我々のシステム上では偽です。
 
-<sup><sub>
+> <sup><sub>
 |definition|定義|
 |reasoning|推論|
 |precluded|排除|
@@ -686,7 +686,7 @@ MLsubでは、これらは失敗できません:
 
 #### 4.4
 
-<sup><sub>
+> <sup><sub>
 |relating|関連|
 |finite|有限な|
 |automata|オートマトン|
@@ -701,7 +701,7 @@ MLsubでは、これらは失敗できません:
 
 ### 5.1
 
-<sup><sub>
+> <sup><sub>
 |simplification|簡素化|
 |subsumption|包摂|
 </sub></sup>
@@ -722,7 +722,7 @@ MLsubでは、これらは失敗できません:
 我々は我々の関数の型を推論し簡潔化する我々の実装をOCamlの標準Listモジュールに使いました。
 
 
-<sup><sub>
+> <sup><sub>
 |syntactically|構文的には|
 |as compact as|以下のようにコンパクト|
 |identical|同一の|
@@ -738,7 +738,7 @@ MLsubによって推論された型はOCamlで推論した物をコンパクト�
 
 ### 5.3
 
-<sup><sub>
+> <sup><sub>
 |available|利用できます|
 |interactively|対話形式で|
 |author’s|著者の|
