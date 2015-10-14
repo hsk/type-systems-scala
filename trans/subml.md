@@ -11,21 +11,21 @@ https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorph
 
 We present a type system combining subtyping and ML-style parametric polymorphism.
 
-我々は提示する型システムをまとめたものサブタイピングとMLスタイルパラメトリック多相性。
+<!-- 我々は提示する型システムをまとめたものサブタイピングとMLスタイルパラメトリック多相性。 -->
 
-	我々はサブタピイングとMLスタイルパラメトリック多相性をまとめた型システムを提示する。
+我々はサブタピイングとMLスタイルパラメトリック多相性をまとめた型システムを提示する。
 
 Unlike previous work, our system supports type inference and infers compact types.
 
-似てない以前の仕事、我々のシステムはサポートする型推論と推論コンパクトタイプ。
+<!-- 似てない以前の仕事、我々のシステムはサポートする型推論と推論コンパクトタイプ。 -->
 
-	以前の仕事との違いは、我々のシステムは型推論と推論コンパクトタイプをサポートしている事である。
+以前の仕事との違いは、我々のシステムは型推論と推論コンパクトタイプをサポートしている事である。
 
 We demonstrate this system in the minimal language MLsub, which types a strict superset of core ML programs.
 
-我々はデモするこのシステム内で最小言語MLsub、                  これは型付け厳格なスーパーセットおぶコアMLプログラム。
+<!-- 我々はデモするこのシステム内で最小言語MLsub、                  これは型付け厳格なスーパーセットおぶコアMLプログラム。 -->
 
-	我々はこのシステム内でコアMLプログラムの厳格なスーパセットで型付けする、最小言語MLsubをデモする。
+我々はこのシステム内でコアMLプログラムの厳格なスーパセットで型付けする、最小言語MLsubをデモする。
 
 ## Introduction
 
