@@ -14,14 +14,14 @@ Overview
 
 ## 概要
 
-|English|日本語|
-| --- | --- |
-|considerably|かなり|
-|predicate|述語|
-|lack|欠如|
-|specify|指定|
-|presentation|発表、提示|
-|relatively|比較的|
+<sup><sub>
+considerably かなり
+predicate 述語
+lack 欠如
+specify 指定
+presentation 発表、提示
+relatively 比較的
+</sub></sup>
 
 > <sup><sub>
 In his paper [Extensible records with scoped labels][1], Daan Leijen describes an innovative
@@ -36,11 +36,10 @@ Daan Leijenは彼の論文[スコープドラベル付き拡張レコード][1]�
 これは、レコードの型 `r` がラベル `l` を含んではならないことを指定して、"欠けている" 述語 *`(r/l)`* などのレコードタイプの述語が含まれるような他のほとんどのレコードシステムよりもそれはかなり簡単になります。
 この実装は、密接に彼の論文でDaanののプレゼンテーションに続き、algorithm_wに実装ヒンドリー - ミルナー型推論アルゴリズムの比較的小さい拡張したものです（変更はコミット[5c183a7][2]で見ることができます）。
 
-
-|English|日本語|
-| --- | --- |
-|consist|構成する|
-|restriction|制限|
+<sup><sub>
+consist 構成する
+restriction 制限
+</sub></sup>
 
 > <sup><sub>
 Records consist of labeled fields with values `{a = one, b = false}` and can extend other
@@ -63,12 +62,12 @@ Details
 
 ## 詳細
 
-|English|日本語|
-| --- | --- |
-|either|どちらか|
-|Syntax sugar|構文糖|
-|consist|構成される|
-|wrapper|ラッパー|
+<sup><sub>
+either どちらか
+Syntax sugar 構文糖
+consist 構成される
+wrapper ラッパー
+</sub></sup>
 
 > <sup><sub>
 The types of expressions `expr` and types `ty` in `expr.ml` are extended with primitive record operations and types.
@@ -77,10 +76,10 @@ Syntax sugar for `{x = false | {y = zero | {}}}` is `{x = false, y = zero}`.
 The type of rows similarly consists of empty rows `<>` and row extensions `<a : _ | ...>`.
 A record type is a wrapper for the type of row; other wrappers could exist (Daan gives example of sum/variant types).
 
-|English|日本語|
-| --- | --- |
-|enclosing|囲む|
-|handled|扱う、取り扱う|
+<sup><sub>
+enclosing 囲む
+handled 扱う、取り扱う
+</sub></sup>
 
 > <sup><sub>
 The core of the type inference is implemented in functions `unify` and `rewrite_row`.
@@ -88,11 +87,11 @@ The function `unify` unifies record types by unifying their enclosing rows, and 
 If a row extension `<a : t | r>` is unified with another row, the function `rewrite_row` rewrites the second row by searching for the first field with label `a` and unifies its type with `t`.
 All other types are handled as before.
 
-|English|日本語|
-| --- | --- |
-|significant|重要な|
-|above|上記|
-|restriction|制限|
+<sup><sub>
+significant 重要な
+above 上記
+restriction 制限
+</sub></sup>
 
 > <sup><sub>
 The only other significant change is in function `infer`, where the types of new expression terms are inferred by treating them as implicit calls to *selection*, *extension* and *restriction* functions with types as above.
@@ -103,31 +102,31 @@ Discussion
 
 ## 考察
 
-|English|日本語|
-| --- | --- |
-|potential|ポテンシャル、潜在的、可能性|
-|represented|表す、表現|
-|whose|その、持つ|
-|procedure|手続き|
-|rearrange|再編成、並べ替え、再配置|
-|necessary|必要|
-|canonically|標準的に|
-|gather|収集、集まる|
+<sup><sub>
+potential ポテンシャル、潜在的、可能性
+represented 表す、表現
+whose その、持つ
+procedure 手続き
+rearrange 再編成、並べ替え、再配置
+necessary 必要
+canonically 標準的に
+gather 収集、集まる
+</sub></sup>
 
 > <sup><sub>
 One potential problem with this implementation is that record literals and row types are represented as a list of record/row extensions, whose order depends on programmer's code and inner workings of the type inference algorithm.
 The unification procedure can rearrange fields as necessary, but records and record types can not be easily compared or canonically represented by strings.
 A better solution would be to gather all labels into a multi-map and use a specific sorting order for labels when representing rows as strings (implemented in [**extensible_rows2**][5]).
 
-|English|日本語|
-| --- | --- |
-|While|ながら、している間|
-|possibility|可能性|
-|proposals|提案|
-|summarized|要約、まとめる|
-|predicate|述語|
-|disjoint|互いに素、バラバラ|
-|structural subtyping|構造的部分型付け|
+<sup><sub>
+While ながら、している間
+possibility 可能性
+proposals 提案
+summarized 要約、まとめる
+predicate 述語
+disjoint 互いに素、バラバラ
+structural subtyping 構造的部分型付け
+</sub></sup>
 
 > <sup><sub>
 While this type system is simple to implement and use (for example, it is a part of the language [Elm][3]), it represents only one possibility for typing extensible records.

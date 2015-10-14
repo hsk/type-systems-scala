@@ -11,12 +11,12 @@ https://github.com/tomprimozic/type-systems.git
 
 # Grow Your Own Type System
 
-|English|日本語|
-| --- | --- |
-|contain|含む|
-|experiment|実験|
-|hopefully|出来るだけ|
-|own|我々の|
+<sup><sub>
+contain 含む
+experiment 実験
+hopefully 出来るだけ
+own 我々の
+</sub></sup>
 
 > <sup><sub>
 This repository contains implementations of different type systems in Scala.
@@ -31,14 +31,14 @@ are minimal and contain code that is (hopefully) simple and clear.
 これは、拡張または独自に実装することで、高度な型システムと型推論や実験についてもっと学びたいという方を助けることを意味しています。
 実装は最小限で、（出来るだけ）単純明快であるコードが含まれています。
 
-|English|日本語|
-| --- | --- |
-|yet|かつ、だからといって (andみたいなもの)|
-|efficient|効率的な|
-|such as|のような|
-|substitution|代入、置換|
-|assign|割り当てる|
-|generalization|一般化|
+<sup><sub>
+yet かつ、だからといって (andみたいなもの)
+efficient 効率的な
+such as のような
+substitution 代入、置換
+assign 割り当てる
+generalization 一般化
+</sub></sup>
 
 -   > <sup><sub>
     [**algorithm_w**](https://github.com/hsk/type-systems-scala/tree/master/algorithm_w)
@@ -51,16 +51,16 @@ are minimal and contain code that is (hopefully) simple and clear.
     *Algorithm W* と呼ばれる（例えばOCaml、HaskellとElmのような関数型言語で使用されている）Damas-Hindley-Milner型推論アルゴリズムの最も基本的で効率的な実装が含まれています。
     型置換をシミュレートするために参照を使用し、let一般化を簡素化するために型変数にランク/レベルを割り当てます。
 
-|English|日本語|
-| --- | --- |
-|extensible|拡張可能な|
-|excellent|素晴しい|
-|although|だけれども、しかし、であるが|
-|assign|割り当てる|
-|generalization|一般化|
-|extremly|非常に|
-|surprisingly|驚くほど|
-|incorporated|組み込まれる|
+<sup><sub>
+extensible 拡張可能な
+excellent 素晴しい
+although だけれども、しかし、であるが
+assign 割り当てる
+generalization 一般化
+extremly 非常に
+surprisingly 驚くほど
+incorporated 組み込まれる
+</sub></sup>
 
 -   > <sup><sub>
     [**extensible_rows**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows)
@@ -81,14 +81,14 @@ are minimal and contain code that is (hopefully) simple and clear.
     [**extensible_rows2**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows2)
     は**extensible_rows** の最適化された実装です。
 
-|English|日本語|
-| --- | --- |
-|partial|部分的、パーシャル|
-|higher-rank|高階|
-|polymorphism|多相|
-|slightly|わずかに|
-|attempt|こころみ|
-|considerably|かなり|
+<sup><sub>
+partial 部分的、パーシャル
+higher-rank 高階
+polymorphism 多相
+slightly わずかに
+attempt こころみ
+considerably かなり
+</sub></sup>
 
 -   > <sup><sub>
     [**first_class_polymorphism**](https://github.com/hsk/type-systems-scala/tree/master/first_class_polymorphism)
@@ -102,16 +102,16 @@ are minimal and contain code that is (hopefully) simple and clear.
     Daan Leijenの[論文][hmf]の他の一方に基づいてファーストクラスおよび高階多相型の型チェックと部分的な型推論で、 **algorithm_w** を拡張します。
     このシステムは、ML<sup>F</sup>などのファーストクラスの多型のための型推論で他の試みよりもわずかに型注釈を必要としますが、実装および使い方はかなり簡単です。
 
-|English|日本語|
-| --- | --- |
-|gradual|段階的、漸進的、なめらかな|
-|combine|結合する、合体する、併せ持つ|
-|benefits|利点|
-|safer|より安全な|
-|flexible|柔軟な|
-|delaing|遅延|
-|until|まで、かけて|
-|neccessary|必要|
+<sup><sub>
+gradual 段階的、漸進的、なめらかな
+combine 結合する、合体する、併せ持つ
+benefits 利点
+safer より安全な
+flexible 柔軟な
+delaing 遅延
+until まで、かけて
+neccessary 必要
+</sub></sup>
 
 -   > <sup><sub>
     [**gradual_typing**](https://github.com/hsk/type-systems-scala/tree/master/gradual_typing)
@@ -124,15 +124,15 @@ are minimal and contain code that is (hopefully) simple and clear.
     は Jeremy G. Siek と Manish Vachharajani による[論文][gradual]に基づいた、**algorithm_w**の別の単純な拡張です。
     gradual typing(漸進的型付け)は、プログラマが、静的な型の情報を追加することにより、動的なプログラムをより安全に、必要に応じて実行時まで型チェックを遅延させることにより、静的なプログラムをより柔軟にできるように、静的および動的型付けの利点を兼ね備えています。
 
-|English|日本語|
-| --- | --- |
-|experiment|実験|
-|dependent|依存|
-|contracts|契約|
-|external automatic theorem prover|外部の自動定理証明|
-|verify|確認|
-|satisfied|満足、満たす|
-|prevent|未然に防ぐ、防止する|
+<sup><sub>
+experiment 実験
+dependent 依存
+contracts 契約
+external automatic theorem prover 外部の自動定理証明
+verify 確認
+satisfied 満足、満たす
+prevent 未然に防ぐ、防止する
+</sub></sup>
 
 -   > <sup><sub>
     [**refined_types**](https://github.com/hsk/type-systems-scala/tree/master/refined_types)

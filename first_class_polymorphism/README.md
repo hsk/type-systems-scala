@@ -10,11 +10,11 @@ first class polymorphism は多相的なものを多相的なまま値として�
 First-class polymorphism
 ========================
 
-|English|日本語|
-| --- | --- |
-|intuitive|直感的な|
-|manner|やり方、方法|
-|impredicative|非可述的|
+<sup><sub>
+intuitive 直感的な
+manner やり方、方法
+impredicative 非可述的
+</sub></sup>
 
 > <sup><sub>
 This in an extension of ordinary Damas-Hindley-Milner type inference that supports first-class (impredicative) and higher-rank polymorphism in a very simple and intuitive manner, requiring only minimal type annotations.
@@ -27,16 +27,16 @@ This in an extension of ordinary Damas-Hindley-Milner type inference that suppor
 概要
 -----
 
-|English|日本語|
-| --- | --- |
-|although|だけれども、しかし、であるが|
-|quite|非常に|
-|limited|限られた|
-|neither|どちらでもない|
-|above|上記、上に|
-|undecidable|否定出来ない、申し分ない|
-|complicated|複雑な|
-|capable|能力のある, 可能な, 有能な|
+<sup><sub>
+although だけれども、しかし、であるが
+quite 非常に
+limited 限られた
+neither どちらでもない
+above 上記、上に
+undecidable 否定出来ない、申し分ない
+complicated 複雑な
+capable 能力のある, 可能な, 有能な
+</sub></sup>
 
 > <sup><sub>
 Although classical Damas-Hindley-Milner type inference supports polymorphic types, polymorphism is quite limited: function parameters cannot have polymorphic types and neither can type variables be instantiated with them.
@@ -47,21 +47,21 @@ In 2003, Didier Le Botlan and Didier Rémy presented [ML<sup>F</sup>][mlf], a sy
 一方、上記のすべてがサポートされている[System F][system_f]はありますが、型推論は決定不能です。
 2003年にDidier Le BotlanとDidier Rémyによって発表された[ML<sup>F</sup>][mlf]は最小限の型注釈を持つ多相型を推論することができるシステムですが、複雑な有界型とより複雑な型推論アルゴリズムを使用しています。
 
-|English|日本語|
-| --- | --- |
-|contrast|コントラスト、対比|
-|intuitive|直感的な|
-|considerably|かなり|
-|since|なぜなら〜だからだ|
-|least|最小|
-|proposed|提案された|
-|n-ary|n項の|
-|rigid|固い|
-|significantly|かなり，著しく，はっきりと|
-|increase|増加，増大，増進，増殖|
-|expressive|表現的な|
-|improve|進歩させる|
-|practical|実用的な|
+<sup><sub>
+contrast コントラスト、対比
+intuitive 直感的な
+considerably かなり
+since なぜなら〜だからだ
+least 最小
+proposed 提案された
+n-ary n項の
+rigid 固い
+significantly かなり，著しく，はっきりと
+increase 増加，増大，増進，増殖
+expressive 表現的な
+improve 進歩させる
+practical 実用的な
+</sub></sup>
 
 > <sup><sub>
 This implementation is based on the work of Daan Leijen, published in his paper [HMF: Simple Type Inference for First-Class Polymorphism][hmf].
@@ -79,9 +79,9 @@ HMFがサポートしている機能:
 
   - *polymorphic type parameters* 多相的型引数
 
-    |English|日本語|
-    | --- | --- |
-    |indeed|たしかに、まあ，さよう、いかにも|
+    <sup><sub>
+    indeed たしかに、まあ，さよう、いかにも
+    </sub></sup>
 
     > <sup><sub>
     Parameters used polymorphically require type annotations even in ML<sup>F</sup>; indeed, without the type annotation this would more likely be programmer error.
@@ -108,11 +108,11 @@ HMFがサポートしている機能:
 
   - *impredicative polymorphism* 非可述的多相性
 
-    |English|日本語|
-    | --- | --- |
-    |During|間に、中に|
-    |below|以下、次|
-    |correct|正しい|
+    <sup><sub>
+    During 間に、中に
+    below 以下、次
+    correct 正しい
+    </sub></sup>
 
     > <sup><sub>
     Type variables such as `a` and `b` in `(a -> b, a) -> b` can be instantiated to polymorphic type.
@@ -130,11 +130,11 @@ HMFがサポートしている機能:
 
   - *rigid type annotations* 厳格な型注釈
 
-    |English|日本語|
-    | --- | --- |
-    |absence|欠席|
-    |least|最低、最小|
-    |specify|特定する|
+    <sup><sub>
+    absence 欠席
+    least 最低、最小
+    specify 特定する
+    </sub></sup>
 
     > <sup><sub>
     In absence of type annotations, HMF will always infer the least polymorphic type.
@@ -165,11 +165,11 @@ HMFがサポートしている機能:
 詳細
 -------
 
-|English|日本語|
-| --- | --- |
-|represents|表す|
-|quantifiers|数量子|
-|unspecified|不特定、未定義|
+<sup><sub>
+represents 表す
+quantifiers 数量子
+unspecified 不特定、未定義
+</sub></sup>
 
 > <sup><sub>
 Types and expressions of HMF are simple extensions of what we had in `algorithm_w`.
@@ -194,11 +194,11 @@ let f_one_ann = fun (f : some[a] a -> a) -> f(one) in
 f_one_ann : (int -> int) -> int
 ```
 
-|English|日本語|
-| --- | --- |
-|important|重要|
-|canonical|標準的な|
-|efficiently|効果的に|
+<sup><sub>
+important 重要
+canonical 標準的な
+efficiently 効果的に
+</sub></sup>
 
 > <sup><sub>
 An important part of the type inference is the `replace_ty_constants_with_vars` function in `parser.mly`, which turns type constants `a` and `b` into `Bound` type variables if they are bound by `forall[a]` or `some[b]`.
@@ -209,11 +209,11 @@ This turns different versions of the same type `forall[b a] a -> b` and `forall[
 この機能は、型を*正規化*し、型の構造に表示されている順にバインドされた変数を順序付け、未使用のものを除去します。
 これは、同じ型の`forall[b a] a -> b`と`forall[c a b] a -> b`の異なるバージョンの標準的な表現`forall[a b] a -> b`に変わり、型推論エンジンが効率的に多相型を単一化することができます。
 
-|English|日本語|
-| --- | --- |
-|respective|それぞれの|
-|appear|現れる、表示する|
-|determined|決定|
+<sup><sub>
+respective それぞれの
+appear 現れる、表示する
+determined 決定
+</sub></sup>
 
 > <sup><sub>
 Function `substitute_bound_vars` in `infer.ml` takes a list of `Bound` variable ids, a list of replacement types and a type and returns a new type with `Bound` variables substituted with respective replacement types.
@@ -223,12 +223,12 @@ Function `escape_check` takes a list of `Generic` type variables and types `ty1`
 `escape_check`関数は`Generic`型変数のリストと型`ty1`と`ty2`を取り、
 `Generic`型変数リスト内の要素が`ty1`か`ty2`のフリーで一般的な変数のセット(これは、関数 `free_generic_vars`を使用して決定されます)内にあるかをチェックします。
 
-|English|日本語|
-| --- | --- |
-|rely|頼る|
-|equivalent|等価、同等の|
-|substitute|代入|
-|otherwise|一方|
+<sup><sub>
+rely 頼る
+equivalent 等価、同等の
+substitute 代入
+otherwise 一方
+</sub></sup>
 
 > <sup><sub>
 The main difference in function `unify` is the unification of polymorphic types.
@@ -254,9 +254,9 @@ It traverses the structure of the types in a depth-first, left-to-right order, s
 関数 `generalize` は、`Bound` 型変数を使って入力レベルよりも高いレベルですべての `Unbound`型変数を代入することにより、 `forall` 型に型変換します。
 これは、深さ優先の型の構造を左から右の順に移動し、`replace_ty_constants_with_vars` 関数と同じように、結果の型は正規形であることを確認します。
 
-|English|日本語|
-| --- | --- |
-|subsume|包含する|
+<sup><sub>
+subsume 包含する
+</sub></sup>
 
 > <sup><sub>
 The function `subsume` takes two types `ty1` and `ty2` and determines if `ty1` is an *instance* of `ty2`.
@@ -275,11 +275,11 @@ If unification succeeds, we check that no generic variable escapes, same as in `
 それ以外の場合は、`Generic`型変数で`ty1`を具体化し、具体化された型の両方を単一化します。
 単一化に成功した場合、`unify`と同じで、一般的な変数は全くエスケープしないことを確認してください。
 
-|English|日本語|
-| --- | --- |
-|significantly|大幅に|
-|instead|それよりも、かえって|
-|might be|かもしれません|
+<sup><sub>
+significantly 大幅に
+instead それよりも、かえって
+might be かもしれません
+</sub></sup>
 
 > <sup><sub>
 Type inference in function `infer` changed significantly.
@@ -313,10 +313,10 @@ Infering type annotation `expr : type` is equivalent to inferring the type of a 
 拡張
 --------
 
-|English|日本語|
-| --- | --- |
-|describe|説明する|
-|desirable|望ましい|
+<sup><sub>
+describe 説明する
+desirable 望ましい
+</sub></sup>
 
 > <sup><sub>
 Daan Leijen also published a reference implementation ([.zip][hmf-ref]) of HMF, written in Haskell.
@@ -335,12 +335,12 @@ Daan Leijen はまた Haskell で書かれた HMF のリファレンス実装を
 let ids = single(id) : list[forall[a] a -> a]
 ```
 
-|English|日本語|
-| --- | --- |
-|propagating|伝搬|
-|propagate|伝搬する|
-|indicate|示す、物語る|
-|whether|かどうか|
+<sup><sub>
+propagating 伝搬
+propagate 伝搬する
+indicate 示す、物語る
+whether かどうか
+</sub></sup>
 
 > <sup><sub>
 We can implement this in the type inference algorithm by *propagating* the information about *expected types* from function result type to function arguments and to parameter types of functions expressions.
@@ -355,9 +355,9 @@ Then we infer the types of the arguments, taking care to first infer the annotat
 関数アプリケーションから予期される型を伝播するために、我々は最初の関数の戻り値の型とそれを単一化。
 その後、我々は最初の注釈付き引数を推測するために、最後の型変数であるパラメータの引数を推測するために世話をして、引数の型を推論。
 
-|English|日本語|
-| --- | --- |
-|invariant|不変|
+<sup><sub>
+invariant 不変
+</sub></sup>
 
 > <sup><sub>
 We cannot propagate the expected type through a function application if the return type of the function is a type variable.
@@ -366,9 +366,9 @@ For example, for function `head : forall[a] list[a] -> a`, propagating the resul
 関数の戻り値の型が型変数であれば我々は、関数アプリケーションから予想型を伝播することはできません。
 例えば、関数`head : forall[a] list[a] -> a`では、`head(ids) : int -> int`での結果の型を伝播することは`list[forall[a] a -> a]`(この型システムは不変であるため) のインスタンスではない`list[int -> int]`へのパラメータの型を、具体化することになります。
 
-|English|日本語|
-| --- | --- |
-|unambiguous|明白な|
+<sup><sub>
+unambiguous 明白な
+</sub></sup>
 
 > <sup><sub>
 This extension also allows programmers to write anonymous functions with polymorphic arguments without annotations in cases when the function type is unambiguous:
