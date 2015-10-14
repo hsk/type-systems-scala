@@ -41,7 +41,7 @@ restriction 制限
 Records consist of labeled fields with values `{a = one, b = false}` and can extend other records `{x = false | r}`.
 The basic operations for records are *selection*, *extension* and *restriction* and are typed as follows:
 
-レコードは、値の`{a = one, b = false}`でラベル付けされたフィールドで構成されており、他のレコードに`{x = false | r}`を拡張することができます。
+レコードは、値の`{a = one, b = false}`でラベル付けされたフィールドで構成されており、他のレコード`{x = false | r}`に拡張することができます。
 レコードのための基本的な操作は、*選択*、*拡張*および*制限*で、次のように型定義されます：
 
 ```
