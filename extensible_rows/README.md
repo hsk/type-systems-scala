@@ -24,15 +24,11 @@ relatively 比較的
 </sub></sup>
 
 > <sup><sub>
-In his paper [Extensible records with scoped labels][1], Daan Leijen describes an innovative
-type inference system for extensible records which allows duplicate labels in rows. This makes
-it considerably simpler than most other record systems, which include predicates on record
-types such as the "lacks" predicate *`(r\l)`*, specifying that the record type `r` must not
-contain label `l`. This implementation closely follows Daan's presentation in his paper and
-is a relatively small extension of the Hindley-Milner type inference algorithm implemented
-in **algorithm_w** (the changes can be seen in commit [5c183a7][2]).
+In his paper [Extensible records with scoped labels][1], Daan Leijen describes an innovative type inference system for extensible records which allows duplicate labels in rows.
+This makes it considerably simpler than most other record systems, which include predicates on record types such as the "lacks" predicate *`(r\l)`*, specifying that the record type `r` must not contain label `l`.
+This implementation closely follows Daan's presentation in his paper and is a relatively small extension of the Hindley-Milner type inference algorithm implemented in **algorithm_w** (the changes can be seen in commit [5c183a7][2]).
 
-Daan Leijenは彼の論文[スコープドラベル付き拡張レコード][1]で、列に重複するラベルを可能にする拡張可能なレコードのための革新的な型推論システムを説明しています。
+彼の論文[スコープドラベル付き拡張レコード][1]で、Daan Leijenはrows内で重複するラベルを可能にする拡張可能なレコードのための革新的な型推論システムを説明しています。
 これは、レコードの型 `r` がラベル `l` を含んではならないことを指定して、"欠けている" 述語 *`(r/l)`* などのレコードタイプの述語が含まれるような他のほとんどのレコードシステムよりもそれはかなり簡単になります。
 この実装は、密接に彼の論文でDaanののプレゼンテーションに続き、algorithm_wに実装ヒンドリー - ミルナー型推論アルゴリズムの比較的小さい拡張したものです（変更はコミット[5c183a7][2]で見ることができます）。
 
@@ -42,20 +38,17 @@ restriction 制限
 </sub></sup>
 
 > <sup><sub>
-Records consist of labeled fields with values `{a = one, b = false}` and can extend other
-records `{x = false | r}`. The basic operations for records are *selection*, *extension*
-and *restriction* and are typed as follows:
+Records consist of labeled fields with values `{a = one, b = false}` and can extend other records `{x = false | r}`.
+The basic operations for records are *selection*, *extension* and *restriction* and are typed as follows:
 
-レコードの値を持つラベルのフィールドで構成`{a = one, b = false}`とその他のレコードを拡張することができます。`{x = false | r}`。
-レコードのための基本的な操作は、選択、拡張および制限され、次のように型定義されます：
+レコードは、値の`{a = one, b = false}`でラベル付けされたフィールドで構成されており、他のレコードに`{x = false | r}`を拡張することができます。
+レコードのための基本的な操作は、*選択*、*拡張*および*制限*で、次のように型定義されます：
 
 ```
 	(_.label) : forall[a r] {label : a | r} -> a
 	{label = _ | _} : forall[a r] (a, {r}) -> {label : a | r}
 	{_ - label} : forall[a r] {label : a | r} -> {r}
 ```
-
-
 
 > <sup><sub>
 Details
@@ -67,6 +60,7 @@ either どちらか
 Syntax sugar 構文糖
 consist 構成される
 wrapper ラッパー
+similarly 同様に
 </sub></sup>
 
 > <sup><sub>
@@ -74,7 +68,13 @@ The types of expressions `expr` and types `ty` in `expr.ml` are extended with pr
 Records can either be empty `{}` or extensions of other records `{x = false | r}`.
 Syntax sugar for `{x = false | {y = zero | {}}}` is `{x = false, y = zero}`.
 The type of rows similarly consists of empty rows `<>` and row extensions `<a : _ | ...>`.
-A record type is a wrapper for the type of row; other wrappers could exist (Daan gives example of sum/variant types).
+A record type is a wrapper for the type of row; other wrappers could exist (Daan gives example of sum/variant types).  
+
+`expr.ml`内の式の型`expr`と型`ty`はプリミティブなレコード操作と型を拡張しています。
+レコードは空 `{}` もしくは他のレコードの式 `{x = false | r}` のどちらかに出来ます。
+`{x = false | {y = zero | {}}}`のシンタックスシュガーは`{x = false, y = zero}`です。
+row型も同様に空のrow `<>`とrowの継承 `<a : _ | ...>` 制約です。
+レコード型はrowの型のためのラッパーです; 他のラッパーも存在しています(Dann はsum/vriant型の式を提供しています).
 
 <sup><sub>
 enclosing 囲む
@@ -85,7 +85,11 @@ handled 扱う、取り扱う
 The core of the type inference is implemented in functions `unify` and `rewrite_row`.
 The function `unify` unifies record types by unifying their enclosing rows, and unifies an empty row only with itself.
 If a row extension `<a : t | r>` is unified with another row, the function `rewrite_row` rewrites the second row by searching for the first field with label `a` and unifies its type with `t`.
-All other types are handled as before.
+All other types are handled as before.  
+
+型推論のコアは関数`unify`と`rewrite_row`で実装されています。
+関数`unify`はrowを囲む単一化によってレコード型を単一化し、空のrowはそれだけを単一化します。
+もしもrow拡張`<a : t | r>`が他のrowによって単一化された場合、関数`rewrite_row`はラベル`a`で１つ目のフィールド検索した物によって２つめのrowを書き換え、またそれの型は`t`で単一化します。
 
 <sup><sub>
 significant 重要な
@@ -96,6 +100,7 @@ restriction 制限
 > <sup><sub>
 The only other significant change is in function `infer`, where the types of new expression terms are inferred by treating them as implicit calls to *selection*, *extension* and *restriction* functions with types as above.
 
+唯一の他の重要な変更は`infer`関数内にあり、それは新しい式の項の型がそれら*selection*, *extension* と *restriction* 関数を上記の型を付けて暗黙の呼び出しで整える事で推論されました。
 
 > <sup><sub>
 Discussion
@@ -118,6 +123,10 @@ One potential problem with this implementation is that record literals and row t
 The unification procedure can rearrange fields as necessary, but records and record types can not be easily compared or canonically represented by strings.
 A better solution would be to gather all labels into a multi-map and use a specific sorting order for labels when representing rows as strings (implemented in [**extensible_rows2**][5]).
 
+この実装の１つの潜在的な問題はプログラマのコード上の他の依存と型推論アルゴリズムの処理内でレコードリテラルとrow型はrecord/row拡張のリストで表現されていることです。
+単一化命令はフィールドの再配置が必要でできますが、レコードとレコード型は簡単に文字列で比較もしくは標準的な表現が出来ません。
+よりよい解決方法は全てのラベルをマルチマップ内に集め、そしてrowの文字列を表示するときに特殊なソートオーダーをラベルに使うことです([**extensible_rows2**][5]内で実装されています)。
+
 <sup><sub>
 While ながら、している間
 possibility 可能性
@@ -131,6 +140,9 @@ structural subtyping 構造的部分型付け
 > <sup><sub>
 While this type system is simple to implement and use (for example, it is a part of the language [Elm][3]), it represents only one possibility for typing extensible records.
 Other proposals, summarized in [GHC wiki][4], include first-class labels, positive and negative ("lacks") predicates for record types and even more general predicates such as "disjoint", and also include structural subtyping (as used for objects in OCaml and Go).
+
+この型システムは簡単に実装し使われ(例えば、[Elm][3]言語で)、これは型拡張レコード用の唯一つの可能性の表現です。
+他の提案は、[GHC wiki][4]にまとめられ、first-classラベルや、 レコード型とさらに"disjoint"のような一般的な述語の為のポジティブもしくはネガティブ("lacks")述語、また構造的部分型(OCamlやGoのオブジェクトで使われている)が含まれます。
 
 [1]: http://research.microsoft.com/apps/pubs/default.aspx?id=65409
 [2]: https://github.com/tomprimozic/type-systems/commit/5c183a7866aa30f3350a4cab011e376d36dd385e
