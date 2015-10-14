@@ -18,16 +18,17 @@ https://github.com/tomprimozic/type-systems.git
 |hopefully|出来るだけ|
 |own|我々の|
 
+> <sup><sub>
 This repository contains implementations of different type systems in Scala.
 
 このリポジトリには、Scalaで書いた異なるタイプシステムの実装が含まれています。
 
+> <sup><sub>
 It is meant to help out anyone who wants to learn more about advanced type systems and
 type inference or experiment by extending or implementing their own. The implementations
 are minimal and contain code that is (hopefully) simple and clear.
 
 これは、拡張または独自に実装することで、高度な型システムと型推論や実験についてもっと学びたいという方を助けることを意味しています。
-
 実装は最小限で、（出来るだけ）単純明快であるコードが含まれています。
 
 |English|日本語|
@@ -39,7 +40,8 @@ are minimal and contain code that is (hopefully) simple and clear.
 |assign|割り当てる|
 |generalization|一般化|
 
--   [**algorithm_w**](https://github.com/hsk/type-systems-scala/tree/master/algorithm_w)
+-   > <sup><sub>
+    [**algorithm_w**](https://github.com/hsk/type-systems-scala/tree/master/algorithm_w)
     contains one of the most basic yet efficient implementation of Damas-Hindley-Milner
     type inference algorithm (used in functional languages such as OCaml, Haskell and Elm)
     called *Algorithm W*. Uses references to simulate type substitutions and assigns
@@ -60,7 +62,8 @@ are minimal and contain code that is (hopefully) simple and clear.
 |surprisingly|驚くほど|
 |incorporated|組み込まれる|
 
--   [**extensible_rows**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows)
+-   > <sup><sub>
+    [**extensible_rows**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows)
     extends **algorithm_w** with type inference for extensible records/rows
     with scoped labels, based on Daan Leijen's excellent [paper][extensible_rows]. Although
     this is just one way of implementing extensible records, it's extremly simple and
@@ -71,7 +74,8 @@ are minimal and contain code that is (hopefully) simple and clear.
     はDaan Leijenの素晴らしい[論文][extensible_rows]に基づいて、スコープ付きラベルと拡張可能なレコード/行の型推論で **algorithm_w** を拡張します。
 	これは拡張可能なレコードを実現するためのひとつの方法ですが、それは非常に簡単で驚くほど便利であり、[Elm](http://elm-lang.org/learn/Records.elm)プログラミング言語に組み込まれました。
 
--   [**extensible_rows2**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows2)
+-   > <sup><sub>
+    [**extensible_rows2**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows2)
     is an optimized implementation of **extensible_rows**.
     
     [**extensible_rows2**](https://github.com/hsk/type-systems-scala/tree/master/extensible_rows2)
@@ -86,7 +90,8 @@ are minimal and contain code that is (hopefully) simple and clear.
 |attempt|こころみ|
 |considerably|かなり|
 
--   [**first_class_polymorphism**](https://github.com/hsk/type-systems-scala/tree/master/first_class_polymorphism)
+-   > <sup><sub>
+    [**first_class_polymorphism**](https://github.com/hsk/type-systems-scala/tree/master/first_class_polymorphism)
     extends **algorithm_w** with type checking and partial type inference for first-class
     and higher-rank polymorphism, based on another one of Daan Leijen's [papers][hmf].
     This system requires slightly more type annotations than other attempts at type inference for
@@ -108,7 +113,8 @@ are minimal and contain code that is (hopefully) simple and clear.
 |until|まで、かけて|
 |neccessary|必要|
 
--   [**gradual_typing**](https://github.com/hsk/type-systems-scala/tree/master/gradual_typing)
+-   > <sup><sub>
+    [**gradual_typing**](https://github.com/hsk/type-systems-scala/tree/master/gradual_typing)
     is another simple extension of **algorithm_w** based on a [paper][gradual] by Jeremy G. Siek
     and Manish Vachharajani. Gradual typing combines the benefits of static and dynamic typing,
     allowing programmers to make dynamic programs safer by adding static type information, and
@@ -128,7 +134,8 @@ are minimal and contain code that is (hopefully) simple and clear.
 |satisfied|満足、満たす|
 |prevent|未然に防ぐ、防止する|
 
--   [**refined_types**](https://github.com/hsk/type-systems-scala/tree/master/refined_types)
+-   > <sup><sub>
+    [**refined_types**](https://github.com/hsk/type-systems-scala/tree/master/refined_types)
     is an experiment that extends the HM type system with dependent types in the form of function
     contracts. It uses an external automatic theorem prover to verify that function contracts are
     satisfied, to prevent many of the most common software errors, such

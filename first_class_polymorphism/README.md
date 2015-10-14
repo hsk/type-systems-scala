@@ -21,8 +21,8 @@ This in an extension of ordinary Damas-Hindley-Milner type inference that suppor
 
 これは、従来のDamas-Hindley-Milner型推論を非常にシンプルかつ直感的な方法で最小限の型注釈が必要なファーストクラス（非可述的）と高階の多相型をサポートして拡張したものです。
 
-Overview
---------
+> <sup><sub>
+> Overview
 
 概要
 -----
@@ -72,7 +72,7 @@ In addition to the basic algorithm, this implementation includes some extensions
 ML<sup>F</sup>とは対照的に、HMFは非常に直感的なSystem Fの型を使用しており、かなり単純な型推論アルゴリズムですが、まだそれは常に少なくとも多相的な型を推論するので、HMFはより多くの型注釈が必要です。
 基本的なアルゴリズムに加えて、この実装では、彼の論文でDaanにより提案されたいくつかの拡張を含んでおり、n項の関数呼び出しのためのrigitアノテーションやサポートなど、かなりHMFの表現力と実用性を向上させることができます。
 
-
+> <sup><sub>
 Features supported by HMF:
 
 HMFがサポートしている機能:
@@ -130,7 +130,6 @@ HMFがサポートしている機能:
 
   - *rigid type annotations* 厳格な型注釈
 
-
     |English|日本語|
     | --- | --- |
     |absence|欠席|
@@ -160,9 +159,8 @@ HMFがサポートしている機能:
     ids : list[forall[a] a -> a]
     ```
 
-
-Details
--------
+> <sup><sub>
+> Details
 
 詳細
 -------
@@ -310,7 +308,7 @@ Infering type annotation `expr : type` is equivalent to inferring the type of a 
 引数の型を推論した後、我々は、パラメータの型が引数の型のインスタンスであるかどうかを判断するためには、関数 `subsume`（または引数が注釈されている場合は`unify`）を使用します。
 
 > <sup><sub>
->> Extensions
+> Extensions
 
 拡張
 --------
