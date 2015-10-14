@@ -1,28 +1,29 @@
 > <sup><sub>
 Algorithm W
 
-Algorithm W の適当な訳
+# Algorithm W の適当な訳
 
-|English|日本語|
-| --- | --- |
-|infer|推論する|
-|occur|出現する|
-|unify|単一化|
-|polymorphism|多相性|
-|porimorphic|多相的|
-|substitution|代入、置換|
-|generalize|一般化|
-|instantiate|具体化|
 
-|English|日本語|
-| --- | --- |
-|principal|主要な|
-|although|であるが、だが|
-|explicit|明確な、厳格な、自明の|
-|substitution|代入、置換|
-|permit|許可する,可能にする|
-|efficient|効率的な|
-|achieving|達成する|
+<sup><sub>
+infer 推論する
+occur 出現する
+unify 単一化
+polymorphism 多相性
+porimorphic 多相的
+substitution 代入、置換
+generalize 一般化
+instantiate 具体化
+</sub></sup>
+
+<sup><sub>
+principal 主要な
+although であるが、だが
+explicit 明確な、厳格な、自明の
+substitution 代入、置換
+permit 許可する,可能にする
+efficient 効率的な
+achieving 達成する
+</sub></sup>
 
 > <sup><sub>
 Algorithm W is the original algorithm for infering types in the Damas-Hindley-Milner type system.
@@ -39,14 +40,14 @@ Overview
 
 ## 概要
 
-|English|日本語|
-| --- | --- |
-|several|いくつかの a few < several < many|
-|naive|素朴な,単純な|
-|insted|その代りに|
-|bound|束縛|
-|unbound|未束縛|
-|eloquent|能弁だ；爽やかだ；爽かだ；宛転たる；能辯だ；雄弁だ；さわやかだ|
+<sup><sub>
+several いくつかの a few < several < many
+naive 素朴な,単純な
+insted その代りに
+bound 束縛
+unbound 未束縛
+eloquent 能弁だ；爽やかだ；爽かだ；宛転たる；能辯だ；雄弁だ；さわやかだ
+</sub></sup>
 
 > <sup><sub>
 For a general description of Algorithm W, see the [Wikipedia article][wikipedia].
@@ -88,11 +89,11 @@ Finally, the type of a *call* expression is inferred by first matching the type 
 *let*式の型は最初にletの値の型を推論し、次に型の一般化し、そして拡張された型環境でlet本体の型を推論することによって推論されます。
 最後、*call* 式の型は、最初の`match_fun_ty`関数を使用して呼び出されている式の型にマッチした後、引数の型を推論し、関数パラメータの型とそれらを単一化することにより推論されます。
 
-|English|日本語|
-| --- | --- |
-|i.e.|つまり、すなわち|
-|determine|決定|
-|identical|同一の|
+<sup><sub>
+i.e. つまり、すなわち
+determine 決定
+identical 同一の
+</sub></sup>
 
 > <sup><sub>
 The function `unify` takes two types and tries to *unify* them, i.e. determine if they can be equal.
@@ -105,12 +106,12 @@ After first performing an "occurs check", unbound type variables can be unified 
 型定数は同じ型定数を単一化し、型を矢印やその他の構造化型は、各成分を単一化することで単一化されています。
 最初の"出現チェック"の実行後、未結合の型変数は、他の型を指すリンクとの参照を置き換えることにより、任意の型で単一化することができます。
 
-|English|日本語|
-| --- | --- |
-|adjust|整える|
-|diverge|発散する、分岐する|
-|ensuring|確保する|
-|correctly|正しく|
+<sup><sub>
+adjust 整える
+diverge 発散する、分岐する
+ensuring 確保する
+correctly 正しく
+</sub></sup>
 
 > <sup><sub>
 The function `occurs_check_adjust_levels` makes sure that the type variable being unified doesn't occur within the type it is being unified with.
@@ -133,18 +134,18 @@ Possible optimizations
 
 ## 可能な最適化
 
-|English|日本語|
-| --- | --- |
-|state-of-the-art|最先端|
-|avoid|避ける|
-|for the sake of|のために|
-|during|中に|
-|adjustment|調整、補正|
-|deal|取引、契約|
-|arise|生じる、起こる、発生する|
-|further|さらに|
-|condensing|凝縮します|
-|take care of|面倒を見る|
+<sup><sub>
+state-of-the-art 最先端
+avoid 避ける
+for the sake of のために
+during 中に
+adjustment 調整、補正
+deal 取引、契約
+arise 生じる、起こる、発生する
+further さらに
+condensing 凝縮します
+take care of 面倒を見る
+</sub></sup>
 
 > <sup><sub>
 Although this implementation is reasonably efficient, state-of-the-art implementations of HM type inference employ several more advanced techniques which were avoided in this implementation for the sake of clarity.
