@@ -4,9 +4,9 @@
 
 https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorphism-subtyping-and-type-inference-in-mlsub.pdf
 
-<sup><sub>|
-superset|上位集合|
-parametric|パラメトリック|
+<sup><sub>
+superset 上位集合
+parametric パラメトリック
 </sub></sup>
 
 > We present a type system combining subtyping and ML-style parametric polymorphism.
@@ -31,11 +31,11 @@ parametric|パラメトリック|
 
 ### Introduction 1
 
-<sup><sub>|
-descendants|子孫|
-practical|実用的な|
-sporting|スポーツの、公正な、変種の、勝負事|
-decidable|決定可能な|
+<sup><sub>
+descendants 子孫
+practical 実用的な
+sporting スポーツの、公正な、変種の、勝負事
+decidable 決定可能な
 </sub></sup>
 
 
@@ -45,10 +45,10 @@ decidable|決定可能な|
 
 MLとこれらの子孫のヒンドリミルナ型システムは人気があり実用的で、決定可能な型推論と実用的な型をもつ変種である。
 
-<sup><sub>|
-extending|延長|
-preserving|保存|
-problematic|問題|
+<sup><sub>
+extending 延長
+preserving 保存
+problematic 問題
 </sub></sup>
 
 > However, extending the system to handle subtyping while preserving these properties has been problematic.
@@ -59,13 +59,13 @@ problematic|問題|
 
 ### Introduction 2
 
-<sup><sub>|
-but also|だけでなく|
-expose|暴露する、公開する|
-such|そのような|
-carefully|慎重に|
-Consider|検討して|
-predicate|述語|
+<sup><sub>
+but also だけでなく
+expose 暴露する、公開する
+such そのような
+carefully 慎重に
+Consider 検討して
+predicate 述語
 </sub></sup>
 
 
@@ -103,14 +103,14 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 ### Introduction 3
 
-<sup><sub>|
-strange|奇妙な|
-demands|要求|
-whatever|どのような|
-acceptable|許容できる|
-constraint|制約|
-arise|生じる|
-behaviour|ふるまい|
+<sup><sub>
+strange 奇妙な
+demands 要求
+whatever どのような
+acceptable 許容できる
+constraint 制約
+arise 生じる
+behaviour ふるまい
 </sub></sup>
 
 
@@ -130,9 +130,9 @@ behaviour|ふるまい|
 
 ### Introduction 4
 
-<sup><sub>|
-examine|調べます|
-actual|実際|
+<sup><sub>
+examine 調べます
+actual 実際
 </sub></sup>
 
 > Let’s examine the actual data flow of this function:
@@ -143,11 +143,11 @@ actual|実際|
 
 	arguments to p <- v -> result <- d
 
-<sup><sub>|
-ignoring|無視する|
-orientation|向き|
-edges|エッジ|
-conclude|結論を出す|
+<sup><sub>
+ignoring 無視する
+orientation 向き
+edges エッジ
+conclude 結論を出す
 </sub></sup>
 
 > Only by ignoring the orientation of the edges above could we conclude that d flows to the argument of p.
@@ -159,12 +159,12 @@ conclude|結論を出す|
 
 上記のエッジの向きを無視することのみで我々はpの引数からdが流れていると結論付ける事が出来る。
 
-<sup><sub>|
-Indeed|確かに|
-exactly|正確に|
-equality|平等|
-constraints|制約|
-direction|方向|
+<sup><sub>
+Indeed 確かに
+exactly 正確に
+equality 平等
+constraints 制約
+direction 方向
 </sub></sup>
 
 > Indeed, this is exactly what ML does: by turning data flow into equality constraints between types, information about the direction of data flow is ignored.
@@ -178,11 +178,11 @@ direction|方向|
 たしかに、これはMLについて正確だ:
 タイプ間で等価性制約内でデータフローから回す事で、データフローの方向の情報ついて無視する。
 
-<sup><sub>|
-Since|以来、いるので|
-equality|平等|
-treated|治療|
-undirected|無向|
+<sup><sub>
+Since 以来、いるので
+equality 平等
+treated 治療
+undirected 無向
 </sub></sup>
 
 > Since equality is symmetric, data flow is treated as undirected.
@@ -201,11 +201,11 @@ undirected|無向|
 
 部分型サポートはデータフローの方向について気にする事だ。
 
-<sup><sub>|
-provide|提供します|
-least|最低|
-guarantees|保証|
-destination|宛先|
+<sup><sub>
+provide 提供します
+least 最低
+guarantees 保証
+destination 宛先
 </sub></sup>
 
 > With subtyping, a source of data must provide at least the guarantees that the destination requires, but is free to provide more.
@@ -216,11 +216,11 @@ destination|宛先|
 
 ### Introduction 6
 
-<sup><sub>|
-noticed|気づいた|
-separation|分離|
-bipartite|二分|
-cycles|サイクル|
+<sup><sub>
+noticed 気づいた
+separation 分離
+bipartite 二分
+cycles サイクル
 </sub></sup>
 
 > In his PhD thesis, Pottier1 noticed that the graph of data flow has a simple structure.
@@ -243,11 +243,11 @@ cycles|サイクル|
 
 ### Introduction 7
 
-<sup><sub>|
-insight|洞察力|
-further|さらにまた|
-religious|宗教的な|
-distinction|違い|
+<sup><sub>
+insight 洞察力
+further さらにまた
+religious 宗教的な
+distinction 違い
 </sub></sup>
 
 > We take this insight a step further,
@@ -271,17 +271,17 @@ distinction|違い|
 
 # 2 Input and output types
 
-<sup><sub>|
-form|形成する|
-lattice|格子|
-least-upper-bound|最小上限|
-greatest-upper-bound|最大上限|
-appear|現れます|
-arbitrarily|任意|
-randomly|無作為に|
-produce|作り出す|
-either|どちらか|
-actual|実際|
+<sup><sub>
+form 形成する
+lattice 格子
+least-upper-bound 最小上限
+greatest-upper-bound 最大上限
+appear 現れます
+arbitrarily 任意
+randomly 無作為に
+produce 作り出す
+either どちらか
+actual 実際
 </sub></sup>
 
 
@@ -312,11 +312,11 @@ actual|実際|
 もしもプログラムがランダムに選んで生成されたτ1か型τ2の1つのうちどちらかのオブジェクトの場合、実際の出力型はτ1 ⨆ τ2です。
 
 
-<sup><sub>|
-Similarly|同様に|
-again|再び|
-arises|生じる|
-describing|記載する|
+<sup><sub>
+Similarly 同様に
+again 再び
+arises 生じる
+describing 記載する
 </sub></sup>
 
 > Similarly, if a program uses an input in a context where a τ1 is required and again in a context where a τ2 is, then the actual input type is τ1 ⨅ τ2.
@@ -336,11 +336,11 @@ describing|記載する|
 
 一般的に、出力に記載されたときのみが⨆発生し、入力中に記載された時のみ⨅が発生する。
 
-<sup><sub>|
-similar vein|同じような文脈|
-Thus|このように|
-distinguish|区別|
-describe|説明する|
+<sup><sub>
+similar vein 同じような文脈
+Thus このように
+distinguish 区別
+describe 説明する
 </sub></sup>
 
 
@@ -375,14 +375,14 @@ describe|説明する|
 
 ### 3.1
 
-<sup><sub>|
-relies|依存している|
-dealing|取扱う|
-equations|方程式|
-deal|契約|
-constraints|制約|
-rather|むしろ|
-equations|方程式|
+<sup><sub>
+relies 依存している
+dealing 取扱う
+equations 方程式
+deal 契約
+constraints 制約
+rather むしろ
+equations 方程式
 </sub></sup>
 
 > The core operation of the Damas-Milner type inference algorithm [1] is unification.
@@ -410,9 +410,9 @@ Damas-Milner型推論アルゴリズム[1]のコアの操作は単一化です�
 
 ### 3.2
 
-<sup><sub>|
-for instance|たとえば|
-dual|の二重|
+<sup><sub>
+for instance たとえば
+dual の二重
 </sub></sup>
 
 > There are three different situations in which DamasMilner inference uses unification. 
@@ -440,16 +440,16 @@ DamasMilner型推論が単一化を使う中で３つの異なる状況があり
 
 ２つ目は最初と重なりますが、型がλ束縛変数(使う型は全て同じ型)のときの２つの必要な入力の式を単一化することです。
 
-<sup><sub>|
-correspond|対応します|
-respectively|それぞれ|
-disparate|異種|
-underconstrained|拘束します|
-useless|役に立ちません|
-disparate|異種|
-overconstrained|制約を超えます|
-neither|どちらも|
-can cause|発生する可能性がある|
+<sup><sub>
+correspond 対応します
+respectively それぞれ
+disparate 異種
+underconstrained 拘束します
+useless 役に立ちません
+disparate 異種
+overconstrained 制約を超えます
+neither どちらも
+can cause 発生する可能性がある
 </sub></sup>
 
 > With subtyping, these correspond respectively to the introduction of a ⨆ or a ⨅ operator. 
@@ -475,12 +475,12 @@ MLsubでは、これらは失敗できません:
 
 ### 3.3
 
-<sup><sub>|
-For instance|たとえば|
-routing|経路|
-tends|期待して|
-badly.|ひどいです。|
-to be the same as|は同じです|
+<sup><sub>
+For instance たとえば
+routing 経路
+tends 期待して
+badly. ひどいです。
+to be the same as は同じです
 </sub></sup>
 
 > The third situation in which unification is used is the routing of inputs to outputs.
@@ -515,10 +515,10 @@ to be the same as|は同じです|
 
 ### 3.4
 
-<sup><sub>|
-demand|要望|
-domain|ドメイン|
-ensure|確保|
+<sup><sub>
+demand 要望
+domain ドメイン
+ensure 確保
 </sub></sup>
 
 > With subtyping, we demand only that the type of `e2` be a subtype of the domain of `e1`.
@@ -548,13 +548,13 @@ ensure|確保|
 
 ### 3.5
 
-<sup><sub>|
-restriction|制限|
-analagous|類推の|
-dub|吹き替えのせりふを入れる|
-remaining|残りの|
-involving|関連します|
-decomposed|分解された|
+<sup><sub>
+restriction 制限
+analagous 類推の
+dub 吹き替えのせりふを入れる
+remaining 残りの
+involving 関連します
+decomposed 分解された
 </sub></sup>
 
 > This syntactic restriction allows us to define an algorithm analagous to unification which we dub biunification.
@@ -565,8 +565,8 @@ decomposed|分解された|
 
 この構文的な制限は我々に我々が置き換えるbiunification単一化の類推アルゴリズムを定義する事を許可します。
 
-<sup><sub>|
-exclude|除外|
+<sup><sub>
+exclude 除外
 </sub></sup>
 
 > The difficult cases of `τ1 ⨅ τ2 ≤ τ3` and `τ1 ≤ τ2 ⨆ τ3` are excluded by construction, while the remaining cases involving lattice operations (`τ1 ≤ τ2 ⨅ τ3` and `τ1 ⨆ τ2 ≤ τ3`) are easily decomposed into smaller constraints.
@@ -579,10 +579,10 @@ exclude|除外|
 
 ### 3.6
 
-<sup><sub>|
-broadly|広い意味|
-We then|それから|
-in place of|変わりに|
+<sup><sub>
+broadly 広い意味
+We then それから
+in place of 変わりに
 </sub></sup>
 
 > We then infer types using a method broadly similar to Damas-Milner inference, with biunification in place of standard unification.
@@ -598,11 +598,11 @@ in place of|変わりに|
 
 ### 4.1
 
-<sup><sub>|
-Much|多くの|
-previous work|以前の研究|
-containing|含みます|
-quantification|定量化|
+<sup><sub>
+Much 多くの
+previous work 以前の研究
+containing 含みます
+quantification 定量化
 </sub></sup>
 
 
@@ -616,32 +616,32 @@ quantification|定量化|
 
 ### 4.2
 
-<sup><sub>|
-leads|先駆け|
-surprisingly|驚くほど|
-finicky|気難しいです|
+<sup><sub>
+leads 先駆け
+surprisingly 驚くほど
+finicky 気難しいです
 </sub></sup>
 
 > This leads to a surprisingly finicky subtyping relation between polymorphic types.
 
 この先駆けは驚く程気難しいサブタイピングで多相的な型と関係しています。
 
-<sup><sub>|
-Quantifying|定量|
-admits|認めている|
-proving|証明|
-relationships|関係|
+<sup><sub>
+Quantifying 定量
+admits 認めている
+proving 証明
+relationships 関係
 </sub></sup>
 
 > Quantifying over ground types admits case analysis over types as a means of proving subtyping relationships between polymorphic types.
 
 グランド型上の定量化は多相型の間のサブタイピング関係の証明できる意味の型上の解析できるケースを許可します。
 
-<sup><sub>|
-Essentially|基本的に|
-bakes|焼く|
-closed-world|閉じた世界|
-assumption|仮定|
+<sup><sub>
+Essentially 基本的に
+bakes 焼く
+closed-world 閉じた世界
+assumption 仮定
 </sub></sup>
 
 > Essentially, defining polymorphic subtyping in terms of ground types bakes in a closed-world assumption.
@@ -650,33 +650,33 @@ assumption|仮定|
 
 ### 4.3
 
-<sup><sub>|
-Instead|代わりに|
-reformulate|再公式化する|
-axiomatisation|公理atisation|
+<sup><sub>
+Instead 代わりに
+reformulate 再公式化する
+axiomatisation 公理atisation
 </sub></sup>
 
 > Instead, we reformulate subtyping by giving an algebraic axiomatisation of subtyping.
 
 かわりに、われわれはサブタイピングを与えられたサブタイピングの代数的公理によって再公式化します。
 
-<sup><sub>|
-whose|その|
-counterintuitive|直観に反した|
-relies|依存している|
-nonexistence|非存在|
-certain|一定|
-thereby|それによって|
+<sup><sub>
+whose その
+counterintuitive 直観に反した
+relies 依存している
+nonexistence 非存在
+certain 一定
+thereby それによって
 </sub></sup>
 
 > Some counterintuitive subtyping relations whose truth relies on the nonexistence of certain types are thereby false in our system.
 
 いくつかの直感に反した正しい依存している一定の型に非存在のサブタイピング関係はそれによって我々のシステム上では偽です。
 
-<sup><sub>|
-definition|定義|
-reasoning|推論|
-precluded|排除|
+<sup><sub>
+definition 定義
+reasoning 推論
+precluded 排除
 </sub></sup>
 
 > Our definition uses only open-world reasoning: case analysis on a type variable is precluded.
@@ -686,10 +686,10 @@ precluded|排除|
 
 #### 4.4
 
-<sup><sub>|
-relating|関連|
-finite|有限な|
-automata|オートマトン|
+<sup><sub>
+relating 関連
+finite 有限な
+automata オートマトン
 </sub></sup>
 
 
@@ -701,9 +701,9 @@ automata|オートマトン|
 
 ### 5.1
 
-<sup><sub>|
-simplification|簡素化|
-subsumption|包摂|
+<sup><sub>
+simplification 簡素化
+subsumption 包摂
 </sub></sup>
 
 
@@ -722,10 +722,10 @@ subsumption|包摂|
 我々は我々の関数の型を推論し簡潔化する我々の実装をOCamlの標準Listモジュールに使いました。
 
 
-<sup><sub>|
-syntactically|構文的には|
-as compact as|以下のようにコンパクト|
-identical|同一の|
+<sup><sub>
+syntactically 構文的には
+as compact as 以下のようにコンパクト
+identical 同一の
 </sub></sup>
 
 > The types inferred by MLsub were as compact as those inferred by OCaml, and in most cases were syntactically identical.
@@ -738,10 +738,10 @@ MLsubによって推論された型はOCamlで推論した物をコンパクト�
 
 ### 5.3
 
-<sup><sub>|
-available|利用できます|
-interactively|対話形式で|
-author’s|著者の|
+<sup><sub>
+available 利用できます
+interactively 対話形式で
+author’s 著者の
 </sub></sup>
 
 > The implementation is available from, and can be used interactively on the first author’s website:
