@@ -29,7 +29,7 @@ We demonstrate this system in the minimal language MLsub, which types a strict s
 
 ## Introduction
 
-> Introduction 1
+> 1
 
 <sup><sub>
 descendants 子孫
@@ -57,7 +57,7 @@ However, extending the system to handle subtyping while preserving these propert
 
 しかしながらこれらのプロパティが持っている問題を保持している間、サブタイピングを延長であるシステムからハンドルする。
 
-> Introduction 2
+> 2
 
 <sup><sub>
 but also だけでなく
@@ -99,7 +99,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 	(α → bool) → α → α → α
 
 
-> Introduction 3
+> 3
 
 <sup><sub>
 strange 奇妙な
@@ -126,7 +126,7 @@ But this constraint does not arise from the behaviour of the program: at no poin
 しかしこの制約は我々の関数がdからpを通すというプログラムの振る舞いから生じることはない。
 
 
-> Introduction 4
+> 4
 
 <sup><sub>
 examine 調べます
@@ -186,7 +186,7 @@ Since equality is symmetric, data flow is treated as undirected.
 
 なぜならば等価性は対比的で、データフローは無方向で整えられているからだ。
 
-> Introduction 5
+> 5
 
 > <sup><sub>
 To support subtyping is to care about the direction of data flow.  
@@ -208,7 +208,7 @@ With subtyping, a source of data must provide at least the guarantees that the d
 
 部分型付けでは、データのソースは宛先を必要とするが、たくさん提供する事で自由であることを最低限保証する必要がある。
 
-> Introduction 6
+> 6
 
 <sup><sub>
 noticed 気づいた
@@ -235,7 +235,7 @@ With edges only from inputs to outputs, such graphs have no cycles (or even path
 
 入力から出力へのエッジでは、サイクル無しのグラフ(もしくは１つのエッジ以上のパスを持っている)のようなものがある。
 
-> Introduction 7
+> 7
 
 <sup><sub>
 insight 洞察力
@@ -453,7 +453,7 @@ MLsubでは、これらは失敗できません:
 For instance たとえば
 routing 経路
 tends 期待して
-badly. ひどいです。
+badly ひどいです
 to be the same as は同じです
 </sub></sup>
 
