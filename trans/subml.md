@@ -41,9 +41,9 @@ We demonstrate this system in the minimal language MLsub, which types a strict s
 
 The Hindley-Milner type system of ML and its descendants is popular and practical, sporting decidable type inference and principal types.
 
-ヒンドリミルナ型システムおぶMLとこれらの子孫は人気がありかつ実用的、変種は決定可能だ型推論と実用的な型。
+<!-- ヒンドリミルナ型システムおぶMLとこれらの子孫は人気がありかつ実用的、変種は決定可能だ型推論と実用的な型。 -->
 
-	MLとこれらの子孫のヒンドリミルナ型システムは人気があり実用的で、決定可能な型推論と実用的な型をもつ変種である。
+MLとこれらの子孫のヒンドリミルナ型システムは人気があり実用的で、決定可能な型推論と実用的な型をもつ変種である。
 
 |English|日本語|
 | --- | --- |
@@ -53,9 +53,9 @@ The Hindley-Milner type system of ML and its descendants is popular and practica
 
 However, extending the system to handle subtyping while preserving these properties has been problematic.
 
-しかしながら、延長であるシステムからハンドルするサブタイプを、間、保存これらのプロパティが持っている問題を。
+<!-- しかしながら、延長であるシステムからハンドルするサブタイプを、間、保存これらのプロパティが持っている問題を。 -->
 
-	しかしながらこれらのプロパティが持っている問題を保持している間、サブタイピングを延長であるシステムからハンドルする。
+しかしながらこれらのプロパティが持っている問題を保持している間、サブタイピングを延長であるシステムからハンドルする。
 
 ### Introduction 2
 
@@ -72,29 +72,34 @@ However, extending the system to handle subtyping while preserving these propert
 Subtyping is useful to encode extensible records, polymorphic variants, and object-oriented programs,
 but also allows us to expose more polymorphism even in core ML programs that do not use such features by more carefully analysing data flow.
 
-サブタイピングは使いやすいからエンコード拡張可能レコード、多相的バリアント、そしてオブジェクト指向プログラム、
+<!-- サブタイピングは使いやすいからエンコード拡張可能レコード、多相的バリアント、そしてオブジェクト指向プログラム、
 しかしながら許す我々にとぅ公開するもっと多相的なイーブンいんコアMLプログラムだっと違うつかうようなおぶ機能ばいもっと慎重に調べろデータフロー。
 
 google: サブタイプは、拡張可能な記録、多型変異体、及びオブジェクト指向プログラムをエンコードすることが有用なだけでなく、私たちはもっと慎重にデータフローを分析することによって、このような機能を使用していないコアMLプログラムでより多くの多型を公開することができます。
+-->
 
-	拡張可能なレコード、多相的バリアント、オブジェクト指向プログラミングからサブタイプはエンコードしやすいが、しかしデータフロー解析をもっと慎重にデータフローを分析してから、機能を使わないコアMLプログラム内でより多くの多相型を公開する事を許可する。
+拡張可能なレコード、多相的バリアント、オブジェクト指向プログラミングからサブタイプはエンコードしやすいが、しかしデータフロー解析をもっと慎重にデータフローを分析してから、機能を使わないコアMLプログラム内でより多くの多相型を公開する事を許可する。
 
 Consider the select function, which takes three arguments: a predicate p, a value v and a default d, and returns the value if the predicate holds of it, and the default otherwise:
 
+<!--
 検討してselect関数、これ取る３つの引数：述語p,値vとデフォルトd、そして返す値もし述語保持するおぶこれ、そしてデフォルト他の：
 
 google: 述語はそれを保持している場合、値を述語p、値VとデフォルトのD、および返し、それ以外の場合は、デフォルト：3つの引数をとり選択機能を、考えてみましょう：
+-->
 
-	以下の述語p,値vとデフォルトdの３つの引数を取るselect関数を検討しよう。もしこの術語が保持される値を返し、そうでなければデフォルト値を返す:
+以下の述語p,値vとデフォルトdの３つの引数を取るselect関数を検討しよう。もしこの術語が保持される値を返し、そうでなければデフォルト値を返す:
 
 
 	select p v d = if (p v) then v else d
 
 In ML and related languages, select has type scheme
 
+<!--
 いんMLと最近の言語、select持ってるタイプスキーム
+-->
 
-	MLや最近の言語では、selectはタイプスキームを持つ
+MLや最近の言語では、selectはタイプスキームを持つ
 
 	(α → bool) → α → α → α
 
@@ -114,15 +119,18 @@ In ML and related languages, select has type scheme
 
 This type is quite strange, in that it demands that whatever we pass as the default d be acceptable to the predicate p.
 
+<!--
 この型はかなり奇妙、いんだっとこれ要求だっとどのような我々通すあずザデフォルトdは許容出来るとぅざ述語p.
+-->
 
-	術語pへ許可出来るデフォルトdを返すような要求の中で、この型はかなり奇妙である。
+術語pへ許可出来るデフォルトdを返すような要求の中で、この型はかなり奇妙である。
 
 But this constraint does not arise from the behaviour of the program: at no point does our function pass d to p.
 
-しかしこれ制約するそんなことない生じるフロムザ振る舞いおぶザプログラム：あっとない点だず我々の関数通すdからp。
+> しかしこれ制約するそんなことない生じるフロムザ振る舞いおぶザプログラム：あっとない点だず我々の関数通すdからp。
 
-	しかしこの制約は我々の関数がdからpを通すというプログラムの振る舞いから生じることはない。
+
+しかしこの制約は我々の関数がdからpを通すというプログラムの振る舞いから生じることはない。
 
 
 ### Introduction 4
@@ -147,44 +155,48 @@ But this constraint does not arise from the behaviour of the program: at no poin
 
 Let’s examine the actual data flow of this function:
 
-レッツ調べるザ実際データフローおぶこの関数:
+> レッツ調べるザ実際データフローおぶこの関数:
 
-	この関数の実際のデータフローを調べよう:
+この関数の実際のデータフローを調べよう:
 
 	arguments to p <- v -> result <- d
 
 Only by ignoring the orientation of the edges above could we conclude that d flows to the argument of p.
 
-オンリーバイ無視するザ向きおぶざエッジ上記の出来る我々結論を出すざっとdフローとぅざ引数おぶp.
-google:唯一のエッジの向きを無視することによって上記の我々は、Dは、pの引数に流れていることを結論付けることができます。
+> オンリーバイ無視するザ向きおぶざエッジ上記の出来る我々結論を出すざっとdフローとぅざ引数おぶp.
+> google:唯一のエッジの向きを無視することによって上記の我々は、Dは、pの引数に流れていることを結論付けることができます。
 
 
-	上記のエッジの向きを無視することのみで我々はpの引数からdが流れていると結論付ける事が出来る。
+上記のエッジの向きを無視することのみで我々はpの引数からdが流れていると結論付ける事が出来る。
 
 Indeed, this is exactly what ML does: by turning data flow into equality constraints between types, information about the direction of data flow is ignored.
 
-確かに、これは正確だ何MLだず：ターニングデータフローからタイプ間で等価制制約内で、
-データフローの方向の情報ついて無視する。
+> 確かに、これは正確だ何MLだず：ターニングデータフローからタイプ間で等価制制約内で、
+> データフローの方向の情報ついて無視する。
+> google: 確かに、これはMLはまったく同じものです：型の間で等式制約にデータフローを回すことにより、データフローの方向についての情報は無視されます。
 
-google: 確かに、これはMLはまったく同じものです：型の間で等式制約にデータフローを回すことにより、データフローの方向についての情報は無視されます。
-
-	たしかに、これはMLについて正確だ:
-	タイプ間で等価性制約内でデータフローから回す事で、データフローの方向の情報ついて無視する。
+たしかに、これはMLについて正確だ:
+タイプ間で等価性制約内でデータフローから回す事で、データフローの方向の情報ついて無視する。
 
 Since equality is symmetric, data flow is treated as undirected.
 
-なぜならば等価性は対比的、データフローは整えらえたあず無方向。
+> なぜならば等価性は対比的、データフローは整えらえたあず無方向。
 
-	なぜならば等価性は対比的で、データフローは無方向で整えられているからだ。
+なぜならば等価性は対比的で、データフローは無方向で整えられているからだ。
 
 ### Introduction 5
+
+
+To support subtyping is to care about the direction of data flow.
+
+> 部分型サポートはデータフローの方向についてケアする事である。
+> google:サブタイプをサポートするには、データフローの方向を気にすることです
+
+部分型サポートはデータフローの方向について気にする事だ。
 
 |English|日本語|
 | --- | --- |
 |provide|提供します|
-
-|English|日本語|
-| --- | --- |
 |least|最低|
 |guarantees|保証|
 |destination|宛先|
@@ -193,38 +205,31 @@ Since equality is symmetric, data flow is treated as undirected.
 |bipartite|二分|
 |cycles|サイクル|
 
-To support subtyping is to care about the direction of data flow.
-
-部分型サポートはデータフローの方向についてケアする事である。
-google:サブタイプをサポートするには、データフローの方向を気にすることです
-
-	部分型サポートはデータフローの方向について気にする事だ。
-
 With subtyping, a source of data must provide at least the guarantees that the destination requires, but is free to provide more.
 
-サブタイピングでは、ソースおぶデータ必要提供するあっと最低保証だっと先に必要とする、しかし自由とぅ提供するもっと。
+> サブタイピングでは、ソースおぶデータ必要提供するあっと最低保証だっと先に必要とする、しかし自由とぅ提供するもっと。
 
-	部分型付けでは、データのソースは宛先を必要とするが、たくさん提供する事で自由であることを最低限保証する必要がある。
+部分型付けでは、データのソースは宛先を必要とするが、たくさん提供する事で自由であることを最低限保証する必要がある。
 
 ### Introduction 6
 
 In his PhD thesis, Pottier1 noticed that the graph of data flow has a simple structure.
 
-インかれのドクター論文、Pottier1気がつくざっとざグラフおぶデータフローもってるシンプル構造。
+> インかれのドクター論文、Pottier1気がつくざっとざグラフおぶデータフローもってるシンプル構造。
 
-	彼のDr.論文中で、Potterはデータ構造が持っているシンプルな構造について気がついている。
+彼のDr.論文中で、Potterはデータ構造が持っているシンプルな構造について気がついている。
 
 By keeping a strict separation between inputs and outputs, we can always represent the constraint graph as a bipartite graph: data flows from inputs to outputs.
 
-ばい保持構造分離、間でインプットとアウトプット、我々出来るすべてで表現ざ制限グラフあず２分木グラフ：データフローふろむ入力とぅ出力。
+> ばい保持構造分離、間でインプットとアウトプット、我々出来るすべてで表現ざ制限グラフあず２分木グラフ：データフローふろむ入力とぅ出力。
 
-	入力と出力の間の構造を分ける事で、我々は入力から出力へのデータフローを全て２分木のグラフで制限を表現出来る。
+入力と出力の間の構造を分ける事で、我々は入力から出力へのデータフローを全て２分木のグラフで制限を表現出来る。
 
 With edges only from inputs to outputs, such graphs have no cycles (or even paths of more than one edge), simplifying analysis.
 
-ありでエッジのみふろむインプットからアウトプット、そのようなグラフ持ってるノーサイクル(またはイーブンパスおぶもっとざん１つのエッジ)、簡単化解析
+> ありでエッジのみふろむインプットからアウトプット、そのようなグラフ持ってるノーサイクル(またはイーブンパスおぶもっとざん１つのエッジ)、簡単化解析
 
-	入力から出力へのエッジでは、サイクル無しのグラフ(もしくは１つのエッジ以上のパスを持っている)のようなものがある。
+入力から出力へのエッジでは、サイクル無しのグラフ(もしくは１つのエッジ以上のパスを持っている)のようなものがある。
 
 ### Introduction 7
 
@@ -235,24 +240,22 @@ With edges only from inputs to outputs, such graphs have no cycles (or even path
 |religious|宗教的な|
 |distinction|違い|
 
-We take this insight a step further,
+> We take this insight a step further,
 
-我々取るこの洞察力段階的さらにまた、
+> 我々取るこの洞察力段階的さらにまた、
 
-	我々はこの洞察から次のステップを取り、
+我々はこの洞察から次のステップを取り、
 
-and show that by keeping the same religious distinction between input and output we can develop a variant of unification compatible with subtyping,
+> and show that by keeping the same religious distinction between input and output we can develop a variant of unification compatible with subtyping,
 
-そしてみるザットバイ保持ザ同じ宗教的な違い間入力と出力我々出来る開発バリアントおぶ単一化コンパチブルうぃす部分的構造化、
+> そしてみるザットバイ保持ザ同じ宗教的な違い間入力と出力我々出来る開発バリアントおぶ単一化コンパチブルうぃす部分的構造化、
 
-allowing us to infer types.
+> allowing us to infer types.
 
-許可我々から推論型。
+> 許可我々から推論型。
+> google: 私たちは、さらに一歩、この洞察を取り、入力と出力の間で同じ宗教の区別を維持することによって、我々は、私たちは型を推測できるように、サブタイプと互換性の統一のバリアントを開発できることを示しています。
 
-google: 私たちは、さらに一歩、この洞察を取り、入力と出力の間で同じ宗教の区別を維持することによって、我々は、私たちは型を推測できるように、サブタイプと互換性の統一のバリアントを開発できることを示しています。
-
-
-	そして同じ宗教的な入力と出力の間の違いを維持する事で、我々は型推論を許可するサブタイピングでのコンパチブルな単一化のバリアントを開発できることを示しています。
+そして同じ宗教的な入力と出力の間の違いを維持する事で、我々は型推論を許可するサブタイピングでのコンパチブルな単一化のバリアントを開発できることを示しています。
 
 
 # 2 Input and output types
@@ -272,31 +275,29 @@ google: 私たちは、さらに一歩、この洞察を取り、入力と出力
 
 
 
-Our types form a lattice, with a least-upper-bound operator ⨆ and a greatest-upper-bound operator ⨅.
+> Our types form a lattice, with a least-upper-bound operator ⨆ and a greatest-upper-bound operator ⨅.
 
-我々の型は形成する格子を、最小上限演算子⨆そして最大上限オペレータ⨅.
-
-google: 私たちのタイプは、最小-上限オペレータ⨆と最大-上限オペレータ⨅で、格子を形成します。
+> 我々の型は形成する格子を、最小上限演算子⨆そして最大上限オペレータ⨅.
+> google: 私たちのタイプは、最小-上限オペレータ⨆と最大-上限オペレータ⨅で、格子を形成します。
 ※訳注: fromはここでは動詞
 
-	我々の型は最小上限演算子⨆と最大上限オペレータ⨅で格子を形成します。
+我々の型は最小上限演算子⨆と最大上限オペレータ⨅で格子を形成します。
 
-The structure of programs does not allow the lattice operations ⨆ and ⨅ to appear arbitrarily.
+> The structure of programs does not allow the lattice operations ⨆ and ⨅ to appear arbitrarily.
 
-構造おぶプログラム許可しない格子⨆と ⨅演算子が現れる事を任意の
+> 構造おぶプログラム許可しない格子⨆と ⨅演算子が現れる事を任意の
+> google:プログラムの構造は、格子の操作を許可していません⨆と⨅任意に表示されるように。
 
-google:プログラムの構造は、格子の操作を許可していません⨆と⨅任意に表示されるように。
-
-	プログラムの構造は任意の⨆と⨅の格子の操作の存在許可していません。
-
+プログラムの構造は任意の⨆と⨅の格子の操作の存在許可していません。
 
 
-If a program chooses randomly to produce either an output of type τ1 or one of type τ2, the actual output type is τ1 ⨆ τ2.
 
-もしも、プログラムが選ぶランダムに生成することどちらかオブジェクトおぶ型τ1か型τ2の1つ、実際の出力タイプはτ1 ⨆ τ2です。
-google: プログラムは、型τ1の出力またはタイプτ2のいずれかを生成するためにランダムに選択した場合、実際の出力タイプは、τ1⨆τ2です。
+> If a program chooses randomly to produce either an output of type τ1 or one of type τ2, the actual output type is τ1 ⨆ τ2.
 
-	もしもプログラムがランダムに選んで生成されたτ1か型τ2の1つのうちどちらかのオブジェクトの場合、実際の出力型はτ1 ⨆ τ2です。
+> もしも、プログラムが選ぶランダムに生成することどちらかオブジェクトおぶ型τ1か型τ2の1つ、実際の出力タイプはτ1 ⨆ τ2です。
+> google: プログラムは、型τ1の出力またはタイプτ2のいずれかを生成するためにランダムに選択した場合、実際の出力タイプは、τ1⨆τ2です。
+
+もしもプログラムがランダムに選んで生成されたτ1か型τ2の1つのうちどちらかのオブジェクトの場合、実際の出力型はτ1 ⨆ τ2です。
 
 
 |English|日本語|
