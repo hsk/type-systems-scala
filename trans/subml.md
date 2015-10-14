@@ -1,8 +1,8 @@
-# Polymorphism, subtyping and type inference in MLsub
+# Polymorphism, subtyping and type inference in MLsub の適当な訳
 
-単語表
+元の論文は以下のURLから手に入ります:
 
-https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorphism-subtyping-and-type-inference-in-mlsub.pdf?attachauth=ANoY7cpDpDlolx8UhGNxFBctu5j6NqDV1aMzJUZHgk9lxHhUfGNlf2ibEtdCacb-Vm5NfIGeqSxeNzriTpyiLUMuBygaxHWXVhDILoFp4WmbnftGdAOqZM-k7XYoArK8iDEKe7Ab6oVQO4g64C9kGvPo8bfg5eyBHazDy0ltmif3eBsp9CX3iBfmbX6gkGdj8U6ebdWAqjACI2o_jQZbrvaxeWKE17Lws8IP61P1KGzVZ9KCjnuV2CZEG8SgNNkIcKXvlmHsRZrvk7mrGN-avAqA8Ukwq0aPOQ%3D%3D&attredirects=0
+https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorphism-subtyping-and-type-inference-in-mlsub.pdf
 
 |English|日本語|
 | --- | --- |
@@ -87,7 +87,7 @@ but also allows us to expose more polymorphism even in core ML programs that do 
 > google: 述語はそれを保持している場合、値を述語p、値VとデフォルトのD、および返し、それ以外の場合は、デフォルト：3つの引数をとり選択機能を、考えてみましょう：
 
 
-以下の述語p,値vとデフォルトdの３つの引数を取るselect関数を検討しよう。もしこの術語が保持される値を返し、そうでなければデフォルト値を返す:
+以下のselect関数を検討しよう。この関数は述語p,値vとデフォルトdの３つの引数を取る。もしこの術語が保持される値を返し、そうでなければデフォルト値を返す:
 
 
 	select p v d = if (p v) then v else d
@@ -134,19 +134,6 @@ MLや最近の言語では、selectはタイプスキームを持つ
 | --- | --- |
 |examine|調べます|
 |actual|実際|
-|ignoring|無視する|
-|orientation|オリエンテーション,向き|
-|edges|エッジ|
-|conclude|結論を出す|
-|Indeed|確かに|
-|exactly|正確に|
-|equality|平等|
-|constraints|制約|
-|direction|方向|
-|Since|以来、いるので|
-|equality|平等|
-|treated|治療|
-|undirected|無向|
 
 > Let’s examine the actual data flow of this function:
 
@@ -155,6 +142,13 @@ MLや最近の言語では、selectはタイプスキームを持つ
 この関数の実際のデータフローを調べよう:
 
 	arguments to p <- v -> result <- d
+
+|English|日本語|
+| --- | --- |
+|ignoring|無視する|
+|orientation|向き|
+|edges|エッジ|
+|conclude|結論を出す|
 
 > Only by ignoring the orientation of the edges above could we conclude that d flows to the argument of p.
 
@@ -165,7 +159,15 @@ MLや最近の言語では、selectはタイプスキームを持つ
 
 上記のエッジの向きを無視することのみで我々はpの引数からdが流れていると結論付ける事が出来る。
 
-Indeed, this is exactly what ML does: by turning data flow into equality constraints between types, information about the direction of data flow is ignored.
+|English|日本語|
+| --- | --- |
+|Indeed|確かに|
+|exactly|正確に|
+|equality|平等|
+|constraints|制約|
+|direction|方向|
+
+> Indeed, this is exactly what ML does: by turning data flow into equality constraints between types, information about the direction of data flow is ignored.
 
 > 確かに、これは正確だ何MLだず：ターニングデータフローからタイプ間で等価制制約内で、
 
@@ -175,6 +177,13 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 
 たしかに、これはMLについて正確だ:
 タイプ間で等価性制約内でデータフローから回す事で、データフローの方向の情報ついて無視する。
+
+|English|日本語|
+| --- | --- |
+|Since|以来、いるので|
+|equality|平等|
+|treated|治療|
+|undirected|無向|
 
 > Since equality is symmetric, data flow is treated as undirected.
 
@@ -198,10 +207,6 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 |least|最低|
 |guarantees|保証|
 |destination|宛先|
-|noticed|気づいた|
-|separation|分離|
-|bipartite|二分|
-|cycles|サイクル|
 
 > With subtyping, a source of data must provide at least the guarantees that the destination requires, but is free to provide more.
 
@@ -210,6 +215,13 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 部分型付けでは、データのソースは宛先を必要とするが、たくさん提供する事で自由であることを最低限保証する必要がある。
 
 ### Introduction 6
+
+|English|日本語|
+| --- | --- |
+|noticed|気づいた|
+|separation|分離|
+|bipartite|二分|
+|cycles|サイクル|
 
 > In his PhD thesis, Pottier1 noticed that the graph of data flow has a simple structure.
 
@@ -233,8 +245,8 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 
 |English|日本語|
 | --- | --- |
-|further|さらにまた|
 |insight|洞察力|
+|further|さらにまた|
 |religious|宗教的な|
 |distinction|違い|
 
@@ -261,7 +273,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 
 |English|日本語|
 | --- | --- |
-|from|形成する|
+|form|形成する|
 |lattice|格子|
 |least-upper-bound|最小上限|
 |greatest-upper-bound|最大上限|
@@ -279,7 +291,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 
 > google: 私たちのタイプは、最小-上限オペレータ⨆と最大-上限オペレータ⨅で、格子を形成します。
 
-> ※訳注: fromはここでは動詞
+> ※訳注: formはfromではなかったw formは動詞
 
 我々の型は最小上限演算子⨆と最大上限オペレータ⨅で格子を形成します。
 
@@ -290,8 +302,6 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > google:プログラムの構造は、格子の操作を許可していません⨆と⨅任意に表示されるように。
 
 プログラムの構造は任意の⨆と⨅の格子の操作の存在許可していません。
-
-
 
 > If a program chooses randomly to produce either an output of type τ1 or one of type τ2, the actual output type is τ1 ⨆ τ2.
 
@@ -308,7 +318,6 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 |again|再び|
 |arises|生じる|
 |describing|記載する|
-|arises|生じる|
 
 > Similarly, if a program uses an input in a context where a τ1 is required and again in a context where a τ2 is, then the actual input type is τ1 ⨅ τ2.
 
@@ -326,6 +335,8 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > google: 一般的に、出力を記述する際のみ、⨆発生し、入力を記述する際⨅間だけ発生します。
 
 一般的に、出力に記載されたときのみが⨆発生し、入力中に記載された時のみ⨅が発生する。
+
+<small> similar vein 同じような文脈 Thus このように distinguish 区別 describe 説明する</small>
 
 |English|日本語|
 | --- | --- |
