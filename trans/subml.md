@@ -9,20 +9,17 @@ superset 上位集合
 parametric パラメトリック
 </sub></sup>
 
-> <sup><sub>We present a type system combining subtyping and ML-style parametric polymorphism.
-
+> <sup><sub>We present a type system combining subtyping and ML-style parametric polymorphism.  
 > <sup><sub>我々は提示する型システムをまとめたものサブタイピングとMLスタイルパラメトリック多相性。
 
 我々はサブタピイングとMLスタイルパラメトリック多相性をまとめた型システムを提示する。
 
-> <sup><sub>Unlike previous work, our system supports type inference and infers compact types.
-
-> <sup><sub>似てない以前の仕事、我々のシステムはサポートする型推論と推論コンパクトタイプ。
+> <sup><sub>Unlike previous work, our system supports type inference and infers compact types.  
+> 似てない以前の仕事、我々のシステムはサポートする型推論と推論コンパクトタイプ。
 
 以前の仕事との違いは、我々のシステムは型推論と推論コンパクトタイプをサポートしている事である。
 
-> <sup><sub>We demonstrate this system in the minimal language MLsub, which types a strict superset of core ML programs.
-
+> <sup><sub>We demonstrate this system in the minimal language MLsub, which types a strict superset of core ML programs.  
 > <sup><sub>我々はデモするこのシステム内で最小言語MLsub、                  これは型付け厳格なスーパーセットおぶコアMLプログラム。
 
 我々はこのシステム内でコアMLプログラムの厳格なスーパセットで型付けする、最小言語MLsubをデモする。
@@ -39,8 +36,7 @@ decidable 決定可能な
 </sub></sup>
 
 
-> <sup><sub>The Hindley-Milner type system of ML and its descendants is popular and practical, sporting decidable type inference and principal types.
-
+> <sup><sub>The Hindley-Milner type system of ML and its descendants is popular and practical, sporting decidable type inference and principal types.  
 > <sup><sub>ヒンドリミルナ型システムおぶMLとこれらの子孫は人気がありかつ実用的、変種は決定可能だ型推論と実用的な型。
 
 MLとこれらの子孫のヒンドリミルナ型システムは人気があり実用的で、決定可能な型推論と実用的な型をもつ変種である。
