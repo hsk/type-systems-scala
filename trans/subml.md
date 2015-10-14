@@ -10,17 +10,20 @@ https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorph
 |parametric|パラメトリック|
 
 > We present a type system combining subtyping and ML-style parametric polymorphism.
+
 > 我々は提示する型システムをまとめたものサブタイピングとMLスタイルパラメトリック多相性。
 
 我々はサブタピイングとMLスタイルパラメトリック多相性をまとめた型システムを提示する。
 
 > Unlike previous work, our system supports type inference and infers compact types.
+
 > 似てない以前の仕事、我々のシステムはサポートする型推論と推論コンパクトタイプ。
 
 以前の仕事との違いは、我々のシステムは型推論と推論コンパクトタイプをサポートしている事である。
 
 > We demonstrate this system in the minimal language MLsub, which types a strict superset of core ML programs.
-> 我々はデモするこのシステム内で最小言語MLsub、                  これは型付け厳格なスーパーセットおぶコアMLプログラム。 -->
+
+> 我々はデモするこのシステム内で最小言語MLsub、                  これは型付け厳格なスーパーセットおぶコアMLプログラム。
 
 我々はこのシステム内でコアMLプログラムの厳格なスーパセットで型付けする、最小言語MLsubをデモする。
 
@@ -37,6 +40,7 @@ https://c10109cf-a-62cb3a1a-s-sites.googlegroups.com/site/mlworkshoppe/polymorph
 
 
 > The Hindley-Milner type system of ML and its descendants is popular and practical, sporting decidable type inference and principal types.
+
 > ヒンドリミルナ型システムおぶMLとこれらの子孫は人気がありかつ実用的、変種は決定可能だ型推論と実用的な型。
 
 MLとこれらの子孫のヒンドリミルナ型システムは人気があり実用的で、決定可能な型推論と実用的な型をもつ変種である。
@@ -47,7 +51,7 @@ MLとこれらの子孫のヒンドリミルナ型システムは人気があり
 |preserving|保存|
 |problematic|問題|
 
-However, extending the system to handle subtyping while preserving these properties has been problematic.
+> However, extending the system to handle subtyping while preserving these properties has been problematic.
 
 > しかしながら、延長であるシステムからハンドルするサブタイプを、間、保存これらのプロパティが持っている問題を。
 
@@ -67,15 +71,19 @@ However, extending the system to handle subtyping while preserving these propert
 
 > Subtyping is useful to encode extensible records, polymorphic variants, and object-oriented programs,
 but also allows us to expose more polymorphism even in core ML programs that do not use such features by more carefully analysing data flow.
+
 > サブタイピングは使いやすいからエンコード拡張可能レコード、多相的バリアント、そしてオブジェクト指向プログラム、
 しかしながら許す我々にとぅ公開するもっと多相的なイーブンいんコアMLプログラムだっと違うつかうようなおぶ機能ばいもっと慎重に調べろデータフロー。
+
 > google: サブタイプは、拡張可能な記録、多型変異体、及びオブジェクト指向プログラムをエンコードすることが有用なだけでなく、私たちはもっと慎重にデータフローを分析することによって、このような機能を使用していないコアMLプログラムでより多くの多型を公開することができます。
 
 
 拡張可能なレコード、多相的バリアント、オブジェクト指向プログラミングからサブタイプはエンコードしやすいが、しかしデータフロー解析をもっと慎重にデータフローを分析してから、機能を使わないコアMLプログラム内でより多くの多相型を公開する事を許可する。
 
 > Consider the select function, which takes three arguments: a predicate p, a value v and a default d, and returns the value if the predicate holds of it, and the default otherwise:
+
 > 検討してselect関数、これ取る３つの引数：述語p,値vとデフォルトd、そして返す値もし述語保持するおぶこれ、そしてデフォルト他の：
+
 > google: 述語はそれを保持している場合、値を述語p、値VとデフォルトのD、および返し、それ以外の場合は、デフォルト：3つの引数をとり選択機能を、考えてみましょう：
 
 
@@ -151,6 +159,7 @@ MLや最近の言語では、selectはタイプスキームを持つ
 > Only by ignoring the orientation of the edges above could we conclude that d flows to the argument of p.
 
 > オンリーバイ無視するザ向きおぶざエッジ上記の出来る我々結論を出すざっとdフローとぅざ引数おぶp.
+
 > google:唯一のエッジの向きを無視することによって上記の我々は、Dは、pの引数に流れていることを結論付けることができます。
 
 
@@ -159,7 +168,9 @@ MLや最近の言語では、selectはタイプスキームを持つ
 Indeed, this is exactly what ML does: by turning data flow into equality constraints between types, information about the direction of data flow is ignored.
 
 > 確かに、これは正確だ何MLだず：ターニングデータフローからタイプ間で等価制制約内で、
+
 > データフローの方向の情報ついて無視する。
+
 > google: 確かに、これはMLはまったく同じものです：型の間で等式制約にデータフローを回すことにより、データフローの方向についての情報は無視されます。
 
 たしかに、これはMLについて正確だ:
@@ -176,6 +187,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > To support subtyping is to care about the direction of data flow.
 
 > 部分型サポートはデータフローの方向についてケアする事である。
+
 > google:サブタイプをサポートするには、データフローの方向を気にすることです
 
 部分型サポートはデータフローの方向について気にする事だ。
@@ -239,6 +251,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > allowing us to infer types.
 
 > 許可我々から推論型。
+
 > google: 私たちは、さらに一歩、この洞察を取り、入力と出力の間で同じ宗教の区別を維持することによって、我々は、私たちは型を推測できるように、サブタイプと互換性の統一のバリアントを開発できることを示しています。
 
 そして同じ宗教的な入力と出力の間の違いを維持する事で、我々は型推論を許可するサブタイピングでのコンパチブルな単一化のバリアントを開発できることを示しています。
@@ -260,18 +273,20 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 |actual|実際|
 
 
-
 > Our types form a lattice, with a least-upper-bound operator ⨆ and a greatest-upper-bound operator ⨅.
 
 > 我々の型は形成する格子を、最小上限演算子⨆そして最大上限オペレータ⨅.
+
 > google: 私たちのタイプは、最小-上限オペレータ⨆と最大-上限オペレータ⨅で、格子を形成します。
-※訳注: fromはここでは動詞
+
+> ※訳注: fromはここでは動詞
 
 我々の型は最小上限演算子⨆と最大上限オペレータ⨅で格子を形成します。
 
 > The structure of programs does not allow the lattice operations ⨆ and ⨅ to appear arbitrarily.
 
 > 構造おぶプログラム許可しない格子⨆と ⨅演算子が現れる事を任意の
+
 > google:プログラムの構造は、格子の操作を許可していません⨆と⨅任意に表示されるように。
 
 プログラムの構造は任意の⨆と⨅の格子の操作の存在許可していません。
@@ -281,6 +296,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > If a program chooses randomly to produce either an output of type τ1 or one of type τ2, the actual output type is τ1 ⨆ τ2.
 
 > もしも、プログラムが選ぶランダムに生成することどちらかオブジェクトおぶ型τ1か型τ2の1つ、実際の出力タイプはτ1 ⨆ τ2です。
+
 > google: プログラムは、型τ1の出力またはタイプτ2のいずれかを生成するためにランダムに選択した場合、実際の出力タイプは、τ1⨆τ2です。
 
 もしもプログラムがランダムに選んで生成されたτ1か型τ2の1つのうちどちらかのオブジェクトの場合、実際の出力型はτ1 ⨆ τ2です。
@@ -297,6 +313,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > Similarly, if a program uses an input in a context where a τ1 is required and again in a context where a τ2 is, then the actual input type is τ1 ⨅ τ2.
 
 > 同様に、もしもプログラムが使う入力いん文脈フェアτ1が必要だったあるいは、またいん文脈フェアτ2、ならば実際の入力型はτ1 ⨅ τ2です。
+
 > google: τ2がどこにあるプログラムはτ1がコンテキストで再び必要とされるコンテキスト内で入力を使用する場合も、実際の入力タイプは、τ1⨅τ2です。
 
 
@@ -305,6 +322,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > Generally, ⨆ only arises when describing outputs, while ⨅ only arises when describing inputs.
 
 > 一般的に、出力に記載されたときのみが⨆発生し、入力中に記載された時のみ⨅が発生する。
+
 > google: 一般的に、出力を記述する際のみ、⨆発生し、入力を記述する際⨅間だけ発生します。
 
 一般的に、出力に記載されたときのみが⨆発生し、入力中に記載された時のみ⨅が発生する。
@@ -319,6 +337,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > In a similar vein, the least type ⊥ appears only on outputs (of non-terminating programs), while the greatest type ⊤ appears only on inputs (an unused input).
 
 > このような文脈の中で、(非端末プログラムの)出力上にのみ最小限の型⊥があらわれ、(使用していない入力)入力上にのみ上限型⊤が現れる。
+
 > google: 最大のタイプは⊤のみ（未使用の入力）入力に表示されている間同じような文脈では、少なくともタイプが⊥、（非終端プログラムの）のみの出力に表示されます。
 
 このような文脈の中で、(非端末プログラムの)出力上にのみ最小限の型⊥があらわれ、(未使用の入力)入力上にのみ上限型⊤が現れる。
@@ -326,6 +345,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > Thus, we distinguish positive types τ+ (which describe outputs) and negative types τ− (which describe inputs):
 
 > このように、我々は区別しますポジティブ型τ+(出力で説明する)とネガティブ型τ−(入力で説明する)を:
+
 > google: したがって、我々は、（入力を記述）は、正タイプτ+（出力を記述ている）と負の種類τ-を区別：
 
 このように、我々は(出力に記述される)ポジティブ型τ+と(入力に記述される)ネガティブ型τ−を区別します:
@@ -336,6 +356,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 > Positive types describe something which is produced, while negative types describe something which is required.
 
 > ポジティブ型は記述します何かをどこかで生成するときに、のときはネガティブ型は記述します何かをどこかで必要とされているときに。
+
 > google: ポジティブタイプは、生成されたものを説明し、負のタイプは何かを記述しながら、必要とされます。
 
 ポジティブ型はどこかで何かを生成するときに記述され、ネガティブ型はどこかで何かが必要されているときに記述されます。
@@ -355,6 +376,7 @@ Indeed, this is exactly what ML does: by turning data flow into equality constra
 |equations|方程式|
 
 > The core operation of the Damas-Milner type inference algorithm [1] is unification.
+
 > コアの操作おぶDamas-Milner型推論アルゴリズム[1]は単一化です。
 
 Damas-Milner型推論アルゴリズム[1]のコアの操作は単一化です。
@@ -362,6 +384,7 @@ Damas-Milner型推論アルゴリズム[1]のコアの操作は単一化です�
 > Unification relies on the substitution of equals for equals, which maps well to dealing with systems of equations between types.
 
 > 単一化は同じものを同じ物に代入する事に依存していて、これはマップされるよく型の間の方程式のシステムの取り扱いが
+
 > google: 統一は、タイプ間の方程式のシステムを扱うによくマッピングするための対等対等の置換に依存しています。
 
 単一化は同じ型を同じ型に代入する事に依存していて、これは型の間の方程式のシステムを取り扱うのによくマッピングされている。
@@ -385,6 +408,7 @@ Damas-Milner型推論アルゴリズム[1]のコアの操作は単一化です�
 > There are three different situations in which DamasMilner inference uses unification. 
 
 > シチュエーションDamasMilner型推論が使う単一化中には３つの違いがあります。
+
 > google:DamasMilner推論が統一を使用する3つの異なる状況があります。
 
 DamasMilner型推論が単一化を使う中で３つの異なる状況があります。
@@ -393,6 +417,7 @@ DamasMilner型推論が単一化を使う中で３つの異なる状況があり
 > The first is to unify two possible output types of an expression, for instance the two branches of an if-expression.
 
 > 最初の１つは単一化すること２つの可能な出力型おぶ式、ための実体の２つのブランチおぶif式。
+
 > google:最初は、例えば、もし式の二つの分岐を表現可能な2つの出力タイプを統一することです。
 
 1つめはif式の２つの分岐の式の２つの可能な出力型を単一化することです。
@@ -400,6 +425,7 @@ DamasMilner型推論が単一化を使う中で３つの異なる状況があり
 > The second is the dual of the first, unifying two required input types of an expression when typing a λ-bound variable (all uses of which must be at the same type). 
 
 > ２つ目は最初と重なりますが、単一化すること２つの必要な入力おぶ式 型がλ束縛された値のとき(必要な同じ型は全て使う)
+
 > google:第二は、λ-バインド変数を（のすべての使用は、同じタイプでなければなりません）と入力したときに、式の2つの必要な入力タイプを統一、最初のデュアルです。
 
 ２つ目は最初と重なりますが、型がλ束縛変数(使う型は全て同じ型)のときの２つの必要な入力の式を単一化することです。
@@ -419,6 +445,7 @@ DamasMilner型推論が単一化を使う中で３つの異なる状況があり
 > With subtyping, these correspond respectively to the introduction of a ⨆ or a ⨅ operator. 
 
 > サブタイピングでは、これらはそれぞれ⨆ または ⨅の操作の表現に対応します。
+
 > google:サブタイプで、これらは⨆の導入または⨅オペレータにそれぞれ対応します。
 
 サブタイピングでは、これらはそれぞれ ⨆ または ⨅ の操作の表現に対応します。
@@ -457,6 +484,7 @@ MLsubでは、これらは失敗できません:
 > For instance, the typing rule for an application e1 e2 constrains the type of the value produced by e2 to be the same as that required by the domain of e1.
 
 > たとえば、型付けルールふぉあ適用 e1 e2 はつぎを制約する。 e2から生成される値の型は同じです(that e1のドメインから必要とされる )
+
 > google:例えば、アプリケーションのE1、E2のための型付け規則は、E1のドメインで必要とされるものと同じになるようにE2によって生成される値の種類を制限します。
 
 例えば、適用 e1 e2の型付け規則はe2から値生成された物とe1のドメインから必要とされた物は同じ型であると制限します。
@@ -486,6 +514,7 @@ MLsubでは、これらは失敗できません:
 > With subtyping, we demand only that the type of `e2` be a subtype of the domain of `e1`.
 
 > サブタイピングでは、我々は要望する唯一の（`e2`の型が`e1`のドメインのサブタイプである事を）.
+
 > google:サブタイプでは、我々は`e2`のタイプはe1``のドメインのサブタイプであることだけを求めています。
 
 サブタイピングでは、我々は`e2`の型が`e1`のドメインのサブタイプである事だけを求めています.
@@ -494,6 +523,7 @@ MLsubでは、これらは失敗できません:
 > Given `e1 : τ1− → τ2+, e2 : τ3+`, we have the constraint `τ1+ ≤ τ3−`.
 
 > `e1 : τ1− → τ2+, e2 : τ3+`が与えられたとき、我々は制約`τ1+ ≤ τ3−`を持ちます。
+
 > Google: 与えられた`E1：τ1-→τ2+、E2：τ3+`、我々は制約`τ1+≤τ3-`を持っています。
 
 `e1 : τ1− → τ2+, e2 : τ3+`が与えられたとき、我々は制約`τ1+ ≤ τ3−`を持ちます。
@@ -501,6 +531,7 @@ MLsubでは、これらは失敗できません:
 > In general, our constraints are always of the form `τ+ ≤ τ−`: we ensure that some value that we produce of type τ+ is acceptable in some context that requires τ−.
 
 > 一般的に、我々の制約は常に`τ+ ≤ τ−`の形のものです: われわれは確保します(同じ値を(我々が型τ+の生成が許容出来る 同じコンテキストの中で(τ−が必要な)))
+
 > google:一般的には、私たちの制約は、常にフォームのある`τ+≤τ-`：私たちは型τ+の生成いくつかの値がτ-を必要とするいくつかのコンテキストで許容可能であることを確認してください。
 
 一般的に、我々の制約は全て`τ+ ≤ τ−`の形式のものです: 我々が同じコンテキストの中でτ−が必要な型τ+の生成が許容出来る同じ値をわれわれは確保します。
@@ -547,6 +578,7 @@ MLsubでは、これらは失敗できません:
 > We then infer types using a method broadly similar to Damas-Milner inference, with biunification in place of standard unification.
 
 > 我々は(型を推論します使っているメソッド広い意味で似ているDamas-Milner推論)、標準的な単一化の変わりにbiunificationとともに
+
 > google:それから、標準的な統一の代わりにbiunificationと、ダマ・ミルナー推論に広く同様の方法を用いて型を推測します。
 
 それから、標準的な単一化の変わりにbiunificationとともに、広い意味でDamas-Milner推論と似ている方法で型を推論します。
