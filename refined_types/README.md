@@ -14,6 +14,7 @@
 |prove|証明する|
 |absence|ない状態|
 
+> <sup><sub>
 This is another type systems experiment that combines Hindley–Milner type inference with static type-checking of a limited version of dependent types called *refined types*.
 Although the type-checker only allows refined types on function parameters and return types (i.e. *function contracts*), it can prove the absence of some of the most common software bugs.
 
@@ -33,6 +34,7 @@ Although the type-checker only allows refined types on function parameters and r
 |during|間に|
 |compilation|コンパイル|
 
+> <sup><sub>
 For a simple example, let's consider integer division: we know that the denominator cannot be zero.
 Thus, if we define division as `/ : (int, i : int if i != 0) → int`, the refined type-checker can tell us *during compilation* that `1/0` will result in an error, as would `1/(2 * 3 - 6)` and `1/(4 % 2)`.
 The system can also deduce that the program `10 / (random1toN(10) - 5)` is potentially unsafe, where `random1toN` is a non-deterministic function whose type is `(N : int if N ≥ 1) → (i : int if 1 ≤ i and i ≤ N)`.
@@ -50,6 +52,7 @@ The system can also deduce that the program `10 / (random1toN(10) - 5)` is poten
 |contracts|契約|
 |prevented|防止|
 
+> <sup><sub>
 Refined type checking can also be used to verify that arrays are not accessed out of bounds, and using appropriate contracts on functions `alloc` and `memcpy`, software bugs such as [Heartbleed][heartbleed] could be prevented.
 
 Refined type checking も配列が境界外へのアクセス、および関数の`alloc`と`memcpy`を、[Heartbleed][heartbleed]などのソフトウェアのバグを防ぐことができた上で適切な契約を使用していないことを確認するために使用することができます。
@@ -91,6 +94,7 @@ function heartbleed_fix(payload : array[byte],
 |explained|説明|
 |below|以下|
 
+> <sup><sub>
 The implementation of a refined type-checker is actually very straightforward and turned out to be
 much simpler than I expected. Essentially, program expressions and contracts on function parameters
 and return types are converted into a series of mathematical formulas and logical statements, the
@@ -107,6 +111,7 @@ Refined typesチェッカの実装は、実際には非常に簡単であり、�
 |familiar|おなじみの|
 |its|それの|
 
+> <sup><sub>
 *Note about syntax:* These examples use a syntax similar to JavaScript or TypeScript that
 should be familiar to most programmers, which is different from the [ML][ml-language]-like syntax that the
 type-checker and its test cases use.
@@ -135,6 +140,7 @@ type-checker and its test cases use.
 |academic|アカデミック|
 |literature|文献|
 
+> <sup><sub>
 *Dependent types*, i.e. types that depend on values, are often presented as the holy grail of secure
 static type systems, yet despite intensive research they remain complex and impractical and are only
 used in research languages and mathematical proof assistants. *Refined types* or *contracts* are a
@@ -164,6 +170,7 @@ academic literature is `{ν : int | ν ≥ 0}`).
 |superseded|置き換え|
 |since|以来、|
 
+> <sup><sub>
 Refined types have been a topic of a lot of research and experimentation in the past decade. *Hybrid
 type checking* [1] combines static and dynamic type-checking by verifying the contracts statically
 when possible and deferring the checks until runtime when necessary (implemented in programming
@@ -191,6 +198,7 @@ Refined types は、過去十年間の間、多くの研究と実験の話題と
 |instead|代わりに|
 |formulas|式|
 
+> <sup><sub>
 This experiment, inspired primarily by Sage and Liquid Types, is an implementation of refined type-checking for a simple functional language.
 Refined types are only allowed on function parameters and return types; nevertheless, a variety of static program properties can be verified.
 The type-checker first strips all refined type annotations and uses Hindley–Milner type inference to infer base types of functions and variables.
@@ -207,6 +215,7 @@ SMTソルバは整数とブールの仕事なので、単純な式はのよう�
 SMTソルバーが一階論理を使用し、それらのパラメータにファーストクラスの値として機能するので、契約を扱うことができないとタイプが代わりに翻訳されて返すような機能の翻訳は、より複雑です。
 その結果、SMT-LIB式はSMTソルバーを介して実行されます(この実装の用途は[Z3][z3])翻訳契約のいずれが壊れていないことを確認します。
 
+> <sup><sub>
 This design allows the refined type-checker to handle a variety of programming constructs, such as multiple variable definitions, nested function calls, and if statements. It can also track abstract properties such as array length or integer ranges, and handle function subtyping.
 The following examples demonstrate these features:
 
@@ -274,6 +283,7 @@ make_const(1) : int -> (a : int if a == 1)
 |disprove|反証する|
 |equalities|等式|
 
+> <sup><sub>
 The `get_2dimensional` function is particularly interesting; it uses [non-linear integer arithmetic][robinson-arithmetic], which is incomplete and undecidable.
 Although Z3 can prove simple non-linear statements about integers, such as `x² ≥ 0`, it cannot prove that the array is accessed within bound in the function `get_2dimensional`.
 Instead, it has to convert the formula to real arithmetic and use the NLSat solver [5].
@@ -285,11 +295,13 @@ Z3は、 `x² ≥ 0` のような整数についての簡単な非線形文を�
 実際の計算が完了し、決定可能であっても非線形かかわらず、このアプローチは、ある種の問題のために動作します。
 例えば、このようなそ正である`x`, `y` ,`z`について`x³ + y³ == z³`のような真の解決策が、なし整数のものを持っている等式を反証することはできません。
 
-## Implementation
+> <sup><sub>
+> Implementation
 
 ## 実装
 
-### Type inference
+> <sup><sub>
+>> Type inference
 
 ### 型推論
 
@@ -307,6 +319,7 @@ Z3は、 `x² ≥ 0` のような整数についての簡単な非線形文を�
 |unexpectedly|予想に反し|
 |propagating|伝播|
 
+> <sup><sub>
 After lexing and parsing, a slightly modified [**algorithm-w**][algorithm-w] is used to perform
 standard Hindley-Milner unification-based type inference on the AST. The main difference is that
 instead of merely inferring the type of the input expression, the algorithm also transforms the AST
@@ -347,7 +360,8 @@ is translated by the type inference algorithm roughly into the following represe
 }
 ```
 
-### Refined type-checking
+> <sup><sub>
+>> Refined type-checking
 
 ### Refined 型検査
 
@@ -363,6 +377,7 @@ is translated by the type inference algorithm roughly into the following represe
 |more-or-less|多かれ少なかれ|
 |assertions|の表明|
 
+> <sup><sub>
 The goal of refined type-checking is *proving* that none of the function contracts can be broken at runtime.
 To do this, expressions of the source program must be translated into SMT-LIB formulas, so they can be reasoned about in proofs by the SMT solver.
 Some expressions, such as integer constants and applications of built-in operators (e.g. `+`, `%`, `>=`, `==` and `or`), have precise values or interpretations in SMT theories and can be translated literally.
@@ -380,6 +395,7 @@ Refined型チェックの目的は、*証明は*関数契約のいずれもが�
 |examine|調べる|
 |during|間に|
 
+> <sup><sub>
 We can use the SMT-LIB representation of an expression to check if a contract is satisfied.
 For a simple example, let's examine the SMT-LIB script generated during refined type-checking of the function `test`:
 
@@ -395,6 +411,7 @@ function test(x : int if x > 3) : (z : int if z > 0) {
 | --- | --- |
 |declare|宣言する|
 
+> <sup><sub>
 We first declare a new SMT-LIB variable for the parameter `x`.
 Its value is unknown and the most we can say about it is that `x > 3`.
 
@@ -434,6 +451,7 @@ Its value is unknown and the most we can say about it is that `x > 3`.
 |inequalities|不等式|
 |instead|代わりに|
 
+> <sup><sub>
 To prove that a contract is satisfied, we need to prove the *validity* of the logical implication where all previous formulas and assertions are premises and the contract is the conclusion.
 In the above example, the required implication is `x > 3 ⇒ x - 2 > 0`.
 However, SMT solvers can only prove that a formula is *satisfiable* (there exists an assignment of values to the variables that makes the formula true), not that it is *valid* (it is true for every assignment of values).
@@ -467,6 +485,7 @@ SMTソルバは否定的含意が充足でないことを証明した場合、�
 |contract|契約|
 |correctly|正しく|
 
+> <sup><sub>
 Some expressions, such as integers, booleans and variables that do not have function types, can be trivially translated into SMT-LIB representation, but the translation of other kinds of expressions can be tricky.
 When translating an `if` expression, the boolean condition has to be added to the premises when checking contracts in the `then` branch, while its negation has to be added to the premises when checking the `else` branch.
 Another non-trivial case is checking function calls, where each argument expression is translated and the contract on the corresponding parameter must be checked.
@@ -488,6 +507,7 @@ In the example above, the local environment when checking the refined return typ
 |reasoned|筋の通った、推論|
 |constrained|制約|
 
+> <sup><sub>
 The results of some function calls are represented directly, specifically the results of calls of built-in operators, which have standard interpretations in SMT theories, and *uninterpreted functions* such as `length`, which are used to represent abstract properties and whose values can be tracked and reasoned about by SMT solvers.
 The results of other function calls are represented by fresh SMT variables, which are constrained by the contract on the functions return type.
 For example, the result of the function application `x + 6` is represented by `"(+ x 6)"`, while the result of the call `random1toN(10)` is translated as
@@ -510,6 +530,7 @@ For example, the result of the function application `x + 6` is represented by `"
 |That way|その方法|
 |correctly|正しく|
 
+> <sup><sub>
 In contrast to other values, functions are not translated into SMT-LIB representation, but are instead stored in a *function environment*.
 If a function is the result of an application of a higher-order function, its local environment is stored along with its refined type.
 Take, for example, the function `make_const : (x : int) → int → (z : int if z == x)`.
@@ -538,6 +559,7 @@ That way, when the resulting function is called, its return type contract can be
 |premises|の前提|
 |implication|意味合い|
 
+> <sup><sub>
 Function casts must establish a subtype relationship between two refined function types, e.g. that `a₁ → b₁ <: a₂ → b₂`.
 Assuming that the base types of `a₁` and `a₂` and of `b₁` and `b₂` are equal, we must prove that the contract of `a₂` implies the contract of `a₁` (as parameter types are contravariant), and that the contract of `a₂` and the contract of `b₁` imply the contract of `b₂` (since return types are covariant).
 If there are multiple parameters, the contracts of all earlier parameters of the supertype must be used as premises when checking the implication of contracts for each parameter and for the return type.
@@ -561,6 +583,7 @@ For example, to prove that the type `(x : int, y : int if y > 0) → (z : int if
 |However|しかし、|
 |improved|改善された|
 
+> <sup><sub>
 This experimental implementation demonstrates a refined type-checking algorithm that can check many software safety properties.
 However, it is far from complete, and could be improved in many different ways.
 
@@ -581,6 +604,7 @@ However, it is far from complete, and could be improved in many different ways.
 |satisfiable|満足できます|
 |contract|契約|
 
+> <sup><sub>
 A simple addition would be implementing HM type inference and refined type checking for recursive functions, which are equivalent to loops and would make the language Turing complete.
 Another idea is to allow type aliases for refined types (e.g. `type nat = i : int if i ≥ 0`), and to perform a simple form of dead code elimination by proving when `if` branches cannot be taken.
 Furthermore, we could use the model generated by the SMT solver the negated implication is satisfiable to extract a set of values that break the contract.
@@ -600,6 +624,7 @@ Furthermore, we could use the model generated by the SMT solver the negated impl
 |alert|警告|
 |inhabiting|居住している|
 
+> <sup><sub>
 Handling of first-class functions needs to be improved.
 We would need to include functions in local environment as well, and then use the function subtype-checking algorithm to check refined function types of parameters and return types.
 We would need to transform some second-order contracts into equivalent refined function types, for example `f : int → int if f(0) == 1` is equivalent to `f : (x : int) → (y : int if (if x == 0 then y == 1 else true))`, while `f : array[int] → int if f == length` is equivalent to `f : (a : array[int]) → (i : int if i == length(a))`.
@@ -620,6 +645,7 @@ Finally, it would be useful to alert the user when there can be no functions inh
 |practical|実用的|
 |imperative|命令的な|
 
+> <sup><sub>
 More substantial extensions would be adding a function effect system, which would prohibit the use of functions with side-effects (such as non-determinism or I/O) in refined types, and including built-in operations for additional datatypes, such as arrays, modular integers and bitvectors, which can also be reasoned about by some SMT solvers.
 To make the language practical, it would also need to support imperative features such as loops and mutable local variables and data structures.
 
@@ -635,6 +661,7 @@ To make the language practical, it would also need to support imperative feature
 |non-negative|非負|
 |predicate|述語|
 
+> <sup><sub>
 A very useful extension would be to allow refined types within algebraic datatypes, for example `array[i : int if i ≥ 0]`.
 This would require the ability to instantiate polymorphic types with refined base types, so that we could use `get : forall[a] (array[a], i : int) → a` to extract a non-negative value from this array.
 A related idea is *predicate polymorphism* [6]: we want to support types such as `array_max : forall[p : int → bool] array[i : int if p(i)] → (k : int if p(k))`.
@@ -666,6 +693,7 @@ A related idea is *predicate polymorphism* [6]: we want to support types such as
 |might be |かもしれません|
 |backwards|後方|
 
+> <sup><sub>
 Ideally, refined type-checking could be used without having the programmer explicitly annotate all parameters and return types.
 However, refined type inference is complicated, as it is hard to say what is the "best" refined type for a given expression.
 For example, the exact refined type of `square(random1toN(5))` is the existential type `exists[i : int if 1 ≤ i ≤ 5] i * i`, but in many situations `i : int if 1 ≤ i ≤ 25` is precise enough while being much clearer.

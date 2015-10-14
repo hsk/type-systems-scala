@@ -44,6 +44,7 @@ object Smt {
         p.getErrorStream().close()
         p.getInputStream().close()
         p.getOutputStream().close()
+        
         try {
           p.waitFor() match {
             case 0 =>

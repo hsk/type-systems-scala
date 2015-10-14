@@ -3,7 +3,6 @@
 $file = file_get_contents("subml.md");
 
 $out = array();
-//preg_replace_callback("/\\n\\|([^|]+\\|)+\\n| (-+ \\|)+\\n/",function($m){
 preg_replace_callback("/\\n\\|([^|\\n]+\\|)+\\n\\|( \\-+ \\|)+\\n((\\|([^|\\n]+\\|)+\\n)+)/",function($m){
   global $out;
   $data = explode("\n", rtrim($m[3],"\n"));
