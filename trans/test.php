@@ -1,15 +1,42 @@
 <?php
+function globRecursive($path, $find) {
+	$rc = array();
+    $dh = opendir($path);
+    while (($file = readdir($dh)) !== false) {
+        if (substr($file, 0, 1) == '.') continue;
+        $rfile = "{$path}/{$file}";
+        if (is_dir($rfile))
+            foreach (globRecursive($rfile, $find) as $ret)
+            	$rc[] = $ret;
+        else if (fnmatch($find, $file)) $rc[] = $rfile;
+    }
+    closedir($dh);
+    return $rc;
+}
 
-$file = file_get_contents("subml.md");
+$names = globRecursive("..", "*.md");
+
+sort($names);
+
+$name = isset($_GET["name"]) ? $_GET["name"] : "../README.md";
+$file = file_get_contents($name);
 
 $out = array();
-preg_replace_callback("/\\n\\|([^|\\n]+\\|)+\\n\\|( \\-+ \\|)+\\n((\\|([^|\\n]+\\|)+\\n)+)/",function($m){
+//echo $file;
+
+preg_replace_callback("/\\n<sup><sub>\\n((.*\\n)+?)<\\/sub><\\/sup>\\n/",function($m){
   global $out;
-  $data = explode("\n", rtrim($m[3],"\n"));
+  $data = explode("\n", rtrim($m[1],"\n"));
 
   foreach($data as $d) {
-    $d = explode("|", $d);
-    $out[$d[1]] = $d[2];    
+
+
+    if(preg_match("/([\\w\\- +*,.'\"`’]+) (.*)/", $d, $m)>0){
+	    $out[$m[1]] = $m[2];
+
+    } else {
+    	echo $d;
+    }
   }
   return "";
 }, $file);
@@ -24,6 +51,8 @@ preg_replace_callback("/\\n\\|([^|\\n]+\\|)+\\n\\|( \\-+ \\|)+\\n((\\|([^|\\n]+\
   <title>Markdown test</title>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.5/angular.min.js"></script>
 <script>
+var name = <?php echo json_encode($name, JSON_UNESCAPED_UNICODE) ?>;
+var names = <?php echo json_encode($names, JSON_UNESCAPED_UNICODE) ?>;
 var datas = <?php echo json_encode($out, JSON_UNESCAPED_UNICODE) ?>;
 var words = [];
 for(var i in datas) {
@@ -51,10 +80,13 @@ angular.module('testApp', [])
     $scope.words=words;
     $scope.ok = 0;
     $scope.ng = 0;
-
+    $scope.names = names;
+    $scope.namev = name;
+    var n = 1;
 	for(var i in words) {
 		words[i].answers = makeAnswers(words,i);
 		words[i].ok = true;
+		words[i].no = n++;
 	}
     $scope.reset=function(a){
     	if(a != null) {
@@ -76,6 +108,9 @@ angular.module('testApp', [])
     	}
     	return false;
     }
+    $scope.send=function() {
+    	window.location = "?name="+encodeURIComponent($scope.namev);
+    }
     $scope.reset();
 });
 </script>
@@ -83,6 +118,7 @@ angular.module('testApp', [])
 <div ng-app="testApp">
 	<div ng-controller="TestController">
 
+		<select ng-change="send()" ng-model="namev" ng-options="nam for nam in names"></select>
 		<div>単語練習<span>全{{words.length}}問</span></div>
 
 		<div>第{{no+1}}問目 {{ok}}問正解 {{ng}}問不正解</div>
@@ -92,6 +128,7 @@ angular.module('testApp', [])
 		</span>
 		<form  ng-submit="sub()">
 		<div ng-repeat="q in words">
+			{{q.no}}.
 			{{q.q}} <span ng-repeat="a in q.answers">
 			<input type="radio" ng-model="q.radio" value="{{a}}" ng-change="sub()">
 				{{words[a].ans}}</span>
