@@ -54,16 +54,11 @@ preg_replace_callback("/\\n<sup><sub>\\n((.*\\n)+?)<\\/sub><\\/sup>\\n/",functio
 var name = <?php echo json_encode($name, JSON_UNESCAPED_UNICODE) ?>;
 var names = <?php echo json_encode($names, JSON_UNESCAPED_UNICODE) ?>;
 var datas = <?php echo json_encode($out, JSON_UNESCAPED_UNICODE) ?>;
-var words = [];
-for(var i in datas) {
-	words.push({q:i, ans:datas[i]});
-}
 
-function makeAnswers(words, no) {
+function makeAnswers(words, no, size) {
 	var ns = [];
 	for(var i = 0; i < words.length; i++)
 		if(no != i) ns.push(i);
-	var size = 2;
 	var answers = [];
 	for(var i = 0; i < size; i++) {
 		var n = Math.floor(Math.random()*(ns.length));
@@ -76,49 +71,69 @@ function makeAnswers(words, no) {
 }
 angular.module('testApp', [])
   .controller('TestController', function($scope) {
-    $scope.no = -1;
-    $scope.words=words;
-    $scope.ok = 0;
-    $scope.ng = 0;
     $scope.names = names;
     $scope.namev = name;
-    var n = 1;
-	for(var i in words) {
-		words[i].answers = makeAnswers(words,i);
-		words[i].ok = true;
-		words[i].no = n++;
-	}
+    $scope.shuffle = false;
+    $scope.size = 2;
     $scope.reset=function(a){
     	if(a != null) {
     		if(a==$scope.no)
     			$scope.ok++;
     		else
     			$scope.ng++;
-    	}
-    	$scope.no++;
+	    	$scope.no++;
+    	} else {
+    		$scope.no = 0;
+		    $scope.ok = 0;
+		    $scope.ng = 0;
+			var words = [];
+			for(var i in datas) {
+				words.push({q:i, ans:datas[i]});
+			}
 
-    	$scope.answers = makeAnswers(words,$scope.no);
+			function shuffle(array) {
+				array.sort(function(){return Math.random()-.5;});
+			}
+			if($scope.shuffle) shuffle(words);
+
+
+		    var n = 1;
+			for(var i in words) {
+				words[i].answers = makeAnswers(words,i, $scope.size);
+				words[i].ok = true;
+				words[i].no = n++;
+			}
+		    $scope.words=words;
+		    $scope.word = words[0];
+       	}
+
+
+    	$scope.answers = makeAnswers($scope.words,$scope.no, $scope.size);
     };
-    $scope.word = words[0];
 
     $scope.sub=function() {
     	var aa = [];
-    	for(var i = 0; i < words.length;i++) {
-    		words[i].ok = (words[i].radio!=i);
+    	for(var i = 0; i < $scope.words.length;i++) {
+    		$scope.words[i].ok = ($scope.words[i].radio!=i);
     	}
     	return false;
     }
     $scope.send=function() {
     	window.location = "?name="+encodeURIComponent($scope.namev);
     }
+    $scope.sizes = [];
+    for(var i = 0; i < 5; i++) $scope.sizes.push(i+1);
     $scope.reset();
 });
 </script>
 <body >
 <div ng-app="testApp">
 	<div ng-controller="TestController">
-
-		<select ng-change="send()" ng-model="namev" ng-options="nam for nam in names"></select>
+		問題<select ng-change="send()" ng-model="namev" ng-options="nam for nam in names"></select>
+		<button ng-click="reset()">リセット</button>
+		<input type="checkbox" ng-model="shuffle" ng-change="reset()">シャッフル
+		選択数
+		<select ng-change="reset()" ng-model="size" ng-options="s for s in sizes"></select>
 		<div>単語練習<span>全{{words.length}}問</span></div>
 
 		<div>第{{no+1}}問目 {{ok}}問正解 {{ng}}問不正解</div>
