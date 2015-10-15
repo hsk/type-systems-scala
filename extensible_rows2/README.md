@@ -3,6 +3,24 @@ Extensible records with scoped labels - improved
 
 # スコープドラベル付き拡張レコード - 改
 
+<sup><sub>
+improved 改善された
+Essentialy 基本的に
+instead 代わりに
+representing 表します
+row 行
+nodes ノード
+each 各
+contains 含まれている
+respectively それぞれ
+During 中に
+converted 変換された
+gathered  集まった
+together 一緒に
+representable 表現
+</sub></sup>
+
+
 > <sup><sub>
 This is an improved implementation of type inference for [extensible records][original].
 

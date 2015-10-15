@@ -8,7 +8,11 @@ object main extends App with ClipboardOwner{
   override def lostOwnership(aClipboard:Clipboard, aContents:Transferable){}
 
   def getclip():String = {
-    clip.getData(DataFlavor.stringFlavor).asInstanceOf[String]
+    try{
+      clip.getData(DataFlavor.stringFlavor).asInstanceOf[String]
+    } catch {
+      case _:Throwable => ""
+    }
   }
 
   def setclip(str:String) {
@@ -67,12 +71,16 @@ object main extends App with ClipboardOwner{
       val log3 = log.trim().split('\n')
 
       var out = ""
-      out += "|English|日本語|\n"
-      out += "| --- | --- |\n"
+
+      out += "<sup><sub>\n"
+      //out += "|English|日本語|\n"
+      //out += "| --- | --- |\n"
       data.toList.zipWithIndex.foreach {
         case (v,i) =>
-          out += "|"+log3(i)+"|"+v+"|\n"
+          //out += "|"+log3(i)+"|"+v+"|\n"
+          out += log3(i)+" "+v+"\n"
       }
+      out += "</sub></sup>\n"
       out
     }
 

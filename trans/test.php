@@ -55,6 +55,24 @@ var name = <?php echo json_encode($name, JSON_UNESCAPED_UNICODE) ?>;
 var names = <?php echo json_encode($names, JSON_UNESCAPED_UNICODE) ?>;
 var datas = <?php echo json_encode($out, JSON_UNESCAPED_UNICODE) ?>;
 
+var spk = new SpeechSynthesisUtterance();
+
+function jp(s,next) {
+	spk.lang = 'ja-JP';
+	spk.text=s;
+	spk.rate = 1.8;
+	spk.onend = next;
+	speechSynthesis.speak(spk);	
+}
+
+function en(s,next) {
+	spk.rate = 1.0;
+	spk.lang = 'en-US';
+	spk.text=s;
+	spk.onend = next;
+	speechSynthesis.speak(spk);	
+}
+
 function makeAnswers(words, no, size) {
 	var ns = [];
 	for(var i = 0; i < words.length; i++)
@@ -70,11 +88,13 @@ function makeAnswers(words, no, size) {
 	return answers;
 }
 angular.module('testApp', [])
-  .controller('TestController', function($scope) {
+  .controller('TestController', function($scope,$timeout) {
     $scope.names = names;
     $scope.namev = name;
     $scope.shuffle = false;
     $scope.size = 2;
+    $scope.stopp = function(){};
+
     $scope.reset=function(a){
     	if(a != null) {
     		if(a==$scope.no)
@@ -83,9 +103,11 @@ angular.module('testApp', [])
     			$scope.ng++;
 	    	$scope.no++;
     	} else {
+    		$scope.stopp();
     		$scope.no = 0;
 		    $scope.ok = 0;
 		    $scope.ng = 0;
+		    $scope.spe = "wait";
 			var words = [];
 			for(var i in datas) {
 				words.push({q:i, ans:datas[i]});
@@ -95,6 +117,41 @@ angular.module('testApp', [])
 				array.sort(function(){return Math.random()-.5;});
 			}
 			if($scope.shuffle) shuffle(words);
+
+			(function(){
+				var stop = false;
+				var sp=0;
+				function speech(){
+					$scope.spe = (sp+1)+"."+words[sp].q;
+					if (stop) return;
+					en(words[sp].no+" "+words[sp].q+" "+words[sp].q+" "+words[sp].q,function(){
+						$timeout(function(){
+							if (stop) return;
+							$scope.spe = (sp+1)+"."+words[sp].q+" "+words[sp].ans;
+							jp(words[sp].ans, function(){
+								$timeout(function(){
+									if (stop) return;
+									sp = sp + 1
+									if(words.length <= sp) {
+										sp = 0;
+										jp("くりかえします", function(){$timeout(speech,1000)});
+									} else {
+
+										$timeout(speech);
+									}
+
+								})
+							});
+
+						});
+					})
+				}
+				$scope.stopp=function(){
+					stop=true;
+				};
+				speech();
+
+			}());
 
 
 		    var n = 1;
@@ -129,6 +186,7 @@ angular.module('testApp', [])
 <body >
 <div ng-app="testApp">
 	<div ng-controller="TestController">
+		{{spe}}<br/>
 		問題<select ng-change="send()" ng-model="namev" ng-options="nam for nam in names"></select>
 		<button ng-click="reset()">リセット</button>
 		<input type="checkbox" ng-model="shuffle" ng-change="reset()">シャッフル
