@@ -55,23 +55,6 @@ var name = <?php echo json_encode($name, JSON_UNESCAPED_UNICODE) ?>;
 var names = <?php echo json_encode($names, JSON_UNESCAPED_UNICODE) ?>;
 var datas = <?php echo json_encode($out, JSON_UNESCAPED_UNICODE) ?>;
 
-var spk = new SpeechSynthesisUtterance();
-
-function jp(s,next) {
-	spk.lang = 'ja-JP';
-	spk.text=s;
-	spk.rate = 1.8;
-	spk.onend = next;
-	speechSynthesis.speak(spk);	
-}
-
-function en(s,next) {
-	spk.rate = 1.0;
-	spk.lang = 'en-US';
-	spk.text=s;
-	spk.onend = next;
-	speechSynthesis.speak(spk);	
-}
 
 function makeAnswers(words, no, size) {
 	var ns = [];
@@ -93,7 +76,33 @@ angular.module('testApp', [])
     $scope.namev = name;
     $scope.shuffle = false;
     $scope.size = 2;
-    $scope.stopp = function(){};
+    $scope.jp_rate = 1.8;
+    $scope.en_rate = 1.0;
+    $scope.en_no = 3;
+    $scope.rates = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0,1.1,1.2,1.3,1.4, 1.5,1.6,1.7,1.8,1.9,2.0];
+    $scope.join = "";
+
+    var spk = null;
+    if(SpeechSynthesisUtterance){
+	    spk = new SpeechSynthesisUtterance();
+    }
+   	$scope.spk = spk != null;
+	function jp(s,next) {
+		spk.lang = 'ja-JP';
+		spk.text=s;
+		spk.rate = $scope.jp_rate;
+		spk.onend = next;
+		speechSynthesis.speak(spk);	
+	}
+
+	function en(s,next) {
+		spk.rate = $scope.en_rate;
+		spk.lang = 'en-US';
+		spk.text=s;
+		spk.onend = next;
+		speechSynthesis.speak(spk);	
+	}
+
 
     $scope.reset=function(a){
     	if(a != null) {
@@ -103,7 +112,6 @@ angular.module('testApp', [])
     			$scope.ng++;
 	    	$scope.no++;
     	} else {
-    		$scope.stopp();
     		$scope.no = 0;
 		    $scope.ok = 0;
 		    $scope.ng = 0;
@@ -118,13 +126,18 @@ angular.module('testApp', [])
 			}
 			if($scope.shuffle) shuffle(words);
 
-			(function(){
+
+			function start(){
 				var stop = false;
 				var sp=0;
 				function speech(){
 					$scope.spe = (sp+1)+"."+words[sp].q;
 					if (stop) return;
-					en(words[sp].no+" "+words[sp].q+" "+words[sp].q+" "+words[sp].q,function(){
+					var eng = [];
+					if(sp % 10 == 9)eng.push(words[sp].no+"th. ");
+					for(var i = 0; i < $scope.en_no;i++)eng.push(words[sp].q);
+					
+					en(eng.join(" "+$scope.join+" "),function(){
 						$timeout(function(){
 							if (stop) return;
 							$scope.spe = (sp+1)+"."+words[sp].q+" "+words[sp].ans;
@@ -146,13 +159,24 @@ angular.module('testApp', [])
 						});
 					})
 				}
-				$scope.stopp=function(){
+				function stopp(next){
 					stop=true;
+					$timeout(function(){
+						if(!speechSynthesis.speaking) next()
+						else stopp(next);
+					},300)
 				};
+				$scope.stopp=stopp;
 				speech();
-
-			}());
-
+				
+			}
+			if(spk){
+	    		if($scope.stopp==null) {
+	    			start();
+			    } else {
+	    			$scope.stopp(start);
+	    		}
+    		}
 
 		    var n = 1;
 			for(var i in words) {
@@ -180,13 +204,21 @@ angular.module('testApp', [])
     }
     $scope.sizes = [];
     for(var i = 0; i < 5; i++) $scope.sizes.push(i+1);
+
     $scope.reset();
 });
 </script>
 <body >
 <div ng-app="testApp">
 	<div ng-controller="TestController">
+		<span ng-show="spk">
+		日本語 スピード<select ng-model="jp_rate" ng-options="r for r in rates"></select>
+		英語 スピード<select ng-model="en_rate" ng-options="r for r in rates"></select>
+		回数<select ng-model="en_no" ng-options="s for s in sizes"></select>
+		join<textarea ng-model="join"></textarea>
+		<br/>
 		{{spe}}<br/>
+		</span>
 		問題<select ng-change="send()" ng-model="namev" ng-options="nam for nam in names"></select>
 		<button ng-click="reset()">リセット</button>
 		<input type="checkbox" ng-model="shuffle" ng-change="reset()">シャッフル
