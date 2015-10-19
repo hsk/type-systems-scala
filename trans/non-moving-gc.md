@@ -760,6 +760,22 @@ __The following__ is __a summary of the features of our GC algorithm__.
     > <sup><sub>
     __The resulting implementation of the special case__ does not require __any additional memory space other than those used in the non-generational version__.
 
+    世代別GCを非移動。
+
+    デマーズet.al.によって提案された部分集合の概念を適応させることによって、 [10]、GCのマーキング当社のビットマップオブジェクトを移動することなく、世代別GCまで拡張可能。
+
+    これは、ビットマップは、ヒープ内のオブジェクトの集合の部分集合を表す私たちの観察に基づいています。
+
+    世代別GCは、各世代のために別個のビットマップを維持することによって実現することができます。
+
+    しきい値を殿堂入りは1であり、世代数が2である[10]に提示「スティッキービット」技術による部分集合は、特殊なケースと一致しています。
+
+    古い世代から若い世代へのポインタは書き込みバリアと思い出したセットを使用して追跡されます。
+
+    上記の特殊なケースでは、思い出したセットが原因で思い出したセットがマイナーコレクション後に洗い流すことができるプロパティにコレクターのトレース・スタックに確保することができます。
+
+    特殊なケースで得られたインプリメンテーションは、非世代のバージョンで使用されているもの以外の追加のメモリ空間を必要としません。
+
 ----
 
 > <sup><sub>
@@ -784,7 +800,19 @@ __These results__ demonstrate that __our development__ have achieved __the goal 
 __The proposed method__ has __additional advantage of supporting multiple native threads without much additional machinery__.
 
 > <sup><sub>
-__Our segment-based heap organization__ allows __each concurrent thread to allocate objects in a shared global heap without any locking__. 
+__Our segment-based heap organization__ allows __each concurrent thread to allocate objects in a shared global heap without any locking__.
+
+私たちは、標準的なMLコンパイラのデータ構造とアルゴリズムを実装しており、大規模なベンチマークテストを行っています。
+
+我々は評価し、比較して、簡単なチェイニーのコピーGCに対して、および[29]に記載されている機能の言語の世代コピーGC、以下の結果を得ているしています：
+
+（ⅰ）セグメントベースのダイナミックサブヒープサイズの調整が自動的に（ii）のビ​​ットマップマーキングGCはチェイニーのコピーGCほど効率的で、最適な手にチューニングされたサブヒープサイズの割り当てを達成し、および（iii）世代の拡張は、非よりも性能が優れています世代ビットマップGC、および世代コピーGCと比べて、同等以上の性能の結果を示しています。
+
+これらの結果は、私たちの開発は関数型言語のために動かないGC法を開発するという目標を達成していることを示しています。
+
+提案された方法は、非常に追加の機械ことなく、複数のネイティブスレッドをサポートする追加の利点を有します。
+
+当社のセグメントベースのヒープ組織は各同時スレッドが任意のロックなしで共有グローバルヒープ内のオブジェクトを割り当てることができます。
 
 <sup><sub>
 preliminary 予備
