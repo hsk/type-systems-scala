@@ -46,7 +46,7 @@ object Expr {
             case _ => "(" + param_ty_list.map(complex).mkString(", ") + ")"
           }
           val return_ty_str = complex(return_ty)
-          param_ty_list_str + " => " + return_ty_str
+          param_ty_list_str + " -> " + return_ty_str
       case TVar(Ref(Link(ty))) => complex(ty)
       case ty => simple(ty)
       }

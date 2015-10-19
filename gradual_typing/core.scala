@@ -9,8 +9,7 @@ object Core {
     val core_ref = Ref(Env.empty)
 
     def assume(name:String, ty_str:String) {
-//      val ty = Parse.ty_forall_eof(ty_str)
-      val ty = TDynamic
+      val ty = parse.ty_forall_eof(ty_str)
       core_ref.a = Env.extend(core_ref.a, name, ty)
     }
 
