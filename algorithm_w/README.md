@@ -30,7 +30,7 @@ Algorithm W is the original algorithm for infering types in the Damas-Hindley-Mi
 It supports polymorphic types, such as `forall[a] a -> a`, let generalization, and infers principal (most general) types.
 Although it is formally described using explicit substitutions, it permits an efficient implemenation using updatable references, achieving close to linear time complexity (in terms of the size of the expression being type-infered).
 
-アルゴリズムWはダマ・ヒンドリー - ミルナー型システムの型を推論するための独自のアルゴリズムです。
+アルゴリズムWはダマ・ヒンドリー - ミルナー型システムの型を推論するためのオリジナルのアルゴリズムです。
 `forall[a] -> a` のような多相型をサポートし、let一般化をし、主要な（最も一般的な）型を推論します。
 アルゴリズムWは形式的には明示的な代入を使用して記述されますが、更新可能な参照を使用して効率的な実装を可能にして、
 （型推論する項の式のサイズの点で）線形時間オーダーの計算量を達成しています。
@@ -59,7 +59,7 @@ A very eloquent description of the ranked type variables algorithm and associate
 アルゴリズムWの一般的な説明については、[Wikipediaの記事][wikipedia]を参照してください。
 この実装は、素朴な実装に優るいくつかの最適化を使用しています。
 型を単一化するときに明示的な置換の代わりに、更新可能な参照を使用しています。
-また、レベルと未束縛な型変数にタグを付けるかのletバインディングの一般化を最適化するためにランクされていて、このテクニックはディディエ・レミーによって最初に記載されました [1]。
+それは、未束縛な型変数でlet束縛の一般化を最適化するためのレベルまたはランクと一緒にタグ付けされ、このテクニックはディディエ・レミーによって最初に記載されました [1]。
 非常に説得力のあるランク付き型変数のアルゴリズムと関連する最適化の説明は、[Oleg Kiselyov][oleg]によって書かれました。
 
 > <sup><sub>
@@ -73,19 +73,19 @@ Lexer is implemented in `lexer.mll` using `ocamllex`, and a simple parser in fil
 The main type inference is implemented in the file `infer.ml`.
 
 ラムダ計算の基本的な項と型の構造は `expr.ml` で定義されています。
-字句解析器はocamllexを使用して`lexer.mll`で実装され、単純なパーサーは`ocamlyacc`を使用したファイル `parser.mly`です。
+字句解析器はocamllexを使用して`lexer.mll`で実装され、単純なパーサーは`ocamlyacc`を使用してファイル `parser.mly`で実装されています。
 メインの型推論は、ファイル `infer.ml`で実装されています。
 
 > <sup><sub>
 The function `infer` takes an environment, a level used for let-generalization, and an expression, and infers types for each term type.
 
-`infer` 関数は、環境(env)、let一般化するために使用されるレベル(level)、および式(expr)をとり、それぞれの項の型を型推論します。
+`infer` 関数は、環境(env)、let一般化で使われるレベル(level)、および式(expr)をとり、それぞれの項の型を型推論します。
 
     def infer(env:Env.env, level:level, expr:Expr):Ty = {
       expr match {
 
 > <sup><sub>
-*Variables* are looked up in the environment and instantiated.
+*Variables* are _looked up in the environment and instantiated_.
 
 *変数* は、環境内で検索され、インスタンス化されます。
 
@@ -97,9 +97,9 @@ The function `infer` takes an environment, a level used for let-generalization, 
           }
 
 > <sup><sub>
-The type of *functions* is inferred by adding the function parameters to the type environment using fresh type variables, and inferring the type of the function body.
+The type of *functions* is inferred by _adding the function parameters to the type environment using fresh type variables_, and inferring _the type of the function body_.
 
-*関数* の型は、新たな型の変数を使用して型環境に関数パラメータを追加し、関数本体の型を推論することで推論されます。
+*関数* の型は、新たな型変数を使用して型環境に関数パラメータを追加して、関数本体の型を推論することで推論されます。
 
         case Fun(param_list, body_expr) =>
           val param_ty_list = param_list.map{ _ => new_var(level)}
@@ -111,15 +111,16 @@ The type of *functions* is inferred by adding the function parameters to the typ
           TArrow(param_ty_list, return_ty)
 
 > <sup><sub>
-The type of *let* expression is inferred by first inferring the type of the let-bound value, generalizing the type, and the inferring the type of the let body in the extended type environment.
+_The type of *let* expression_ is inferred by _first inferring the type of the let-bound value_, generalizing the type, and _the inferring the type of the let body in the extended type environment_.
 
-*let* 式の型は最初にletの値の型を推論し、次に型の一般化し、そして拡張された型環境でlet本体の型を推論することによって推論されます。
+*let* 式の型は最初にletの値の型を推論し、型を一般化し、そして拡張された型環境でlet本体の型を推論することによって推論されます。
 
         case Let(var_name, value_expr, body_expr) =>
           val var_ty = infer(env, level + 1, value_expr)
           val generalized_ty = generalize(level, var_ty)
           infer (Env.extend(env, var_name, generalized_ty), level, body_expr)
 
+> <sup><sub>
 Finally, the type of a *call* expression is inferred by first matching the type of the expression being called using the `match_fun_ty` function, and then inferring the types of the arguments and unifying them with the types of function parameters.
 
 最後に、*call* 式の型は、最初の`match_fun_ty`関数を使用して呼び出されている式の型にマッチした後、引数の型を推論し、関数パラメータの型とそれらを単一化することにより推論されます。
@@ -141,7 +142,7 @@ identical 同一の
 </sub></sup>
 
 > <sup><sub>
-The function `unify` takes two types and tries to *unify* them, i.e. determine if they can be equal.
+_The function `unify`_ takes _two types_ and tries to *unify* _them_, i.e. determine if _they_ can be _equal_.
 
 `unify` 関数は2つの型を取りそれらを*unify*しようとします、すなわち、引数が等しくできるか判断します。
 
@@ -150,7 +151,7 @@ The function `unify` takes two types and tries to *unify* them, i.e. determine i
       (ty1, ty2) match {
 
 > <sup><sub>
-Type constants unify with identical type constants, and arrow types and other structured types are unified by unifying each of their components.
+_Type constants_ unify with _identical type constants_, and _arrow types and other structured types_ are unified by _unifying each of their components_.
 
 型定数は同じ型定数を単一化し、矢印型やその他の構造化型は、それぞれの部分をそれぞれ単一化することで単一化されています。
 
@@ -224,7 +225,7 @@ While traversing the type tree, this function also takes care of updating the le
     }
 
 > <sup><sub>
-Function `generalize` takes a level and a type and turns all type variables within the type that have level higher than the input level into generalized (polymorphic) type variables.
+_Function `generalize`_ takes _a level and a type_ and turns _all type variables within the type_ that have _level higher_ than _the input level into generalized (polymorphic) type variables_.
 
 `generalize`(一般化)関数は、レベルと型を取り、一般化（多相型）への入力レベルよりも高いレベルを持っている型内ですべての型変数の変数を入力をオンにします。
 
@@ -242,9 +243,9 @@ Function `generalize` takes a level and a type and turns all type variables with
     }
 
 > <sup><sub>
-Function `instantiate` duplicates the input type, transforming any polymorphic variables into normal unbound type variables.
+_Function `instantiate`_ duplicates _the input type_, transforming _any polymorphic variables into normal unbound type variables_.
 
-`instantiate`(インスタンス化)関数は、通常未結合の型の変数に任意の多相型の変数を変換し、入力タイプが複製されます。
+`instantiate`(インスタンス化)関数は入力した型を複製し、_通常未結合の型の変数に任意の多相型の変数_を変換します。
 
     def instantiate(level:level, ty:Ty):Ty = {
       var id_var_map = Map[id,Ty]()
@@ -290,17 +291,18 @@ take care of 面倒を見る
 </sub></sup>
 
 > <sup><sub>
-Although this implementation is reasonably efficient, state-of-the-art implementations of HM type inference employ several more advanced techniques which were avoided in this implementation for the sake of clarity.
-As outlined in Oleg's article, OCaml's type checker marks *every* type with a type level, which is the maximum type level of the type variables occuring within it, to avoid traversing non-polymorphic types during instantiation.
+Although _this implementation_ is _reasonably efficient_, _state-of-the-art implementations of HM type inference_ employ _several more advanced techniques_ which were avoided in _this implementation for the sake of clarity_.
+As _outlined in Oleg's article_, _OCaml's type checker_ marks _*every* type with a type level_, which is _the maximum type level of the type variables occuring within it_, to avoid traversing _non-polymorphic types during instantiation_.
 It also delays occurs checks and level adjustments.
 It can deal with recursive types, which arise often while type checking objects, by marking types during unification.
-Oleg describes a further optimization that could be performed by condensing the sequences of type links as we follow them, but our `generalize` function takes care of that problem.
+_Oleg_ describes _a further optimization_ that could be performed by _condensing the sequences of type links as we follow them_, but _our `generalize` function_ takes care of _that problem_.
 
 この実装は適度に効率的であるが、HM型推論の最先端の実装では、明確にするために、この実装では回避されたいくつかのより高度なテクニックを使用します。
 オレグの記事で概説してあるように、OCamlでの型チェッカーは、インスタンス化中に非多型型を横断避けるために、その中に起きて型変数の最大型レベルで型レベル、とのすべてのタイプをマーク。
 また、遅延がチェックおよびレベル調整を発生します。
 これは、タイプが統一時に型をマークすることによって、オブジェクトを確認しながら、多くの場合、発生する再帰的な型を扱うことができます。
-オレグは、我々はそれに従うようなタイプのリンクのシーケンスを凝縮させることによって実施することができる更なる最適化を説明していますが、私たちのgeneralize関数は、その問題の面倒を見ます。
+オレグは、我々はそれに従うようなタイプのリンクのシーケンスを凝縮させることによって実施することができる更なる最適化を説明していますが、私たちのgeneralize関数は、その問題を解決します。
+
 
 > <sup><sub>
 References

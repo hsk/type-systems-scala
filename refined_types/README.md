@@ -16,11 +16,12 @@ absence ない状態
 </sub></sup>
 
 > <sup><sub>
-This is another type systems experiment that combines Hindley–Milner type inference with static type-checking of a limited version of dependent types called *refined types*.
-Although the type-checker only allows refined types on function parameters and return types (i.e. *function contracts*), it can prove the absence of some of the most common software bugs.
+_This_ is _another type systems experiment_ that combines _Hindley–Milner type inference_ with _static type-checking of a limited version of dependent types called *refined types*_.
+Although _the type-checker_ only allows _refined types_ on _function parameters and return types (i.e. *function contracts*)_,
+_it_ can prove _the absence of some of the most common software bugs_ .
 
-これは、*refined types* と呼ばれる依存型の限定バージョンの静的型チェックでヒンドリーミルナーの型推論を組み合わせた別の型システム実験です。
-型チェッカが唯一の関数のパラメータおよび戻り値の型（関数契約）の洗練化タイプを可能にするが、それは最も一般的なソフトウェアのバグのいくつかが存在しないことを証明することができます。
+これは、別な*refined types*と呼ばれる依存型の限られたバージョンのヒンドリミルナ型推論をかね揃えた静的型検査の型システムの実験です。
+型検査器は(関数の契約のような)関数のパラメータと返り値の型にのみ*refined types* をゆるすのであるけど、それはおおくのソフトウェアに共通したバグのいくつかがないことを証明出来ます。
 
 <sup><sub>
 consider 考慮する
@@ -36,13 +37,17 @@ compilation コンパイル
 </sub></sup>
 
 > <sup><sub>
-For a simple example, let's consider integer division: we know that the denominator cannot be zero.
-Thus, if we define division as `/ : (int, i : int if i != 0) → int`, the refined type-checker can tell us *during compilation* that `1/0` will result in an error, as would `1/(2 * 3 - 6)` and `1/(4 % 2)`.
-The system can also deduce that the program `10 / (random1toN(10) - 5)` is potentially unsafe, where `random1toN` is a non-deterministic function whose type is `(N : int if N ≥ 1) → (i : int if 1 ≤ i and i ≤ N)`.
+For _a simple example_, let's consider _integer division_:
+_we_ know that _the denominator_ cannot be _zero_.
+Thus, if _we_ define _division_ as `/ : (int, i : int if i != 0) → int`,
+_the refined type-checker_ can tell us *during compilation* that `1/0` will _result in an error_,
+as would _`1/(2 * 3 - 6)` and `1/(4 % 2)`_.
+_The system_ can also deduce that _the program `10 / (random1toN(10) - 5)`_ is _potentially unsafe_, where `random1toN` is _a non-deterministic function_ whose _type_ is `(N : int if N ≥ 1) → (i : int if 1 ≤ i and i ≤ N)`.
 
-簡単な例について、整数除算を考えてみましょう：分母がゼロにならないことを私たちは知っています。
-従って、我々は`/ : (int, i : int if i != 0) → int`と割り算を定義した場合、Refined typesチェッカは `1/0` あるいは `1/(2 * 3 - 6)` や `1/(4 % 2)` がエラーになることを、コンパイル時に私たちに伝えることができます。
-このシステムは、プログラム`10 / (random1toN(10) - 5)`が安全でない可能性があることを推論することができます(ここで`random1toN`は型`(N : int if N ≥ 1) → (i : int if 1 ≤ i and i ≤ N)`である非決定的関数)。
+シンプルな例で、整数の除算について考えてみましょう:
+我々は分母がゼロに出来ない事を知ってます。
+従って、もしも`/ : (int, i : int if i != 0) → int`という割算を定義すれば、Refined型検査器は`1/(2 * 3 - 6)` と `1/(4 % 2)`のような`1/0`の結果がエラーになる事をコンパイル時に我々に伝える事が出来ます。
+このシステムはプログラム`10 / (random1toN(10) - 5)` が潜在的に安全はでないことを計算出来て、ここで`random1toN`は非決定的な関数で、この型は`(N : int if N ≥ 1) → (i : int if 1 ≤ i and i ≤ N)`です。
 
 <sup><sub>
 verify 確認します
@@ -54,9 +59,13 @@ prevented 防止
 </sub></sup>
 
 > <sup><sub>
-Refined type checking can also be used to verify that arrays are not accessed out of bounds, and using appropriate contracts on functions `alloc` and `memcpy`, software bugs such as [Heartbleed][heartbleed] could be prevented.
+_Refined type checking_ can also be used _to verify_ that _arrays_ are not accessed _out of bounds_,
+and using _appropriate contracts on functions `alloc` and `memcpy`_,
+_software bugs such as [Heartbleed][heartbleed]_ could be prevented.
 
-Refined type checking も配列が境界外へのアクセス、および関数の`alloc`と`memcpy`を、[Heartbleed][heartbleed]などのソフトウェアのバグを防ぐことができた上で適切な契約を使用していないことを確認するために使用することができます。
+Refined型検査は配列が境界外へのアクセスされていない事の検証にも使え、
+関数`alloc`と`memcpy`上で適切な契約を使い、
+[Heartbleed][heartbleed]のようなソフトウェアバグを防ぐことができます。
 
 ```typescript
 alloc : (i : int) -> (a : array[byte] if length(a) == i)
@@ -96,15 +105,18 @@ below 以下
 </sub></sup>
 
 > <sup><sub>
-The implementation of a refined type-checker is actually very straightforward and turned out to be
-much simpler than I expected. Essentially, program expressions and contracts on function parameters
-and return types are converted into a series of mathematical formulas and logical statements, the
-validity of which is then assessed using an external automated theorem prover [Z3][z3]. The details
-of the implementation, including the tricks that allow functions to be handled as first-class
-values, are explained below.
+_The implementation of a refined type-checker_ is _actually very straightforward_  and turned out to be _much simpler than I expected_.
+Essentially, _program expressions_ and _contracts on function parameters　and return types_ are converted into _a series of mathematical formulas and logical statements_,
+_the validity_ of which is then assessed using _an external automated theorem prover [Z3][z3]_.
+_The details of the implementation_,
+including _the tricks_ that allow _functions to be handled as first-class values_,
+are explained below.
 
-Refined typesチェッカの実装は、実際には非常に簡単であり、私の予想よりはるかに簡単であることが判明しました。基本的に、プログラム式や関数のパラメータと戻り値の型の契約は、外部自動定理証明[Z3][z3]を用いて評価される有効性そのうちの数式や論理ステートメントの列に変換されます。
-関数はファーストクラスの値として扱うことを可能にするトリックを含む実装の詳細は、以下に説明します。
+Refined型検査の実装は、実際には非常にすなおで、私の予想よりはるかに簡単であることが分かりました。
+基本的に、プログラムの式や関数のパラメータと戻り値の型の契約は、数学的な式や論理ステートメントの列に変換されたもので、
+その妥当性は外部自動定理証明[Z3][z3]を用いて評価されたものです。
+実装の詳細は、
+ファーストクラスの値として関数を扱えるようにするトリックを含んでおり、以下の説明である。
 
 <sup><sub>
 should すべきです
@@ -113,11 +125,11 @@ its それの
 </sub></sup>
 
 > <sup><sub>
-*Note about syntax:* These examples use a syntax similar to JavaScript or TypeScript that
-should be familiar to most programmers, which is different from the [ML][ml-language]-like syntax that the
-type-checker and its test cases use.
+*Note about syntax:*
+_These examples_ use _a syntax similar to JavaScript or TypeScript_ that should be _familiar to most programmers_, which is _different from the [ML][ml-language]-like syntax_ that _the type-checker and its test cases_ use.
 
-*構文に関する注意:* これらの例は、JavaScriptやタイプスクリプトに似た構文を使用していて、それは、ほとんどのプログラマに精通している必要があり、これは型チェッカとそのテストケースを使用して、MLのような構文とは異なります。
+*構文に関する注意:*
+これらの例では多くのプログラマにとって親しみやすくするべきであることにより、JavaScriptかTypeScriptに似た構文を使っています。しかし[ML][ml-language]ライクな構文をつかってる型検査やテストケースとは違います。
 
 > <sup><sub>
 Overview
@@ -142,15 +154,15 @@ literature 文献
 </sub></sup>
 
 > <sup><sub>
-*Dependent types*, i.e. types that depend on values, are often presented as the holy grail of secure
-static type systems, yet despite intensive research they remain complex and impractical and are only
-used in research languages and mathematical proof assistants. *Refined types* or *contracts* are a
-restricted form of dependent types that combine base datatypes with logical predicates; for example,
-the type of natural numbers could be written `x : int if x ≥ 0` (the notation most commonly used in
-academic literature is `{ν : int | ν ≥ 0}`).
+*Dependent types*, i.e. _types that depend on values_, are often presented as *the holy grail of secure static type systems*, yet despite intensive research they remain complex and impractical and are only used in research languages and mathematical proof assistants.
+_*Refined types* or *contracts*_ are _a restricted form of dependent types_ that combine _base datatypes with logical predicates_;
+for example, _the type of natural numbers_ could be written `x : int if x ≥ 0`
+(_the notation most commonly used in academic literature_ is `{ν : int | ν ≥ 0}`).
 
-*依存型*, すなわち値に依存する型は、多くの場合、安全な静的型システムの究極の目標として提示されており、集中的な研究にもかかわらず、彼らは、複雑で非現実的なままであり、研究言語と数学的証明アシスタントでのみ使用されています。
-*Refined types* または契約は、論理的な述語で基本データ型を組み合わせた依存型の制限された形です; 例えば、自然数のタイプは、`x : int if x ≥ 0` と書くことができます。(最も一般的に学術文献で使用される表記は `{ν : int | ν ≥ 0}` です)。
+*依存型*はすなわち値に依存する型で、安全な静的型システムの究極の目標です。しかし多くの研究者によって研究されている割にまだ複雑で非現実的な状況が続いています。そのため研究用の言語や定理証明アシスタントでのみ使用されています。
+
+*Refinedタイプ*または*契約*は、基本型に論理的な式をつけた依存型の制限された形です;
+例えば、自然数の型は`x : int if x ≥ 0`と書けます(アカデミックな文献上のよく使われている記法は`{ν : int | ν ≥ 0}`です)。
 
 <sup><sub>
 experimentation 実験
@@ -172,19 +184,22 @@ since 以来、
 </sub></sup>
 
 > <sup><sub>
-Refined types have been a topic of a lot of research and experimentation in the past decade. *Hybrid
-type checking* [1] combines static and dynamic type-checking by verifying the contracts statically
-when possible and deferring the checks until runtime when necessary (implemented in programming
-language [Sage][sage] [2]). Limited automatic inference of function contracts was developed which
-can reduce the amount of type annotations necessary to prove software safety (e.g. Liquid Types [3]
-and [4]). Refined types have also been used in some experimental programming languages and verifying
-compilers, such as the [VCC][vcc], a verifier for concurrent C, [F7][f7], which implements refined
-types for F# (since superseded by [F*][f-star]), and the [Whiley][whiley] programming language.
+_Refined types_ have been _a topic of a lot of research and experimentation in the past decade_.
+*Hybrid type checking* [1] combines _static and dynamic type-checking_ by _verifying the contracts statically when possible_ and deferring the checks until runtime when necessary (implemented in programming language [Sage][sage] [2]).
 
-Refined types は、過去十年間の間、多くの研究と実験の話題となっています。
-ハイブリッド型検査 [1] は、静的に契約を確認し、可能な場合、必要に応じて実行時までチェックを延期することにより、静的および動的な型チェックを兼ね備えています(プログラミング言語[Sage][sage] [2]で実装されています）。
-関数契約の制限された自動推論タイプ、ソフトウェアの安全性を証明するために必要な注釈の量を低減することができる開発された（例えば、液体タイプ[3]、[4]）。
-洗練されたタイプはまた、同時Cについて[VCC][vcc]、検証として、いくつかの実験的なプログラミング言語や検証コンパイラで使用されている、 F取って代わらので、（F＃のための洗練されたタイプを実装し、[F7][f7] [F*][F-star]）、および[Whiley][whiley]プログラミング言語。
+Refined型は、過去十年間の間、多くの研究と実験の話題となっています。
+*ハイブリッド型検査* [1] は、可能なら静的に契約を認証し、必要なら実行時までチェックを延期する、静的および動的な型検査を兼ね備えています(プログラミング言語[Sage][sage] [2]で実装されています)。
+
+> <sup><sub>
+*Limited automatic inference of function contracts* was developed which can reduce _the amount of type annotations necessary to prove software safety_ (e.g. Liquid Types [3] and [4]).
+
+型注釈が必要なソフトウェア安全性の証明の量を削減出来る、制約付き関数契約の自動推論が開発されました
+(例えば、Liquid型[3]と[4])。
+
+> <sup><sub>
+Refined types have also been used in some experimental programming languages and verifying compilers, such as the [VCC][vcc], a verifier for concurrent C, [F7][f7], which implements refined types for F# (since superseded by [F*][f-star]), and the [Whiley][whiley] programming language.
+
+Refined型はまた、[VCC][vcc]、コンカレントCの検証、[F7][f7]、F#のRefine型の実装([F*][F-star]で取って代わられた)、そして[Whiley][whiley]プログラミング言語など、いくつかの実験的プログラミング言語とコンパイラ検証器で使われています。
 
 <sup><sub>
 primarily 主に
@@ -205,23 +220,32 @@ Refined types are only allowed on function parameters and return types; neverthe
 The type-checker first strips all refined type annotations and uses Hindley–Milner type inference to infer base types of functions and variables.
 Then it translates the program into [SMT-LIB][smtlib], a language understood by automated theorem provers called *SMT solvers*.
 SMT solvers understand how integers and booleans work, so simple expressions such as `1 + a` can be translated directly.
-Translation of functions is more complicated, as SMT solvers use first-order logic and cannot handle functions as first-class values, so the contracts on their parameters and return types are translated instead.
-The resulting SMT-LIB formulas are run through a SMT solver (this implementation uses [Z3][z3]) to verify that none of the translated contracts are broken.
 
-セージとリキッドタイプによって主にインスピレーションを得たこの実験は、単純な関数型言語のための洗練された型チェックの実装です。
-洗練されたタイプは、唯一の関数パラメータと戻り値の型で許可されています;それにもかかわらず、静的なプログラムのプロパティの様々な検証することができます。
-型チェッカは、最初にすべての洗練された型の注釈を取り除き、関数や変数のベース型を推論するヒンドリー - ミルナーの型推論を使用しています。
-次に、[SMT-LIB][smtlib]自動定理証明によって理解される言語と呼ばれる*SMTソルバ*にプログラムを変換します。
-SMTソルバは整数とブールの仕事なので、単純な式はのような`1 + a`直接翻訳することができる方法を理解します。
-SMTソルバーが一階論理を使用し、それらのパラメータにファーストクラスの値として機能するので、契約を扱うことができないとタイプが代わりに翻訳されて返すような機能の翻訳は、より複雑です。
-その結果、SMT-LIB式はSMTソルバーを介して実行されます(この実装の用途は[Z3][z3])翻訳契約のいずれが壊れていないことを確認します。
+この実験は、主にSageとLiquid型からインスパイアされた、単純な関数型言語用のReined型検査の実装です。
+Refined型は関数の引数と戻り値の型でのみ使用可能ですが;それでも静的プログラムの様々な性質を検証できます。
+型検査器は、まずすべてのRefined型の注釈を取り除き、ヒンドリー - ミルナー型推論器を使って関数や変数の基本の型を推論します。
+次に、*SMTソルバ*と呼ばれる自動定理証明で読み込める[SMT-LIB][smtlib]言語にプログラムを変換します。
+SMTソルバは整数とブールを理解出来るので、単純な`1 + a`のような式は直接変換できます。
 
 > <sup><sub>
-This design allows the refined type-checker to handle a variety of programming constructs, such as multiple variable definitions, nested function calls, and if statements. It can also track abstract properties such as array length or integer ranges, and handle function subtyping.
+Translation of functions is more complicated,
+as SMT solvers use first-order logic and cannot handle functions as first-class values,
+so the contracts on their parameters and return types are translated instead.
+The resulting SMT-LIB formulas are run through a SMT solver (this implementation uses [Z3][z3]) to verify that none of the translated contracts are broken.
+
+
+関数の変換はもっと複雑で、
+SMTソルバーは一階論理を使い、ファーストクラスの値として関数を扱えないので、
+変わりにそれらのパラメータとリターンの型の制約が変換されます。
+結果のSMT-LIB式はSMTソルバーを実行して(この実装は[Z3][z3]を使用)変換された制約のいずれが壊れていないことを検証します。
+
+> <sup><sub>
+This design allows the refined type-checker to handle a variety of programming constructs, such as multiple variable definitions, nested function calls, and if statements.
+It can also track abstract properties such as array length or integer ranges, and handle function subtyping.
 The following examples demonstrate these features:
 
-このデザインは、洗練された型チェッカは、複数の変数定義、ネストされた関数呼び出し、およびif文プログラミング構造の多様性を処理することができます。
-それはまた、配列の長さまたは整数範囲と抽象プロパティを追跡し、機能のサブタイプを処理することができます。
+この設計はRefined型検査器が、複数の変数定義やネストした関数コール、if文のようなプログラミング構築など多様な処理を可能にしています。
+これはまた、配列の長さや整数の範囲の抽象プロパティを追跡し、そして部分型付けを扱うことができます。
 次の例では、これらの機能を示します:
 
 ```typescript
@@ -267,7 +291,6 @@ function test(x : int if abs(x) <= 10) {
 min : (i : int if i > 0, j : int if j < 0) -> (k : int if k < 0)
 make_const(1) : int -> (a : int if a == 1)
 ```
-
 <sup><sub>
 particularly 特に
 arithmetic 算術
@@ -290,11 +313,11 @@ Although Z3 can prove simple non-linear statements about integers, such as `x² 
 Instead, it has to convert the formula to real arithmetic and use the NLSat solver [5].
 Even though non-linear real arithmetic is complete and decidable, this approach only works for certain kinds of problems; for example, it cannot disprove equalities that have real solutions but no integer ones, such as `x³ + y³ == z³` where `x`, `y` and `z` are positive.
 
-`get_2dimensional`関数は特に興味深いです; これは[non-linear integer arithmetic][robinson-arithmetic]を使っていて、それは不完全で決定不能です。
-Z3は、 `x² ≥ 0` のような整数についての簡単な非線形文を、証明することができますが、配列が関数 `get_2dimensional`中の結合内でアクセスされていることを証明することはできません。
-その代わりに、それは本当の算術式を変換しNLSatソルバ[5]を使用する必要があります。
+`get_2dimensional`関数は特に興味深く; これは[非線形整数代数][robinson-arithmetic]を使っており、不完全なため決定不能です。
+Z3は、 `x² ≥ 0` のような整数についての簡単な非線形な文を証明することができますが、関数 `get_2dimensional`中の配列が範囲内でアクセスされていることを証明することはできません。
+その代わりに、それはreal算術式に変換してNLSatソルバ[5]を使用する必要があります。
 実際の計算が完了し、決定可能であっても非線形かかわらず、このアプローチは、ある種の問題のために動作します。
-例えば、このようなそ正である`x`, `y` ,`z`について`x³ + y³ == z³`のような真の解決策が、なし整数のものを持っている等式を反証することはできません。
+例えば、このようなそ正である`x`, `y` ,`z`について`x³ + y³ == z³`のような真の解決策が、整数のものを持っていない等式である事を反証することはできません。
 
 > <sup><sub>
 Implementation
@@ -321,18 +344,15 @@ propagating 伝播
 </sub></sup>
 
 > <sup><sub>
-After lexing and parsing, a slightly modified [**algorithm-w**][algorithm-w] is used to perform
-standard Hindley-Milner unification-based type inference on the AST. The main difference is that
-instead of merely inferring the type of the input expression, the algorithm also transforms the AST
-into a typed expression tree that will be used later by the refined type-checker. The predicate
-expressions in refined function types have their types inferred as well and unified with `bool`. To
-prevent unification from unexpectedly propagating refined types, predicates are stripped from
-function types before calling `unify` and before adding the types to the typing context.
+After lexing and parsing, a slightly modified [**algorithm-w**][algorithm-w] is used to perform standard Hindley-Milner unification-based type inference on the AST.
+_The main difference_ is that instead of _merely inferring_ _the type of the input expression_, the algorithm also transforms _the AST into a typed expression tree_ that will be used later by the refined type-checker.
+_The predicate expressions in refined function types_ have _their types_ inferred as well and unified with `bool`.
+To _prevent unification_ from _unexpectedly propagating refined types_, _predicates_ are stripped from _function types_ before calling `unify` and before adding the types to the typing context.
 
 字句解析と構文解析した後、わずかに変更された[**algorithm-w**][algorithm-w]は、ASTに標準的なヒンドリー - ミルナー単一化ベースの型推論を実行するために使用されます。
-主な違いではなく、単に入力式の型を推論する、アルゴリズムはまた、洗練された型チェッカによって、後に使用される型指定された式ツリーにASTを変換することです。
-洗練された関数型で述語式は、その型も同様に推測し、ブール値で統一してい。
-予想外に洗練されたタイプを伝播するから統一を防ぐために、述語は統一呼び出す前に、と入力コンテキストにタイプを追加する前に、関数の型から削除されます。
+_主な違い_は、_かわりに単に入力式の型を推論すること_で、_アルゴリズム_はまた、Refined型検査器によって後で使われる_型指定された式ツリー_へ_AST_を変換します。
+_Refined関数型内の述語式_は、同様に推論され、ブールで単一化された_それらの型_をもちます。
+_予期しないRefined型の伝播_から_単一化を防ぐ_ために、_述語_は`unify`を呼ぶ前の、型付けコンテキストに型を追加する前に、_関数の型_から除かれます。
 
 For example, the function cast
 例えば、cast関数
@@ -348,10 +368,10 @@ representation 表現
 denotes 表します
 </sub></sup>
 
-is translated by the type inference algorithm roughly into the following representation, where
+is translated by _the type inference algorithm_ roughly into the following representation, where
 `{e; τ}` denotes a typed tree node with expression `e` and type `τ`:
 
-おおよそ `{e; τ}` は、式 `e` と型 `τ` を持つ型付きツリーノードを表し、次の表現、に型推論アルゴリズムで翻訳されています：
+は_型推論アルゴリズムで_おおよそ次の表現に変換されます、ここでの`{e; τ}`は式 `e` と型 `τ` を持つ型付きツリーノードを表します：
 
 
 ```typescript
@@ -384,10 +404,11 @@ To do this, expressions of the source program must be translated into SMT-LIB fo
 Some expressions, such as integer constants and applications of built-in operators (e.g. `+`, `%`, `>=`, `==` and `or`), have precise values or interpretations in SMT theories and can be translated literally.
 Others, such as function parameters and the return value of a `random1toN(10)` call, don't have specific values and we can only make certain more-or-less precise assertions about them.
 
-Refined型チェックの目的は、*証明は*関数契約のいずれもが実行時に破損しないことが可能です。
-これを行うには、ソースプログラムの表現は、SMT-LIB式に翻訳されなければならないので、SMTソルバーによって証明中について推論することができます。
-このような整数定数と組み込み演算子のアプリケーションなどの一部の表現 (例えば、 `+`、`%`、`>=`、`==`と`or`)、 SMT理論で正確な値または解釈を持ってすることができます直訳。
-このような関数のパラメータと `random1toN(10)`呼び出しの戻り値として、他のものは、特定の値を持っていないと私たちはそれらについて一定の多かれ少なかれ正確なアサーションを行うことができます。
+Refined型検査の目的は関数の契約が実行時に破壊可能ではないことを*証明すること*です。
+これを行うには、ソースプログラムの式は、SMT-LIB式に変換されなければならず、SMTソルバーによって証明について推論することができます。
+整数定数や組み込み演算子の適用 (例えば、 `+`、`%`、`>=`、`==`と`or`)のような、式はSMT理論内の正確な値または解釈を持っていて文字通りに変換することができます。
+関数のパラメータや `random1toN(10)`呼び出しの戻り値のような、
+他のものは、特定の値を持たず、我々はそれらに関して多かれ少なかれ一定の正確な表明を行うことができます。
 
 <sup><sub>
 contract 契約
@@ -400,7 +421,8 @@ during 間に
 We can use the SMT-LIB representation of an expression to check if a contract is satisfied.
 For a simple example, let's examine the SMT-LIB script generated during refined type-checking of the function `test`:
 
-我々は契約が成立しているかどうかを確認するために、式のSMT-LIB表現を使用することができます。簡単な例では、のは、関数 `test`のrefined 型チェックの際に生成されたSMT-LIBスクリプトを調べてみましょう：
+我々は契約が満たされているかの検査に式のSMT-LIB表現を使用できます。
+簡単な例で、関数 `test`のRefined型検査時に生成されたSMT-LIBスクリプトを調べてみましょう：
 
 ```typescript
 function test(x : int if x > 3) : (z : int if z > 0) {
@@ -416,8 +438,8 @@ declare 宣言する
 We first declare a new SMT-LIB variable for the parameter `x`.
 Its value is unknown and the most we can say about it is that `x > 3`.
 
-私たちは、最初のパラメータ `x` の新しい SMT-LIB 変数を宣言します。
-その値は不明であり、我々はそれについて言うことができるほとんどはそれを `x > 3` です。
+我々は、まずパラメータ `x` の新しい SMT-LIB 変数を宣言します。
+その値は分かりませんが、我々はそれが `x > 3` であると言う事ができます。
 
 ```lisp
 (declare-const x Int)                   ; declare `x : int`
@@ -453,22 +475,48 @@ instead 代わりに
 </sub></sup>
 
 > <sup><sub>
-To prove that a contract is satisfied, we need to prove the *validity* of the logical implication where all previous formulas and assertions are premises and the contract is the conclusion.
-In the above example, the required implication is `x > 3 ⇒ x - 2 > 0`.
-However, SMT solvers can only prove that a formula is *satisfiable* (there exists an assignment of values to the variables that makes the formula true), not that it is *valid* (it is true for every assignment of values).
-Fortunately, we can determine if the implication is valid by negating the condition of the contract and checking whether the negation of the implication is satisfiable.
-If the SMT solver produces a model showing that it is, indeed, satisfiable, we have a counterexample of values that break the contract.
-If the SMT solver proves that the negated implication is not satisfiable, we conclude that the implication itself is valid, and that the contract cannot be broken.
-If the solver can neither show that the negated implication is satisfiable nor prove that it is not, its satisfiability is checked again in the theory of non-linear real arithmetic by the NLSat solver.
+To prove that a contract is satisfied, we need to prove the *validity* of _the logical implication_ where all previous formulas and assertions are premises and the contract is the conclusion.
+In the above example, _the required implication_ is `x > 3 ⇒ x - 2 > 0`.
+However, SMT solvers can only prove that a formula is *satisfiable* (there exists an assignment of values to the variables that makes the formula true),
+not that it is *valid* (it is true for every assignment of values).
+
+契約が成立していることを証明するために、我々は以前のすべての数式や表明が前提として、契約がまとまり、論理的意味合いの*妥当性*を証明する必要があります。
+上記の例では、必要な意味合いは `x > 3 ⇒ x - 2 > 0` です。
+しかしながら、SMTソルバは式が*満足する*(真の式になる、変数への値の割り当てが存在する)事は証明できますが、
+それは*有効*(値のすべての割り当てで真)である事ではありません。
+
+> <sup><sub>
+Fortunately, we can determine if _the implication_ is valid by negating the condition of the contract and checking whether _the negation of the implication_ is satisfiable.
+
+幸いなことに、意味合いの否定が満足しないかを調べる事で、我々は契約の条件の否定から意味合いが有効かどうかを決定できます。
+
+> <sup><sub>
+If _the SMT solver_ produces _a model_ showing that _it_ is, indeed, _satisfiable_,
+_we_ have _a counterexample of values_ that break _the contract_.
+
+_SMTソルバ_が_それ_が確かに_充足である_ことを示す_モデル_を作成する場合、
+_我々_は_契約_を破る_値の反例_を持っています。
+
+> <sup><sub>
+If _the SMT solver_ proves that _the negated implication_ is _not satisfiable_,
+_we_ conclude that _the implication itself_ is _valid_,
+and that _the contract_ cannot be _broken_.
+
+_SMTソルバ_が_否定的意味合い_は_充足でない_ことを証明した場合、
+_我々_は_意味合い自体_が_有効_で、かつ_契約_を_破壊_できないと結論付けます。
+
+> <sup><sub>
+If _the solver_ can neither show that _the negated implication_ is _satisfiable_ nor prove that it is not,
+_its satisfiability_ is checked again in _the theory_ of _non-linear real arithmetic_ by _the NLSat solver_.
+
+_ソルバー_はどちらも_否定的意味合い_が_充足_であることを示していても、そうでないことの証明ではなく、
+_その充足_が_NLSatソルバー_により_非線形real算術_の_理論_で再びチェックされます。
+
+> <sup><sub>
 (Z3 incorrectly translates strict inequalities when translating between the theories of integer and real arithmetic, which is why `>=` and `<=` are used instead of `>` and `<`.) 
 
-契約が成立していることを証明するために、我々は以前のすべての数式やアサーションが前提であり、契約が締結され、論理的含意の*有効*を証明する必要があります。
-上記の例では、必要な含意は `x > 3 ⇒ x - 2 > 0` です。
-しかし、SMTソルバのみ式が*充足*であることを証明することができます（真の式になり、変数への値の割り当てが存在する）、それが*有効*であることではない（それは、値のすべての割り当てのために真です）。
-含意が契約の条件を否定し、含意の否定が充足可能かどうかをチェックすることで有効であれば幸いなことに、我々は決定することができます。
-SMTソルバは、それは、確かに、充足であることを示すモデルを作成する場合、我々は契約を破る値の反例を持っています。
-SMTソルバは否定的含意が充足でないことを証明した場合、我々は意味合い自体が有効であること、及び契約は分割できないと結論付けています。
-ソルバーはどちらも否定的含意が充足であることを示していることも、そうでないことを証明できる場合は、その充足がNLSatソルバーにより非線形実際の算術の理論に再びチェックされます。（整数と実数算術の理論との間で変換するときZ3が間違って `>=`と `<=` ではなく`>`と`<`の使用されている理由である、厳格な不平等を変換します。）
+
+（整数と実数算術の理論との間で変換するときZ3が間違って `>=`と `<=` ではなく`>`と`<`の使用されている理由である、厳格に不等式を変換します。）
 
 <sup><sub>
 trivially 自明に、トリビアルに
@@ -488,16 +536,40 @@ correctly 正しく
 
 > <sup><sub>
 Some expressions, such as integers, booleans and variables that do not have function types, can be trivially translated into SMT-LIB representation, but the translation of other kinds of expressions can be tricky.
-When translating an `if` expression, the boolean condition has to be added to the premises when checking contracts in the `then` branch, while its negation has to be added to the premises when checking the `else` branch.
-Another non-trivial case is checking function calls, where each argument expression is translated and the contract on the corresponding parameter must be checked.
-As contracts on function parameters can refer to earlier parameters, the representations of argument expressions corresponding to named parameters are added to the function's *local environment*.
-In the example above, the local environment when checking the refined return type is `{z ↦ "(- x 2)"}`, so that the variable `z` in the contract expression is translated correctly.
 
-このような関数型を持っていない整数、ブール値や変数、などのいくつかの表現は、自明SMT-LIB 表現に変換することができますが、式の他の種類の翻訳は注意が必要です。
-`if` 式を変換する場合、ブール条件は、その否定は `else` ブランチをチェックする際に施設に追加する必要がありながら、`then` ブランチの契約をチェックするときに施設に追加する必要があります。
-別の非自明な場合は、各引数式が変換され、対応するパラメータの契約がチェックされなければならない関数呼び出しを、チェックしています。
-関数のパラメータの契約は、以前のパラメータを参照することができますように、名前付きパラメータに対応する引数式の表現は、関数のローカル環境に追加されます。
-契約式の変数 `z` が正しく変換されるように、上記の例では、洗練された戻り値の型をチェックし、ローカル環境は、`{z ↦ "(- x 2)"}` です。
+関数型を持っていない整数、ブール値や変数、などのいくつかの式は、
+自明なSMT-LIB 表現に変換することができますが、式の他の種類の翻訳は注意が必要です。
+
+> <sup><sub>
+When _translating an `if` expression_,
+_the boolean condition_ has to be added to _the premises when checking contracts in the `then` branch_,
+while _its negation_ has to be added to _the premises when checking the `else` branch_.
+
+`if` 式を変換する場合、
+ブール条件は、_`then` ブランチの契約をチェックするとき_に前提に追加する必要があり、
+その否定は、_`else` ブランチをチェックするときに_に前提に追加する必要があります。
+
+> <sup><sub>
+Another _non-trivial case_ is checking function calls,
+where _each argument expression_ is _translated_ and _the contract on the corresponding parameter_ must be _checked_.
+
+別の非自明な場合は、各引数式が変換され、対応するパラメータの契約がチェックされなければならない、関数呼び出しをチェックしています。
+
+> <sup><sub>
+_As contracts on function parameters_ can refer to _earlier parameters_,
+_the representations of argument expressions_ corresponding to _named parameters_ are added to _the function's *local environment*_.
+
+関数のパラメータの契約は、以前のパラメータを参照することができ、
+名前付きパラメータに対応する引数式の表現は、関数のローカル環境に追加されます。
+
+> <sup><sub>
+In the example above,
+_the local environment_ when checking _the refined return type_ is `{z ↦ "(- x 2)"}`,
+so that _the variable `z` in the contract expression_ is translated correctly.
+
+上記の例では、
+ローカル環境の戻り値のRefined型の検査結果は`{z ↦ "(- x 2)"}`で、
+すなわち_契約式の変数 `z`_ が正しく変換される。
 
 <sup><sub>
 specifically 特に
@@ -509,13 +581,30 @@ constrained 制約
 </sub></sup>
 
 > <sup><sub>
-The results of some function calls are represented directly, specifically the results of calls of built-in operators, which have standard interpretations in SMT theories, and *uninterpreted functions* such as `length`, which are used to represent abstract properties and whose values can be tracked and reasoned about by SMT solvers.
-The results of other function calls are represented by fresh SMT variables, which are constrained by the contract on the functions return type.
-For example, the result of the function application `x + 6` is represented by `"(+ x 6)"`, while the result of the call `random1toN(10)` is translated as
+_The results of some function calls_ are represented directly,
+_specifically the results of calls of built-in operators_,
+which have _standard interpretations in SMT theories_,
+and *uninterpreted functions* such as `length`,
+which are used to represent _abstract properties and whose values can be tracked and reasoned about by SMT solvers_.
 
-いくつかの関数呼び出しの結果は、直接SMT理論における標準的な解釈を持っている組み込みオペレータの通話の具体的な結果を表現されており、*未解釈機能*このような抽象プロパティとその値を表現するために使用される`length`、など追跡し、SMTソルバー約推論することができます。
-他の関数呼び出しの結果は、機能上の契約によって拘束される新鮮なSMT変数で表され、型を返します。
-例えば、application `x + 6` 関数の結果は、`"(+ x 6)"`で表され、コール`random1toN(10)`の結果は次のように変換される
+_いくつかの関数呼び出しの結果_は直接表現され、
+_特殊な組み込みオペレータの呼び出し結果_は、
+SMT理論上の標準的な解釈を持ち、
+`length`のような*未解釈関数*は、
+_抽象プロパティとSMTソルバーによって追跡され推論することができる値_を使った表現されています。
+
+> <sup><sub>
+_The results of other function calls_ are represented by _fresh SMT variables_,
+which are constrained by _the contract on the functions return type_.
+
+_他の関数呼び出しの結果_は_新鮮なSMT変数_で表され、これは関数の返り値の型の契約によって拘束されています。
+
+> <sup><sub>
+For example, _the result of the function application `x + 6`_ is represented by `"(+ x 6)"`,
+while _the result of the call `random1toN(10)`_ is translated as
+
+例えば、`x + 6` 関数適用の結果は、`"(+ x 6)"`で表され、
+`random1toN(10)`呼び出しの結果は次のように変換されます。
 
 ```lisp
 (declare-const _i0 Int)
@@ -532,16 +621,34 @@ correctly 正しく
 </sub></sup>
 
 > <sup><sub>
-In contrast to other values, functions are not translated into SMT-LIB representation, but are instead stored in a *function environment*.
-If a function is the result of an application of a higher-order function, its local environment is stored along with its refined type.
-Take, for example, the function `make_const : (x : int) → int → (z : int if z == x)`.
-The result of the call `make_const(1 + 2)` is the pair `({x ↦ "(+ 1 2)"}, int → (z : int if z == x))`.
-That way, when the resulting function is called, its return type contract can be translated correctly.
+In contrast to other values,
+functions are not translated into SMT-LIB representation,
+but are instead stored in a *function environment*.
 
-他の値とは対照的に、関数は、SMT-LIB表現に翻訳されないが、代わりに*関数環境*に格納されています。
-関数は、高次関数を適用した結果である場合に、そのローカル環境は、その洗練された型と共に記憶されています。
-例えば、関数`make_const : (x : int) → int → (z : int if z == x)`してください。コール`make_const(1 + 2)`の結果は、ペア`({x ↦ "(+ 1 2)"}, int → (z : int if z == x))`です。
-そうすれば、結果として関数が呼び出されたときに、その戻り値の型の契約を正確に翻訳することができます。
+他の値とは対照的に、
+関数は、SMT-LIB表現に翻訳されないが、
+代わりに*関数環境*に格納されています。
+
+> <sup><sub>
+If a function is the result of an application of a higher-order function, its local environment is stored along with its refined type.
+
+関数が高階関数の適用の結果である場合に、
+そのローカル環境は、そのRefined型と共に記憶されています。
+
+> <sup><sub>
+Take, for example, the function `make_const : (x : int) → int → (z : int if z == x)`.
+
+例えば、関数`make_const : (x : int) → int → (z : int if z == x)`を見ましょう。
+
+> <sup><sub>
+The result of the call `make_const(1 + 2)` is the pair `({x ↦ "(+ 1 2)"}, int → (z : int if z == x))`.
+
+`make_const(1 + 2)`の呼び出しの結果は、ペア`({x ↦ "(+ 1 2)"}, int → (z : int if z == x))`です。
+
+> <sup><sub>
+That way, when _the resulting function_ is called, _its return type contract_ can be translated correctly.
+
+そうすれば、関数の結果は呼び出されたときに、_その戻り値の型の契約_を正確に翻訳することができます。
 
 <sup><sub>
 establish 構築
@@ -561,15 +668,32 @@ implication 意味合い
 </sub></sup>
 
 > <sup><sub>
-Function casts must establish a subtype relationship between two refined function types, e.g. that `a₁ → b₁ <: a₂ → b₂`.
-Assuming that the base types of `a₁` and `a₂` and of `b₁` and `b₂` are equal, we must prove that the contract of `a₂` implies the contract of `a₁` (as parameter types are contravariant), and that the contract of `a₂` and the contract of `b₁` imply the contract of `b₂` (since return types are covariant).
-If there are multiple parameters, the contracts of all earlier parameters of the supertype must be used as premises when checking the implication of contracts for each parameter and for the return type.
-For example, to prove that the type `(x : int, y : int if y > 0) → (z : int if z == x + y)` is a subtype of `(x : int if x > 0, y : int if y > x) → (z : int if z > 0)`, we must prove 1) `x > 0 ⇒ true`, 2) `x > 0 ∧ y > x ⇒ y > 0`, and 3) `x > 0 ∧ y > x ∧ z == x + y ⇒ z > 0`.
+_Function casts_ must establish _a subtype relationship between two refined function types_,
+e.g. that `a₁ → b₁ <: a₂ → b₂`.
 
-機能キャストは例えば、2洗練された関数型、サブタイプ間の関係を確立する必要があります それ`a₁ → b₁ <: a₂ → b₂`。
-仮定すると`a₁`と `a₂`との基本型`b₁`と`b₂`は、我々は（パラメータの型が反変であるため） `a₂`の契約が`a₁`の契約を意味することを証明しなければならない、等しいです、`a₂`と`b₁`の契約の契約は`b₂`の契約を意味することを（戻り値の型ので、共変です）。
-複数のパラメータがある場合は、各パラメータおよび戻り値の型の契約の意味をチェックする際に、スーパータイプの以前のすべてのパラメータの契約が前提として使用する必要があります。
-たとえば、タイプ `(x : int, y : int if y > 0) → (z : int if z == x + y)` は `(x : int if x > 0, y : int if y > x) → (z : int if z > 0)` のサブタイプであることを証明するために、我々は 1) `x > 0 ⇒ true` , 2) `x > 0 ∧ y > x ⇒ y > 0` , 3) `x > 0 ∧ y > x ∧ z == x + y ⇒ z > 0` を証明しなければなりません。
+機能キャストは例えば`a₁ → b₁ <: a₂ → b₂` のような、_２つのRefined型関数のサブタイプ間の関係_を確立する必要があります。
+
+> <sup><sub>
+Assuming that _the base types_ of _`a₁` and `a₂`_ and of _`b₁` and `b₂`_ are equal_,
+we must prove that _the contract of `a₂`_ implies _the contract of `a₁`_ (as parameter types are contravariant), and that _the contract of `a₂`_ and _the contract of `b₁`_ imply the contract of `b₂` (since return types are covariant).
+
+`a₁`と `a₂`、`b₁`と`b₂`の基本型が等しいと仮定すると、
+我々は_`a₂`の契約_が_`a₁`の契約_を意味し（パラメータの型が反変であるため）、
+そして_`a₂`の契約_と_`b₁`の契約_は_`b₂`の契約_を意味する（戻り値の型が共変であるため）をことを証明しなければならない。
+
+> <sup><sub>
+If _there are multiple parameters_,
+_the contracts of all earlier parameters of the supertype_ must be used as premises when checking _the implication of contracts_ for _each parameter_ and for _the return type_.
+
+_複数のパラメータがある_場合、
+スーパータイプのすべての以前のパラメータの契約は、各パラメータおよび戻り値の型の契約の意味合いをチェックする時に、前提として使用される必要があります。
+
+> <sup><sub>
+For example, to prove that the type `(x : int, y : int if y > 0) → (z : int if z == x + y)` is a subtype of `(x : int if x > 0, y : int if y > x) → (z : int if z > 0)`,
+we must prove 1) `x > 0 ⇒ true`, 2) `x > 0 ∧ y > x ⇒ y > 0`, and 3) `x > 0 ∧ y > x ∧ z == x + y ⇒ z > 0`.
+
+たとえば、型 `(x : int, y : int if y > 0) → (z : int if z == x + y)` が `(x : int if x > 0, y : int if y > x) → (z : int if z > 0)` のサブタイプであることを証明するために、
+我々は 1) `x > 0 ⇒ true` , 2) `x > 0 ∧ y > x ⇒ y > 0` , 3) `x > 0 ∧ y > x ∧ z == x + y ⇒ z > 0` を証明しなければなりません。
 
 > <sup><sub>
 Possible extensions
@@ -586,11 +710,11 @@ improved 改善された
 </sub></sup>
 
 > <sup><sub>
-This experimental implementation demonstrates a refined type-checking algorithm that can check many software safety properties.
-However, it is far from complete, and could be improved in many different ways.
+_This experimental implementation_ demonstrates a _refined type-checking algorithm_ that can check _many software safety properties_.
+However, it is far from complete, and could be improved in _many different ways_.
 
-この実験的な実装では、多くのソフトウェア安全性のプロパティを確認することができる洗練された型チェックアルゴリズムを示しています。
-しかし、完全なものにはほど遠く、多くの異なる方法で改善することができます。
+_この実験的な実装_で、_多くのソフトウェア安全性のプロパティ_を確認することができる_Refined型検査アルゴリズム_を示しました。
+しかし、完全なものにはほど遠く、_多くの異なる方法_で改善することができます。
 
 <sup><sub>
 would be なります
@@ -601,19 +725,21 @@ elimination 排除、消去
 proving 証明
 Furthermore さらに
 negated 否定
-implication 含意
+implication 意味合い
 satisfiable 満足できます
 contract 契約
 </sub></sup>
 
 > <sup><sub>
-A simple addition would be implementing HM type inference and refined type checking for recursive functions, which are equivalent to loops and would make the language Turing complete.
-Another idea is to allow type aliases for refined types (e.g. `type nat = i : int if i ≥ 0`), and to perform a simple form of dead code elimination by proving when `if` branches cannot be taken.
-Furthermore, we could use the model generated by the SMT solver the negated implication is satisfiable to extract a set of values that break the contract.
+_A simple addition_ would be implementing _HM type inference and refined type checking for recursive functions_, which are equivalent _to loops_ and would make _the language Turing complete_.
+_Another idea_ is _to allow type aliases for refined types_ (e.g. `type nat = i : int if i ≥ 0`),
+and to perform _a simple form of dead code elimination by proving_ when _`if` branches_ cannot be taken.
+Furthermore, we could use _the model generated by the SMT solver_ the _negated implication_ is satisfiable to extract _a set of values that break the contract_.
 
-単純な加算はループと同等であり、言語チューリングが完了するだろう再帰関数のためのHM型推論と洗練された型チェックを実行することになります。
-もう一つのアイデアは、洗練された種類の型の別名をできるようにすることです（例えば、 `type nat = i : int if i ≥ 0`)、および支店取ることができない場合、証明することによってデッドコード削除の簡単なフォームを実行します。
-さらに、我々は否定的含意が契約を破る値のセットを抽出することが充足可能SMTソルバーによって生成されたモデルを使用することができます。
+_単純な加算_はループと同等であり、チューリング完全な言語である、_再帰関数のためのHM型推論とRefined型検査_を実行することになります。
+_もう一つのアイデア_は、_Refined型の別名を許可する事_で（例えば、 `type nat = i : int if i ≥ 0`)、
+および_`if`ブランチ_が実行されない場合を_証明することによってデッドコード削除をする簡単なフォーム_を実行します。
+さらに、我々は_SMTソルバーによって生成されたモデルの否定的意味合い_が_契約を破る値の集合_を抽出することが充足可能である事を使用できます。
 
 <sup><sub>
 Handling 取り扱い
@@ -627,14 +753,14 @@ inhabiting 居住している
 </sub></sup>
 
 > <sup><sub>
-Handling of first-class functions needs to be improved.
-We would need to include functions in local environment as well, and then use the function subtype-checking algorithm to check refined function types of parameters and return types.
-We would need to transform some second-order contracts into equivalent refined function types, for example `f : int → int if f(0) == 1` is equivalent to `f : (x : int) → (y : int if (if x == 0 then y == 1 else true))`, while `f : array[int] → int if f == length` is equivalent to `f : (a : array[int]) → (i : int if i == length(a))`.
+_Handling of first-class functions_ needs to be improved.
+We would need to include _functions in local environment_ as well, and then use _the function subtype-checking algorithm_ to check _refined function types of parameters_ and return types.
+We would need to transform _some second-order contracts_ into _equivalent refined function types_, for example `f : int → int if f(0) == 1` is equivalent to `f : (x : int) → (y : int if (if x == 0 then y == 1 else true))`, while `f : array[int] → int if f == length` is equivalent to `f : (a : array[int]) → (i : int if i == length(a))`.
 Finally, it would be useful to alert the user when there can be no functions inhabiting a given function type, such as `(x : int if x > 0) → (y : int if y > x and y < 0)`.
 
-ファーストクラスの関数の取り扱いを改善する必要があります。
-我々としても、ローカル環境での機能を含める必要があり、その後、パラメータの洗練された機能の種類をチェックして、型を返すために関数のサブタイプチェックアルゴリズムを使用します。
-我々は `f : array[int] → int if f == length` は `(x : int if x > 0) → (y : int if y > x and y < 0)`に相当しながら、例えば、 `f : int → int if f(0) == 1` は、 `f : (x : int) → (y : int if (if x == 0 then y == 1 else true))` に相当し、同等の洗練された機能の種類にいくつかの二次契約を変換する必要があります。
+_ファーストクラスの関数の取り扱い_を改善する必要があります。
+我々としても、_ローカル環境での関数_を含める必要があり、その後、_パラメータのRefined関数型_を検査して、型を返すために_関数のサブタイプチェックアルゴリズム_を使用します。
+我々は `f : array[int] → int if f == length` は `(x : int if x > 0) → (y : int if y > x and y < 0)`に相当しながら、例えば、 `f : int → int if f(0) == 1` は、 `f : (x : int) → (y : int if (if x == 0 then y == 1 else true))` に相当し、_同等のRefined関数型_に_いくつかの二階の契約_を変換する必要があります。
 
 <sup><sub>
 substantial かなりの
@@ -648,11 +774,17 @@ imperative 命令的な
 </sub></sup>
 
 > <sup><sub>
-More substantial extensions would be adding a function effect system, which would prohibit the use of functions with side-effects (such as non-determinism or I/O) in refined types, and including built-in operations for additional datatypes, such as arrays, modular integers and bitvectors, which can also be reasoned about by some SMT solvers.
-To make the language practical, it would also need to support imperative features such as loops and mutable local variables and data structures.
+_More substantial extensions_ would be adding _a function effect system_, which would prohibit _the use of functions with side-effects_ (such as non-determinism or I/O) in _refined types_,
+and including _built-in operations for additional datatypes_,
+such as arrays, modular integers and bitvectors,
+which can also be reasoned about by some SMT solvers.
+To make the language practical, it would also need to _support imperative features_ such as _loops and mutable local variables and data structures_.
 
-より実質的な拡張は、そのようなアレイなどの追加データ型の組込み操作など、refined タイプであり、（例えば非決定論やI/ Oなど）の副作用を持つ関数の使用を禁止する機能効果システムを追加することになります、モジュラー整数と、いくつかのSMTソルバー約推論することができますビットベクトル。
-言語は、実用的にするために、それはまた、ループおよび可変ローカル変数およびデータ構造として不可欠の機能をサポートする必要があります。
+_より実質的な拡張_は、_関数効果システム_を追加することで、
+refined型内(例えば非決定的な計算やI/Oのような)の_副作用を持つ関数の使用_を禁止し、
+そして、配列、モジュラー整数とビットベクトルのような、データ型の組込み操作を含めます、
+いくつかのSMTソルバーは推論することができます。
+実用的言語にするために、それはまた、_ループおよび可変ローカル変数およびデータ構造_のような命令的な機能をサポートする必要があります。
 
 <sup><sub>
 algebraic 代数の
@@ -664,13 +796,13 @@ predicate 述語
 </sub></sup>
 
 > <sup><sub>
-A very useful extension would be to allow refined types within algebraic datatypes, for example `array[i : int if i ≥ 0]`.
+_A very useful extension_ would be to allow _refined types within algebraic datatypes_, for example `array[i : int if i ≥ 0]`.
 This would require the ability to instantiate polymorphic types with refined base types, so that we could use `get : forall[a] (array[a], i : int) → a` to extract a non-negative value from this array.
 A related idea is *predicate polymorphism* [6]: we want to support types such as `array_max : forall[p : int → bool] array[i : int if p(i)] → (k : int if p(k))`.
 
-非常に便利な拡張機能は、例えば、`array[i : int if i ≥ 0]`のために、代数的データ型内のrefinedタイプを許可することであろう。
-私たちはこの配列からの非負の値を抽出するために `get : forall[a] (array[a], i : int) → a` を使用することができるようにこれは、洗練された基本型と多形型をインスタンス化する能力を必要とするであろう。
-関連したアイデアがある *述語多型* [6]：私たちは、`array_max : forall[p : int → bool] array[i : int if p(i)] → (k : int if p(k))`などの型をサポートします。
+非常に便利な拡張機能は、、代数的データ型内のRefined型を許可することでしょう、例えば`array[i : int if i ≥ 0]`。
+我々はこの配列からの非負の値を抽出するために `get : forall[a] (array[a], i : int) → a` を使用することができるようにこれは、Refined基本型と多相型を具体化する能力を必要となるでしょう。
+関連したアイデアは *述語多相型* [6]です：我々は、`array_max : forall[p : int → bool] array[i : int if p(i)] → (k : int if p(k))`のような型をサポートしたいところです。
 
 <sup><sub>
 Ideally 理想的
@@ -696,17 +828,17 @@ backwards 後方
 </sub></sup>
 
 > <sup><sub>
-Ideally, refined type-checking could be used without having the programmer explicitly annotate all parameters and return types.
+Ideally, _refined type-checking_ could be used without having _the programmer explicitly annotate all parameters and return types_.
 However, refined type inference is complicated, as it is hard to say what is the "best" refined type for a given expression.
 For example, the exact refined type of `square(random1toN(5))` is the existential type `exists[i : int if 1 ≤ i ≤ 5] i * i`, but in many situations `i : int if 1 ≤ i ≤ 25` is precise enough while being much clearer.
-The Liquid Types [3] type inference system attempts to solve this by inferring refined types made only of programmer-specified qualifiers, such as `0 ≤ _` and `_ < length(_)`.
-The system presented in [4] instead uses *weakest precondition generation* to propagate the conditions of a contract that might be broken backwards to the function parameters.
+_The Liquid Types [3] type inference system_ attempts to solve _this by inferring refined types made only of programmer-specified qualifiers_, such as `0 ≤ _` and `_ < length(_)`.
+_The system presented in [4]_ instead uses *weakest precondition generation* to propagate _the conditions of a contract_ that might be broken backwards to _the function parameters_.
 
-理想的には、洗練された型チェックは、プログラマが明示的にすべてのパラメータに注釈を付けると型を返すことなく使用することができます。
-それは与えられた式のための「最良」の洗練されたタイプであることを言うのは難しいですしかし、洗練された型推論は、複雑です。
-例えば、 `square(random1toN(5))` の正確な洗練されたタイプは、実存型 `exists[i : int if 1 ≤ i ≤ 5] i * i` ですが、より明確にしながら、多くの状況で `i : int if 1 ≤ i ≤ 25` は、十分に正確です。
-[3]推論システムを型液状タイプは、 `0 ≤ _` と `_ < length(_)` としてのみ、プログラマが指定した修飾子で作られた洗練されたタイプを、推論することによってこの問題を解決しようとします。
-[4]で提示システムではなく、関数のパラメータに後方に破壊される可能性がある契約の条件を伝播する*最も弱い前提条件の生成*を使用しています。
+理想的には、Refined型検査は、_プログラマが明示的にすべてのパラメータとリターンの型に注釈を付ける_ことなく使用することができるとよいです。
+しかし、Refined型推論は複雑で、与えられた式の「最良」のRefined型が何かというのは難しいのです。
+例えば、 `square(random1toN(5))` の正確なRefined型は、実存型 `exists[i : int if 1 ≤ i ≤ 5] i * i` ですが、より明確にしながら、多くの状況で `i : int if 1 ≤ i ≤ 25` は、十分に正確です。
+Liquid型[3]型推論システムは、 `0 ≤ _` や `_ < length(_)` のような、_プログラマが指定した修飾子で作られたRefined型のみを、推論することで_問題を解決しようとします。
+[4]で提示システムでは、_関数パラメータ_に後方で破壊されるかもしれない_契約の条件_を伝播する *最も弱い前提条件の生成*をかわりに使用しています。
 
 
 > <sup><sub>

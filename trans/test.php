@@ -131,7 +131,7 @@ angular.module('testApp', [])
 				var stop = false;
 				var sp=0;
 				function speech(){
-					$scope.spe = (sp+1)+"."+words[sp].q;
+					$scope.spe = (sp+1)+". "+words[sp].q;
 					if (stop) return;
 					var eng = [];
 					if(sp % 10 == 9)eng.push(words[sp].no+"th. ");
@@ -140,7 +140,7 @@ angular.module('testApp', [])
 					en(eng.join(" "+$scope.join+" "),function(){
 						$timeout(function(){
 							if (stop) return;
-							$scope.spe = (sp+1)+"."+words[sp].q+" "+words[sp].ans;
+							$scope.spe = (sp+1)+". "+words[sp].q+" "+words[sp].ans;
 							jp(words[sp].ans, function(){
 								$timeout(function(){
 									if (stop) return;

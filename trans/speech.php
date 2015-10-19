@@ -20,7 +20,7 @@ function getProbrems($file) {
     $data = explode("\n", rtrim($m[1],"\n"));
 
     foreach($data as $d) {
-      if(preg_match("/([\\w\\- +*,.'\"`’]+) (.*)/", $d, $m)>0){
+      if(preg_match("/([\\w\\- +*:,.'\"`’]+) (.*)/", $d, $m)>0){
         $out[$m[1]] = $m[2];
       } else {
         echo $d;

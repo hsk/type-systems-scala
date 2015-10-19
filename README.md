@@ -19,14 +19,13 @@ own 我々の
 </sub></sup>
 
 > <sup><sub>
-This repository contains implementations of different type systems in Scala.
+*This repository* contains *implementations of different type systems* {in Scala}.
 
 このリポジトリには、Scalaで書いた異なるタイプシステムの実装が含まれています。
 
 > <sup><sub>
-It is meant to help out anyone who wants to learn more about advanced type systems and
-type inference or experiment by extending or implementing their own. The implementations
-are minimal and contain code that is (hopefully) simple and clear.
+{It is meant to help out anyone} <- who {wants to learn more about<- *advanced type systems and type inference* or experiment {by {extending or implementing} their own}.
+*The implementations* {are minimal} and {contain {code that is *(hopefully) simple and clear* }}.
 
 これは、拡張または独自に実装することで、高度な型システムと型推論や実験についてもっと学びたいという方を助けることを意味しています。
 実装は最小限で、（出来るだけ）単純明快であるコードが含まれています。
@@ -42,10 +41,9 @@ generalization 一般化
 
 -   > <sup><sub>
     [**algorithm_w**](https://github.com/hsk/type-systems-scala/tree/master/algorithm_w)
-    contains one of the most basic yet efficient implementation of Damas-Hindley-Milner
-    type inference algorithm (used in functional languages such as OCaml, Haskell and Elm)
-    called *Algorithm W*. Uses references to simulate type substitutions and assigns
-    ranks/levels to type variables to simplify let-generalization.
+    contains *one of the most basic* yet *efficient implementation* of *Damas-Hindley-Milner type inference algorithm*
+    ({used in} *functional languages* {such as} *OCaml, Haskell and Elm*) called *Algorithm W*.
+    *Uses references to simulate type substitutions* and *assigns ranks/levels to type variables* {to simplify *let-generalization*}.
     
     [**algorithm_w**](https://github.com/hsk/type-systems-scala/tree/master/algorithm_w)には
     *Algorithm W* と呼ばれる（例えばOCaml、HaskellとElmのような関数型言語で使用されている）Damas-Hindley-Milner型推論アルゴリズムの最も基本的で効率的な実装が含まれています。
