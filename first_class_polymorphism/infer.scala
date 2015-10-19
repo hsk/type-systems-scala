@@ -208,10 +208,6 @@ object Infer {
     }
   }
 
-
-
-
-
   def generalize(level:level, ty:ty):ty = {
     val var_id_list_rev_ref = Ref(List[id]())
     def f(ty:ty) {

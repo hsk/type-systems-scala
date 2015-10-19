@@ -29,7 +29,7 @@ This in {*an extension of ordinary Damas-Hindley-Milner type inference* that sup
 although だけれども、しかし、であるが
 quite 非常に
 limited 限られた
-neither 否定に続いて 以下の文も_でもない
+neither 否定に続いて以下の文でもない
 above 上記、上に
 undecidable 否定出来ない、申し分ない
 complicated 複雑な
