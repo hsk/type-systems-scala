@@ -131,7 +131,6 @@ object Infer {
 
 
   def unify(ty1:ty, ty2:ty) {
-    println("unify "+ty1+" "+ty2)
     if (ty1 == ty2) return
     (ty1, ty2) match {
       case (TConst(name1), TConst(name2)) if (name1 == name2) => ()
@@ -141,9 +140,12 @@ object Infer {
       case (TArrow(param_ty_list1, return_ty1), TArrow(param_ty_list2, return_ty2)) =>
           iter2(param_ty_list1, param_ty_list2, unify)
           unify(return_ty1, return_ty2)
+
       case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
       case (ty1, TVar(Ref(Link(ty2)))) => unify(ty1, ty2)
-      case (TVar(Ref(Unbound(id1, _))), TVar(Ref(Unbound(id2, _)))) => assert(false)
+
+      case (TVar(Ref(Unbound(id1, _))), TVar(Ref(Unbound(id2, _)))) if (id1 == id2) => assert(false)
+
       case (TVar(Ref(Generic(id1))), TVar(Ref(Generic(id2)))) if (id1 == id2) =>
           /* This should be handled by the `ty1 == ty2` case, as there should
              be only a single instance of a particular variable. */
@@ -264,7 +266,6 @@ object Infer {
   }
 
   def infer(env:Env.env, level:level, expr:expr):ty = {
-    println("infer "+expr)
     expr match {
     case Var(name) =>
         try {

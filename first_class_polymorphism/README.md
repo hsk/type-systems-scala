@@ -186,6 +186,7 @@ unspecified 不特定、未定義
     case class Generic(a: id) extends tval
     case class Bound(a: id) extends tval
 
+> <sup><sub>
 *Expressions* are extended with *type annotations `expr : type`*.
 *Type annotations* can bind *additional unspecified type variables*, and can also appear on *function parameters*:
 
@@ -355,7 +356,8 @@ otherwise 一方
             unify(return_ty1, return_ty2)
         case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
         case (ty1, TVar(Ref(Link(ty2)))) => unify(ty1, ty2)
-        case (TVar(Ref(Unbound(id1, _))), TVar(Ref(Unbound(id2, _)))) => assert(false)
+        case (TVar(Ref(Unbound(id1, _))), TVar(Ref(Unbound(id2, _)))) if (id1 == id2) => assert(false)
+
         case (TVar(Ref(Generic(id1))), TVar(Ref(Generic(id2)))) if (id1 == id2) =>
             /* This should be handled by the `ty1 == ty2` case, as there should
                be only a single instance of a particular variable. */
