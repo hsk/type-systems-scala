@@ -27,34 +27,34 @@ maintains 維持
 </sub></sup>
 
 > <sup><sub>
-Motivated by *developing a memory management system* that allows *functional languages to seamlessly inter-operate with C*,
-*we* propose *an efficient non-moving garbage collection algorithm based on bitmap marking* and report *its implementation and performance evaluation*.
+Motivated by __developing a memory management system__ that allows __functional languages to seamlessly inter-operate with C__,
+__we__ propose __an efficient non-moving garbage collection algorithm based on bitmap marking__ and report __its implementation and performance evaluation__.
 
-*メモリ管理システムの開発*の目的は、*関数型言語とC言語のシームレスな相互運用*を可能にする事で、
-*我々*は*効率的なbitmap markingwベースとしたnon-movingガーベジコレクションアルゴリズム*を提案し、そして*実装とパフォーマンスの評価*を報告します。
-
-> <sup><sub>
-In *our method*,
-*the heap* consists of *sub-heaps {Hi | c ≤ i ≤ B} of exponentially increasing allocation sizes (Hi for 2i bytes)* and *a special sub-heap for exceptionally large objects*.
-
-*我々の手法*では、*ヒープ*は*指数関数的に増加するアロケーションサイズ(2iバイトのHi)の複数のサブヒープ{Hi | c ≤ i ≤ B}* と*指数関数的に大きなオブジェクト用の特殊なサブヒープ*で構成されます。
+__メモリ管理システムの開発__の目的は、__関数型言語とC言語のシームレスな相互運用__を可能にする事で、
+__我々__は__効率的なbitmap markingwベースとしたnon-movingガーベジコレクションアルゴリズム__を提案し、そして__実装とパフォーマンスの評価__を報告します。
 
 > <sup><sub>
-*Actual space for each sub-heap* is *dynamically allocated* and reclaimed from *a pool of fixed size allocation segments*.
+In __our method__,
+__the heap__ consists of __sub-heaps {Hi | c ≤ i ≤ B} of exponentially increasing allocation sizes (Hi for 2i bytes)__ and __a special sub-heap for exceptionally large objects__.
 
-*各サブヒープの実際の空間*は*動的に確保され*、そして*アロケーションセグメントのサイズにあわせたプール*から要求されたものです。
-
-> <sup><sub>
-In *each allocation segment*,
-*the algorithm* maintains *a bitmap representing the set of live objects*.
-
-*各々のアロケーションセグメント内*では、
-*アルゴリズム*は*生存オブジェクトの集合のビットマップ表現*を維持します。
+__我々の手法__では、__ヒープ__は__指数関数的に増加するアロケーションサイズ(2iバイトのHi)の複数のサブヒープ{Hi | c ≤ i ≤ B}__ と__指数関数的に大きなオブジェクト用の特殊なサブヒープ__で構成されます。
 
 > <sup><sub>
-*Allocation* is done by *searching for the next free bit in the bitmap*.
+__Actual space for each sub-heap__ is __dynamically allocated__ and reclaimed from __a pool of fixed size allocation segments__.
 
-*アロケーション*は*ビットマップ中の次のフリーなビットから検索することにより*行われます。
+__各サブヒープの実際の空間__は__動的に確保され__、そして__アロケーションセグメントのサイズにあわせたプール__から要求されたものです。
+
+> <sup><sub>
+In __each allocation segment__,
+__the algorithm__ maintains __a bitmap representing the set of live objects__.
+
+__各々のアロケーションセグメント内__では、
+__アルゴリズム__は__生存オブジェクトの集合のビットマップ表現__を維持します。
+
+> <sup><sub>
+__Allocation__ is done by __searching for the next free bit in the bitmap__.
+
+__アロケーション__は__ビットマップ中の次のフリーなビットから検索することにより__行われます。
 
 <sup><sub>
 summarize 要約する
