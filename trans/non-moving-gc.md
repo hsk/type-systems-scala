@@ -709,11 +709,147 @@ we use C like syntax in describing the algorithms.
 
 ### 2.2 The structure of the heap space and allocation strategy
 
+In what follows, we assume that one machine word is 32-bit long.
+This is not a restriction; any other word size can equally be used.
+We use a given allocation space as a pool of fixed size allocation
+areas, called segments, and set up the entire heap as follows.
+heap = (M, S,(H3, . . . , H12))
+M is a special sub-heap for large objects explained earlier. S is a
+free segment pool, i.e. set of unused segments. Each Hi is a subheap
+for 2
+i
+byte allocation blocks. Each sub-heap has the following
+structure.
+Hi = (SegList i
+, Pi)
+SegList i
+is a list of segments currently belonging to Hi. Pi is an
+allocation pointer for sub-heap Hi whose structure is defined in
+subsection 2.4.
+A segment Si initialized for Hi has the following structure.
+Si = (Count i, Blks i, BitMapi
+, Tworki)
+where Count i is the number of already allocated blocks in this
+segment, Blks i is an array of 2
+i
+byte allocation blocks, BitMapi
+is
+a bitmap tree, and Tworki is the working area used for tracing live
+objects. The number of allocation blocks in a segment is derived
+from the segment size, which is statically fixed. We write Sizei
+for the number of allocation blocks in Si. We assume that every
+segment is aligned to power-of-2 boundary for fast bit-level address
+computation.
+We write Blks i(k) for the k-th block in Blks i. Let Li =
+dlog32(Sizei)e. This determines the height of the bitmap tree in
+a segment Si. The bitmap tree has the following structure
+BitMapi = (BM 0
+i
+, . . . , BM Li−1
+i
+)
+where BM j
+i
+is the j-th level bitmap which is a sequence of bits
+organized as an array of 32 bit words. We write BM j
+i
+(k) to denote
+the k-th bit and BM j
+i
+[k] the k-th word in the j-th level bitmap. The
+least significant bit in BM j
+i
+[k] is the bit BM j
+i
+(32 × k + 0) and its
+most significant bit is BM j
+i
+(32 × k + 31). The leaf-level bitmap
+
+BM 0
+i
+represents the liveness of Blks i, namely,
+BM 0
+i (k) = {
+1 Blks i(k) is live,
+0 Blks i(k) is free.
+As we shall explain below, meanings of 1 and 0 are chosen in such
+a way that free bit search can be implemented efficiently. The j+1-
+th level bitmap BM j+1
+i
+represents whether each word in BM j
+i
+has
+free entry or not, namely,
+BM j+1
+i
+(k) = {
+1 all bits in BM j
+i
+[k] are 1,
+0 otherwise.
+So for example if all the bits of the top-level bitmap BM Li−1
+i
+is 1
+then all the blocks in Blks i are live, and there is no space left.
 ### 2.3 The allocation strategy
+
+With the above structure, SegListi in Hi forms a single allocation area managed by one (virtual) hierarchically organized tree of bitmaps.
+
+The list itself is regarded as the root bitmap of the entire bitmap tree where each bit indicates whether each segment is full or not, and each segment in the list is regarded as an immediate sub-tree of the root bitmap.
+
+This structure guarantees that the next free block in Hi can be found in log32(Sizei) time in the worst case.
+
+In addition, we need to make average allocation as efficient as possible so that it can be comparable to “bump allocation” in Cheney GC.
+
+To this end, we observe that in most cases the block array Blks i is very sparsely used after GC.
+
+So we adopt the following strategy.
+
+1. We sequentially allocate the next free block in Hi.
+
+2. To make the typical case of allocation fast, we maintain a position information of the next candidate of allocation block.
+
+If this block is free then the allocator simply returns this next block and advances the position information.
+
+3. If the next block is live, then the allocator searches for the next free bit using the bitmap tree. To perform this search efficiently, we maintain the next bit position information for higher-level bitmaps.
+
+The allocation pointer Pi in Hi introduced in the previous subsection is for this purpose, whose structure is given below.
+
+    Pi = (Si, BitPtrs i, BlkPtr i)
+    BitPtrs i = (BitPtr 0i, . . . , BitPtr Li−1i)
+
+Si is a pointer to the active segment in Hi, i.e. the segment in which blocks are being allocated.
+
+BitPtrs i are bit pointers indicating the next bit positions in Si to be examined.
+
+BitPtr 0i indicates the next bit position to be tested in the leaf-level bitmap BM 0i.
+
+For each `0 ≤ j ≤ Li − 2, BitPtr j+1i` points to the parent bit representing the bitmap word that includes the bit pointed by BitPtr ji.
+
+BlkPtr i is a block pointer indicating the block address corresponding to the bit pointed by BitPtr 0i.
+
+Using these pointers, allocation is done as fast as “bump allocation” when the next block is free.
+
+_Figure 1 and 2_ shows _the structures of the set of sub-heaps and a segment, respectively_.
+図1と図2は、それぞれサブヒープとセグメントの集合の構造を示します。
+
+![図1](https://raw.githubusercontent.com/hsk/type-systems-scala/master/trans/non-moving-gc-fig1.png)
+図1
+
+![図2](https://raw.githubusercontent.com/hsk/type-systems-scala/master/trans/non-moving-gc-fig2.png)
+図2
+
+![図1](non-moving-gc-fig1.png)
+図1
+
+![図2](non-moving-gc-fig2.png)
+図2
 
 ### 2.4 The allocation algorithm
 
 ### 2.5 The bitmap marking GC algorithm
+
 
 ## 3. Generational extension
 
