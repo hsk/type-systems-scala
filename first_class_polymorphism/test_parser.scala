@@ -8,7 +8,7 @@ object Test_parser {
   case class OK(a:expr) extends Result
   case object Fail extends Result
 
-  def bound(i:Int):ty = TVar(Ref(Bound(i)))
+  def bound(i:Int):ty = TVar(Bound(i))
 
   val test_cases = List(
     "" -> Fail,

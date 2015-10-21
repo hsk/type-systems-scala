@@ -11,8 +11,6 @@ object Expr {
   case class Let(a:name, t: Option[Ty], b:Expr, c: Expr) extends Expr // let
   case class Ann(a:Expr, b:Ty) extends Expr // type annotation
 
-  case class Ref[A](var a:A)
-
   type id = Int
   type level = Int
 
@@ -21,7 +19,7 @@ object Expr {
   case class TApp(a: Ty, b:List[Ty]) extends Ty // type application: `list[int]`
   case class TArrow(a: List[Ty], b: Ty) extends Ty // function type: `(int, int) -> int`
 
-  case class TVar(a: Ref[TVal]) extends Ty // type variable
+  case class TVar(var a: TVal) extends Ty // type variable
   case object TDynamic extends Ty // dynamic type: `?`
 
   sealed trait TVal
@@ -31,10 +29,10 @@ object Expr {
 
   def string_of_ty_with_var_names(ty:Ty) = {
     var id_name_map:Map[id, String] = Map()
-    val count = Ref(0)
+    var count = 0
     def next_name() = {
-      val i = count.a
-      count.a += 1
+      val i = count
+      count += 1
       (97 + i % 26).toChar.toString + (if (i >= 26) ""+(i / 26) else "")
     }
 
@@ -47,7 +45,7 @@ object Expr {
           }
           val return_ty_str = complex(return_ty)
           param_ty_list_str + " -> " + return_ty_str
-      case TVar(Ref(Link(ty))) => complex(ty)
+      case TVar(Link(ty)) => complex(ty)
       case ty => simple(ty)
       }
     }
@@ -57,21 +55,21 @@ object Expr {
       case TConst(name) => name
       case TApp(ty, ty_arg_list) =>
           simple(ty) + "[" + ty_arg_list.map(complex).mkString(", ") + "]"
-      case TVar(Ref(Generic(id))) =>
+      case TVar(Generic(id)) =>
             id_name_map.getOrElse(id,{
               val name = next_name()
               id_name_map = id_name_map + (id -> name)
               name
             })
         
-      case TVar(Ref(Unbound(id, _, is_dynamic))) =>
+      case TVar(Unbound(id, _, is_dynamic)) =>
           (if (is_dynamic) "@dynamic" else "@unknown") + id
-      case TVar(Ref(Link(ty))) => simple(ty)
+      case TVar(Link(ty)) => simple(ty)
       case ty => "(" + complex(ty) + ")"
       }
     }
     val ty_str = complex(ty)
-    if (count.a > 0) {
+    if (count > 0) {
       val var_names = id_name_map.toList.foldLeft(List[String]()){
         case (acc, (_, value)) => value :: acc
       }

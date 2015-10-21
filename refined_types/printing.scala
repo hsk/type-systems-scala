@@ -17,11 +17,11 @@ object Printing {
   // Printing types
   def string_of_ty_with_var_names[A](string_of_expr:A=>String, ty:Ty[A]):(List[String], String) = {
     var id_name_map = Map[id,String]()
-    val count = Ref(0)
+    var count = 0
     
     def next_name():String = {
-      val i = count.a
-      count.a += 1
+      val i = count
+      count += 1
       (97 + i % 26).toChar.toString + (if (i >= 26) ""+(i / 26) else "")
     }
     def complex_ty(ty:Ty[A]):String = {
@@ -46,7 +46,7 @@ object Printing {
                 "(" + name + " : " + complex_ty(ty) + " if " + string_of_expr(expr) + ")"
           }
           param_r_ty_list_str + " -> " + return_r_ty_str
-        case TVar(Ref(Link(ty))) => complex_ty(ty)
+        case TVar(Link(ty)) => complex_ty(ty)
         case ty => simple_ty(ty)
       }
     }
@@ -56,7 +56,7 @@ object Printing {
         case TConst(name) => name
         case TApp(name, arg_ty_list) =>
           name + "[" + arg_ty_list.map(complex_ty).mkString(", ") + "]"
-        case TVar(Ref(Generic(id))) =>
+        case TVar(Generic(id)) =>
           try {
             id_name_map(id)
           } catch {
@@ -65,14 +65,14 @@ object Printing {
               id_name_map = id_name_map + (id -> name)
               name
           }
-        case TVar(Ref(Unbound(id, _))) =>
+        case TVar(Unbound(id, _)) =>
           "@unknown" + id
-        case TVar(Ref(Link(ty))) => simple_ty(ty)
+        case TVar(Link(ty)) => simple_ty(ty)
         case ty => "(" + complex_ty(ty) + ")"
       }
     }
     val ty_str = complex_ty(ty)
-    if (count.a > 0) {
+    if (count > 0) {
       val var_names = hashtbl_values(id_name_map)
       (var_names.sorted, ty_str)
     } else {

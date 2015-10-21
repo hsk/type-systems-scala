@@ -15,12 +15,12 @@ object Infer {
     current_id = 0
   }
 
-  def new_var(level:level):ty = TVar(Ref(Unbound(next_id(), level)))
-  def new_gen_var():ty = TVar(Ref(Generic(next_id())))
+  def new_var(level:level):ty = TVar(Unbound(next_id(), level))
+  def new_gen_var():ty = TVar(Generic(next_id()))
 
   def new_bound_var():(id, ty) = {
     val id = next_id()
-    (id, TVar(Ref(Bound(id))))
+    (id, TVar(Bound(id)))
   }
   
   def error[A](msg:String):Nothing = throw new Exception(msg)
@@ -28,9 +28,9 @@ object Infer {
   def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:ty) {
     def f(t:ty) {
       t match {
-      case TVar(Ref(Link(ty))) => f(ty)
-      case TVar(Ref(Generic(_))) | TVar(Ref(Bound(_))) =>
-      case TVar(other_tvar@Ref(Unbound(other_id, other_level))) =>
+      case TVar(Link(ty)) => f(ty)
+      case TVar(Generic(_)) | TVar(Bound(_)) =>
+      case other_tvar@TVar(Unbound(other_id, other_level)) =>
           if (other_id == tvar_id) error("recursive types")
           if (other_level > tvar_level)
               other_tvar.a = Unbound(other_id, tvar_level)
@@ -51,8 +51,8 @@ object Infer {
     def f(id_ty_map:Map[id,ty], ty:ty):ty = {
       ty match {
       case TConst(_) => ty
-      case TVar(Ref(Link(ty))) => f(id_ty_map, ty)
-      case TVar(Ref(Bound(id))) => id_ty_map.getOrElse(id, ty)
+      case TVar(Link(ty)) => f(id_ty_map, ty)
+      case TVar(Bound(id)) => id_ty_map.getOrElse(id, ty)
           
       case TVar(_) => ty
       case TApp(ty, ty_arg_list) =>
@@ -71,11 +71,11 @@ object Infer {
     def f(ty:ty) {
       ty match {
       case TConst(_) =>
-      case TVar(Ref(Link(ty))) => f(ty)
-      case TVar(Ref(Bound(_))) =>
-      case TVar(Ref(Generic(_))) =>
+      case TVar(Link(ty)) => f(ty)
+      case TVar(Bound(_)) =>
+      case TVar(Generic(_)) =>
           free_var_set += ty
-      case TVar(Ref(Unbound(_,_))) =>
+      case TVar(Unbound(_,_)) =>
       case TApp(ty, ty_arg_list) =>
           f(ty)
           ty_arg_list.foreach(f)
@@ -109,22 +109,22 @@ object Infer {
           param_ty_list1.zip(param_ty_list2).foreach{case(a,b)=>unify(a,b)}
           unify(return_ty1, return_ty2)
 
-      case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
-      case (ty1, TVar(Ref(Link(ty2)))) => unify(ty1, ty2)
+      case (TVar(Link(ty1)), ty2) => unify(ty1, ty2)
+      case (ty1, TVar(Link(ty2))) => unify(ty1, ty2)
 
-      case (TVar(Ref(Unbound(id1, _))), TVar(Ref(Unbound(id2, _)))) if (id1 == id2) => assert(false)
+      case (TVar(Unbound(id1, _)), TVar(Unbound(id2, _))) if (id1 == id2) => assert(false)
 
-      case (TVar(Ref(Generic(id1))), TVar(Ref(Generic(id2)))) if (id1 == id2) =>
+      case (TVar(Generic(id1)), TVar(Generic(id2))) if (id1 == id2) =>
           /* This should be handled by the `ty1 == ty2` case, as there should
              be only a single instance of a particular variable. */
           assert(false)
-      case (TVar(Ref(Bound(_))), _) | (_, TVar(Ref(Bound(_)))) =>
+      case (TVar(Bound(_)), _) | (_, TVar(Bound(_))) =>
           // Bound vars should have been instantiated.
           assert(false)
-      case (TVar(tvar@Ref(Unbound(id, level))), ty) =>
+      case (tvar@TVar(Unbound(id, level)), ty) =>
           occurs_check_adjust_levels(id, level, ty)
           tvar.a = Link(ty)
-      case (ty, TVar(tvar@Ref(Unbound(id, level)))) =>
+      case (ty, tvar@TVar(Unbound(id, level))) =>
           occurs_check_adjust_levels(id, level, ty)
           tvar.a = Link(ty)
       case (forall_ty1@TForall(var_id_list1, ty1), forall_ty2@TForall(var_id_list2, ty2)) =>
@@ -160,7 +160,7 @@ object Infer {
     case TForall(var_id_list, ty) =>
         val (var_list, instantiated_ty) = substitute_with_new_vars(level, var_id_list, ty)
         instantiated_ty
-    case TVar(Ref(Link(ty))) => instantiate(level, ty)
+    case TVar(Link(ty)) => instantiate(level, ty)
     case ty => ty
     }
   }
@@ -179,18 +179,18 @@ object Infer {
   }
 
   def generalize(level:level, ty:ty):ty = {
-    val var_id_list_rev_ref = Ref(List[id]())
+    var var_id_list_rev_ref = List[id]()
     def f(ty:ty) {
       ty match {
-      case TVar(Ref(Link(ty))) => f(ty)
-      case TVar(Ref(Generic(_))) => assert(false)
-      case TVar(Ref(Bound(_))) =>
-      case TVar(other_tvar@Ref(Unbound(other_id, other_level))) if (other_level > level) =>
+      case TVar(Link(ty)) => f(ty)
+      case TVar(Generic(_)) => assert(false)
+      case TVar(Bound(_)) =>
+      case other_tvar@TVar(Unbound(other_id, other_level)) if (other_level > level) =>
           other_tvar.a = Bound(other_id)
-          if (!var_id_list_rev_ref.a.contains(other_id)) {
-            var_id_list_rev_ref.a = other_id :: var_id_list_rev_ref.a
+          if (!var_id_list_rev_ref.contains(other_id)) {
+            var_id_list_rev_ref = other_id :: var_id_list_rev_ref
           }
-      case TVar(Ref(Unbound(_,_))) =>
+      case TVar(Unbound(_,_)) =>
       case TApp(ty, ty_arg_list) =>
           f(ty)
           ty_arg_list.foreach(f)
@@ -202,7 +202,7 @@ object Infer {
       }
     }
     f(ty)
-    var_id_list_rev_ref.a match {
+    var_id_list_rev_ref match {
       case List() => ty
       case var_id_list_rev => TForall(var_id_list_rev.reverse, ty)
     }
@@ -215,17 +215,9 @@ object Infer {
           error("unexpected number of arguments")
         else
           (param_ty_list, return_ty)
-    case TVar(Ref(Link(ty))) => match_fun_ty(num_params, ty)
-    case TVar(tvar@Ref(Unbound(id, level))) =>
-        val param_ty_list = {
-          def f(acc:List[ty], n:Int):List[ty] = {
-            n match {
-            case 0 => acc
-            case n => f(new_var(level) :: acc, n - 1)
-            }
-          }
-          f(List[ty](), num_params)
-        }
+    case TVar(Link(ty)) => match_fun_ty(num_params, ty)
+    case tvar@TVar(Unbound(id, level)) =>
+        val param_ty_list = List.fill(num_params){new_var(level)}
         val return_ty = new_var(level)
         tvar.a = Link(TArrow(param_ty_list, return_ty))
         (param_ty_list, return_ty)
@@ -241,31 +233,31 @@ object Infer {
           case None => error ("variable " + name + " not found")
         }
     case Fun(param_list, body_expr) =>
-        val fn_env_ref = Ref(env)
-        val var_list_ref = Ref(List[ty]())
+        var fn_env_ref = env
+        var var_list_ref = List[ty]()
         val param_ty_list = param_list.map {
           case (param_name, maybe_param_ty_ann) =>
             val param_ty = maybe_param_ty_ann match {
               case None => // equivalent to `some[a] a`
                   val v = new_var(level + 1)
-                  var_list_ref.a = v :: var_list_ref.a
+                  var_list_ref = v :: var_list_ref
                   v
               case Some(ty_ann) =>
                   val (var_list, ty) = instantiate_ty_ann(level + 1, ty_ann)
-                  var_list_ref.a = var_list ::: var_list_ref.a
+                  var_list_ref = var_list ::: var_list_ref
                   ty
             }
-            fn_env_ref.a = fn_env_ref.a + (param_name -> param_ty)
+            fn_env_ref = fn_env_ref + (param_name -> param_ty)
             param_ty
           }
         
-        val inferred_return_ty = infer(fn_env_ref.a, level + 1, body_expr)
+        val inferred_return_ty = infer(fn_env_ref, level + 1, body_expr)
         val return_ty =
           if (is_annotated(body_expr)) inferred_return_ty
           else instantiate (level + 1, inferred_return_ty)
-        if (!var_list_ref.a.forall(is_monomorphic))
+        if (!var_list_ref.forall(is_monomorphic))
           error ("polymorphic parameter inferred: "
-            + var_list_ref.a.map(string_of_ty).mkString(", "))
+            + var_list_ref.map(string_of_ty).mkString(", "))
         else
           generalize(level, TArrow(param_ty_list, return_ty))
     case Let(var_name, value_expr, body_expr) =>
@@ -290,7 +282,7 @@ object Infer {
     def get_ordering(ty:ty, arg:Any):Int = {
       // subsume type variables last
       unlink(ty) match {
-        case TVar(Ref(Unbound(_,_))) => 1
+        case TVar(Unbound(_,_)) => 1
         case _ => 0
       }
     }

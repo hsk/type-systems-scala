@@ -9,7 +9,7 @@ object Test_parser {
   case class OK(a:s_expr) extends Result
   case object Fail extends Result
 
-  def bound[A](i:Int):Ty[A] = TVar(Ref(Generic[A](i)))
+  def bound[A](i:Int):Ty[A] = TVar(Generic[A](i))
 
   val test_cases = List(
     "" -> Fail,

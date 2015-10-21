@@ -26,18 +26,18 @@ object Infer {
   }
 
   def new_var(level:level, is_dynamic:Boolean):Ty =
-    TVar(Ref(Unbound(next_id(), level, is_dynamic)))
+    TVar(Unbound(next_id(), level, is_dynamic))
 
-  def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
+  def new_gen_var():Ty = TVar(Generic(next_id()))
 
   def error[A](msg:String):Nothing = throw new Exception(msg)
 
   def occurs_check_adjust_levels_make_vars_dynamic(tvar_id:id, tvar_level:level, tvar_is_dynamic:Boolean, ty:Ty) {
     def f(ty:Ty) {
       ty match {
-        case TVar(Ref(Link(ty))) => f(ty)
-        case TVar(Ref(Generic(_))) => assert(false)
-        case TVar(other_tvar @ Ref(Unbound(other_id, other_level, other_is_dynamic))) =>
+        case TVar(Link(ty)) => f(ty)
+        case TVar(Generic(_)) => assert(false)
+        case other_tvar @ TVar(Unbound(other_id, other_level, other_is_dynamic)) =>
           if (other_id == tvar_id) error("recursive types")          
           val new_level = Math.min(tvar_level, other_level)
           val new_is_dynamic = tvar_is_dynamic || other_is_dynamic
@@ -68,14 +68,14 @@ object Infer {
             case(a,b) => unify(a, b)
           }
           unify(return_ty1, return_ty2)
-      case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
-      case (ty1, TVar(Ref(Link(ty2)))) => unify(ty1, ty2)
-      case (TVar(Ref(Unbound(id1, _, _))), TVar(Ref(Unbound(id2, _, _)))) if id1 == id2 =>
+      case (TVar(Link(ty1)), ty2) => unify(ty1, ty2)
+      case (ty1, TVar(Link(ty2))) => unify(ty1, ty2)
+      case (TVar(Unbound(id1, _, _)), TVar(Unbound(id2, _, _))) if id1 == id2 =>
           assert(false) // There is only a single instance of a particular type variable.
-      case (TVar(tvar @ Ref(Unbound(id, level, is_dynamic))), ty) =>
+      case (tvar @ TVar(Unbound(id, level, is_dynamic)), ty) =>
           occurs_check_adjust_levels_make_vars_dynamic(id, level, is_dynamic, ty)
           tvar.a = Link(ty)
-      case (ty, TVar(tvar @ Ref(Unbound(id, level, is_dynamic)))) =>
+      case (ty, tvar @ TVar(Unbound(id, level, is_dynamic))) =>
           occurs_check_adjust_levels_make_vars_dynamic(id, level, is_dynamic, ty)
           tvar.a = Link(ty)
       case (_, _) => error("cannot unify types " + string_of_ty(ty1) + " and " + string_of_ty(ty2))
@@ -85,20 +85,20 @@ object Infer {
   def generalize(level:level, ty:Ty):Ty = {
     ty match {
       case TDynamic => error("assert")
-      case TVar(Ref(Unbound(id, other_level, is_dynamic))) if other_level > level =>
+      case TVar(Unbound(id, other_level, is_dynamic)) if other_level > level =>
         if (is_dynamic) {
           if (settings.freeze_dynamic)
             TDynamic
           else
-            TVar(Ref(Unbound(id, level, true)))
+            TVar(Unbound(id, level, true))
         } else
-          TVar(Ref(Generic(id)))
+          TVar(Generic(id))
       case TApp(ty, ty_arg_list) =>
         TApp(generalize(level, ty), ty_arg_list.map(generalize(level, _)))
       case TArrow(param_ty_list, return_ty) =>
         TArrow(param_ty_list.map(generalize(level, _)), generalize(level, return_ty))
-      case TVar(Ref(Link(ty))) => generalize(level, ty)
-      case TVar(Ref(Generic(_))) | TVar(Ref(Unbound(_, _, _))) | TConst(_) => ty
+      case TVar(Link(ty)) => generalize(level, ty)
+      case TVar(Generic(_)) | TVar(Unbound(_, _, _)) | TConst(_) => ty
     }
   }
 
@@ -107,8 +107,8 @@ object Infer {
     def f (ty:Ty):Ty = {
       ty match {
         case TConst(_) => ty
-        case TVar(Ref(Link(ty))) => f(ty)
-        case TVar(Ref(Generic(id))) =>
+        case TVar(Link(ty)) => f(ty)
+        case TVar(Generic(id)) =>
           id_var_map.get(id) match {
             case Some(a) => a
             case None =>
@@ -116,7 +116,7 @@ object Infer {
               id_var_map = id_var_map + (id -> var1)
               var1
           }
-        case TVar(Ref(Unbound(_,_,_))) => ty
+        case TVar(Unbound(_,_,_)) => ty
         case TDynamic =>
           if (instantiate_dynamic) new_var(level, true) else TDynamic
         case TApp(ty, ty_arg_list) =>
@@ -138,17 +138,9 @@ object Infer {
         if (param_ty_list.length != num_params)
           throw new Exception("unexpected number of arguments")
         (param_ty_list, return_ty)
-      case TVar(Ref(Link(ty))) => match_fun_ty(num_params, ty)
-      case TVar(tvar@Ref(Unbound(id, level, is_dynamic))) =>
-        val param_ty_list = { 
-          def f(n:Int):List[Ty] = {
-            n match {
-              case 0 => List()
-              case n => new_var(level, is_dynamic) :: f(n - 1)
-            }
-          }
-          f(num_params)
-        }
+      case TVar(Link(ty)) => match_fun_ty(num_params, ty)
+      case tvar@TVar(Unbound(id, level, is_dynamic)) =>
+        val param_ty_list = List.fill(num_params){new_var(level, is_dynamic)}
         val return_ty = new_var(level, is_dynamic)
         tvar.a = Link(TArrow(param_ty_list, return_ty))
         (param_ty_list, return_ty)
@@ -161,14 +153,14 @@ object Infer {
   def duplicate_dynamic(level:level, ty:Ty):Ty = {
     ty match {
     case TDynamic => error("assert")
-    case TVar(Ref(Unbound(id, other_level, true))) if other_level > level =>
+    case TVar(Unbound(id, other_level, true)) if other_level > level =>
         new_var(level, true)
     case TApp(ty, ty_arg_list) =>
         TApp(duplicate_dynamic(level, ty), ty_arg_list.map(duplicate_dynamic(level, _)))
     case TArrow(param_ty_list, return_ty) =>
         TArrow(param_ty_list.map(duplicate_dynamic(level, _)), duplicate_dynamic(level, return_ty))
-    case TVar(Ref(Link(ty))) => duplicate_dynamic(level, ty)
-    case TVar(Ref(Generic(_))) | TVar(Ref(Unbound(_,_,_))) | TConst(_) => ty
+    case TVar(Link(ty)) => duplicate_dynamic(level, ty)
+    case TVar(Generic(_)) | TVar(Unbound(_,_,_)) | TConst(_) => ty
     }
   }
 
@@ -181,7 +173,7 @@ object Infer {
           case _:Throwable => throw new Exception("variable " + name + " not found")
         }
       case Fun(param_list, body_expr) =>
-        val fn_env_ref = Ref(env)
+        var fn_env_ref = env
         val param_ty_list = param_list.map{
           case (param_name, maybe_param_ty_ann) =>
             val param_ty = maybe_param_ty_ann match {
@@ -191,10 +183,10 @@ object Infer {
               case Some(ty_ann) =>
                 instantiate_ty_ann(level, ty_ann)
             }
-            fn_env_ref.a = fn_env_ref.a + (param_name -> param_ty)
+            fn_env_ref = fn_env_ref + (param_name -> param_ty)
             param_ty
         }
-        val return_ty = infer(fn_env_ref.a, level, body_expr)
+        val return_ty = infer(fn_env_ref, level, body_expr)
         TArrow(param_ty_list.map(instantiate(level, _)), return_ty)
       case Let(var_name, None, value_expr, body_expr) =>
         val var_ty = infer(env, level + 1, value_expr)

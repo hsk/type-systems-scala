@@ -14,8 +14,6 @@ object Expr {
   case class RecordRestrict(a: Expr, b: name) extends Expr       // deleting a label: `{r - a}`
   case object RecordEmpty extends Expr                           // empty record: `{}`
 
-  case class Ref[A](var a:A)
-
   type id = Int
   type level = Int
 
@@ -23,7 +21,7 @@ object Expr {
   case class TConst(a: name) extends Ty // type constant: `int` or `bool`
   case class TApp(a: Ty, b:List[Ty]) extends Ty // type application: `list[int]`
   case class TArrow(a: List[Ty], b: Ty) extends Ty // function type: `(int, int) -> int`
-  case class TVar(a: Ref[TVal]) extends Ty // type variable
+  case class TVar(var a: TVal) extends Ty // type variable
   case class TRecord(a:Row) extends Ty                  // record type: `{<...>}`
   case object TRowEmpty extends Ty                      // empty row: `<>`
   case class TRowExtend(a:name, b:Ty, c:Row) extends Ty // row extension: `<a : _ | ...>`
@@ -70,10 +68,10 @@ object Expr {
 
   def string_of_ty(ty: Ty): String = {
     var id_name_map:Map[id, String] = Map()
-    val count = Ref(0)
+    var count = 0
     def next_name() = {
-      val i = count.a
-      count.a += 1
+      val i = count
+      count += 1
       (97 + i % 26).toChar.toString + (if (i >= 26) ""+(i / 26) else "")
     }
     def f(is_simple: Boolean, ty: Ty): String = {
@@ -94,7 +92,7 @@ object Expr {
                 "(" + param_ty_list_str + ") -> " + return_ty_str
             }
           if (is_simple) "(" + arrow_ty_str + ")" else arrow_ty_str
-        case TVar(Ref(Generic(id))) =>
+        case TVar(Generic(id)) =>
           try {
             id_name_map(id)
           } catch {
@@ -103,8 +101,8 @@ object Expr {
               id_name_map = id_name_map + (id -> name)
               name
           }
-        case TVar(Ref(Unbound(id, _))) => "_" + id
-        case TVar(Ref(Link(ty))) => f(is_simple, ty)
+        case TVar(Unbound(id, _)) => "_" + id
+        case TVar(Link(ty)) => f(is_simple, ty)
         case TRecord(row_ty) => "{" + f(false, row_ty) + "}"
         case TRowEmpty => ""
         case TRowExtend(label, ty, row_ty) =>
@@ -113,7 +111,7 @@ object Expr {
               case TRowEmpty => str
               case TRowExtend(label, ty, row_ty) =>
                 g(str + ", " + label + " : " + f(false, ty), row_ty)
-              case TVar(Ref(Link(ty))) => g(str, ty)
+              case TVar(Link(ty)) => g(str, ty)
               case other_ty => str + " | " + f(false, other_ty)
             }
           }
@@ -121,7 +119,7 @@ object Expr {
       }
     }
     val ty_str = f(false, ty)
-    if (count.a > 0) {
+    if (count > 0) {
       val var_names = id_name_map.toList.foldLeft(List[String]()){
         case (acc, (_, value)) => value :: acc
       }

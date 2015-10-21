@@ -10,8 +10,6 @@ object Expr {
   case class Fun(a:List[name], b:Expr) extends Expr // abstraction
   case class Let(a:name, b:Expr, c: Expr) extends Expr // let
 
-  case class Ref[A](var a:A)
-
   type id = Int
   type level = Int
 
@@ -20,7 +18,7 @@ object Expr {
   case class TApp(a: Ty, b:List[Ty]) extends Ty // type application: `list[int]`
   case class TArrow(a: List[Ty], b: Ty) extends Ty // function type: `(int, int) -> int`
 
-  case class TVar(a: Ref[TVal]) extends Ty // type variable
+  case class TVar(var a: TVal) extends Ty // type variable
 
   sealed trait TVal
   case class Unbound(a: id, b: level) extends TVal
@@ -46,10 +44,10 @@ object Expr {
 
   def string_of_ty(ty: Ty): String = {
     var id_name_map:Map[id, String] = Map()
-    val count = Ref(0)
+    var count = 0
     def next_name() = {
-      val i = count.a
-      count.a += 1
+      val i = count
+      count += 1
       (97 + i % 26).toChar.toString + (if (i >= 26) ""+(i / 26) else "")
     }
     def f(is_simple: Boolean, ty: Ty): String = {
@@ -70,7 +68,7 @@ object Expr {
                 "(" + param_ty_list_str + ") -> " + return_ty_str
             }
           if (is_simple) "(" + arrow_ty_str + ")" else arrow_ty_str
-        case TVar(Ref(Generic(id))) =>
+        case TVar(Generic(id)) =>
           try {
             id_name_map(id)
           } catch {
@@ -79,12 +77,12 @@ object Expr {
               id_name_map = id_name_map + (id -> name)
               name
           }
-        case TVar(Ref(Unbound(id, _))) => "_" + id
-        case TVar(Ref(Link(ty))) => f(is_simple, ty)
+        case TVar(Unbound(id, _)) => "_" + id
+        case TVar(Link(ty)) => f(is_simple, ty)
       }
     }
     val ty_str = f(false, ty)
-    if (count.a > 0) {
+    if (count > 0) {
       val var_names = id_name_map.toList.foldLeft(List[String]()){
         case (acc, (_, value)) => value :: acc
       }

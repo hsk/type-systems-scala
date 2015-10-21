@@ -6,14 +6,12 @@ object Expr {
   type id = Int
   type level = Int
 
-
-  case class Ref[A](var a:A)
   // Types
   sealed trait Ty[A]
   case class TConst[A](a:name) extends Ty[A]
   case class TApp[A](a:name, b:List[Ty[A]]) extends Ty[A]
   case class TArrow[A](a:List[refined_ty[A]], b:refined_ty[A]) extends Ty[A]
-  case class TVar[A](a:Ref[TVal[A]]) extends Ty[A]
+  case class TVar[A](var a:TVal[A]) extends Ty[A]
 
   sealed trait refined_ty[A]
   case class Plain[A](a:Ty[A]) extends refined_ty[A]
@@ -29,7 +27,7 @@ object Expr {
 
   def real_ty[A](t:Ty[A]):Ty[A] = {
     t match {
-    case TVar(Ref(Link(ty))) => real_ty(ty)
+    case TVar(Link(ty)) => real_ty(ty)
     case ty => ty
     }
   }
@@ -53,7 +51,7 @@ object Expr {
   def is_function_ty[A](t:Ty[A]):Boolean = {
     t match {
       case TArrow(_, _) => true
-      case TVar(Ref(Link(ty))) => is_function_ty(ty)
+      case TVar(Link(ty)) => is_function_ty(ty)
       case _ => false
     }
   }
@@ -65,7 +63,7 @@ object Expr {
       case TArrow(param_r_ty_list, return_r_ty) =>
         def f[A](r_ty: refined_ty[A]):refined_ty[A] = Plain(strip_refined_types(plain_ty(r_ty)))
         TArrow(param_r_ty_list.map(f), f(return_r_ty))
-      case TVar(Ref(Link(ty))) => strip_refined_types(ty)
+      case TVar(Link(ty)) => strip_refined_types(ty)
       case TConst(_) => ty
       case TVar(_) => ty
     }
@@ -80,9 +78,9 @@ object Expr {
       case TArrow(param_r_ty_list, return_r_ty) =>
           def f[A](r_ty:refined_ty[A]):refined_ty[A] = Plain(duplicate_without_refined_types(plain_ty(r_ty)))
           TArrow(param_r_ty_list.map(f), f(return_r_ty))
-      case TVar(Ref(Link(ty))) => duplicate_without_refined_types(ty)
-      case TVar(Ref(Unbound(id, level))) => TVar(Ref(Unbound(id, level)))
-      case TVar(Ref(Generic(id))) => TVar(Ref(Generic(id)))
+      case TVar(Link(ty)) => duplicate_without_refined_types(ty)
+      case TVar(Unbound(id, level)) => TVar(Unbound(id, level))
+      case TVar(Generic(id)) => TVar(Generic(id))
     }
   }
 

@@ -454,11 +454,11 @@ object Refine {
     }
   }
 
-  val already_started = Ref(false)
+  var already_started = false
 
   def start() {
-    if (!(already_started.a)) {
-      already_started.a = true
+    if (!already_started) {
+      already_started = true
       Smt.start()
       Smt.write("(declare-sort Other)")
       uninterpreted.foreach {

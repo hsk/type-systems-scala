@@ -18,7 +18,7 @@ object Propagate {
   def should_generalize(expected_ty:ty):generalized = {
     expected_ty match {
     case TForall(_,_) => Generalized
-    case TVar(Ref(Link(ty))) => should_generalize(ty)
+    case TVar(Link(ty)) => should_generalize(ty)
     case _ => Instantiated
     }
   }
@@ -72,30 +72,30 @@ object Propagate {
           }
         
 
-        val fn_env_ref = Ref(env)
-        val var_list_ref = Ref(List[ty]())
+        var fn_env_ref = env
+        var var_list_ref = List[ty]()
         val param_ty_list = expected_param_list.map {
           case (param_name, maybe_param_ty_ann) =>
             val param_ty = maybe_param_ty_ann match {
               case None => // equivalent to `some[a] a`
                   val v = new_var(level + 1)
-                  var_list_ref.a = v :: var_list_ref.a
+                  var_list_ref = v :: var_list_ref
                   v
               case Some(ty_ann) =>
                   val (var_list, ty) = instantiate_ty_ann (level + 1, ty_ann)
-                  var_list_ref.a = var_list ::: var_list_ref.a
+                  var_list_ref = var_list ::: var_list_ref
                   ty
               }
-            fn_env_ref.a = fn_env_ref.a + (param_name -> param_ty)
+            fn_env_ref = fn_env_ref + (param_name -> param_ty)
             param_ty
           }
 
         val return_ty =
-          infer(fn_env_ref.a, level + 1, maybe_expected_return_ty, body_generalized, body_expr)
+          infer(fn_env_ref, level + 1, maybe_expected_return_ty, body_generalized, body_expr)
         
-        if (!var_list_ref.a.forall(is_monomorphic))
+        if (!var_list_ref.forall(is_monomorphic))
           error ("polymorphic parameter inferred: "
-            + var_list_ref.a.map(string_of_ty).mkString(", "))
+            + var_list_ref.map(string_of_ty).mkString(", "))
         
         maybe_generalize(generalized, level, TArrow(param_ty_list, return_ty))
     case Let(var_name, value_expr, body_expr) =>
@@ -107,7 +107,7 @@ object Propagate {
         val instantiated_return_ty = instantiate(level + 1, return_ty)
         (maybe_expected_ty, instantiated_return_ty) match {
           case (None, _) =>
-          case (_, TVar(Ref(Unbound(_,_)))) =>
+          case (_, TVar(Unbound(_,_))) =>
           case (Some(expected_ty), _) =>
             unify(instantiate(level + 1, expected_ty), instantiated_return_ty)
         }
@@ -127,7 +127,7 @@ object Propagate {
       // subsume annotated arguments first, type variables last
       if (is_annotated (arg)) 0
       else unlink(ty) match {
-          case TVar(Ref(Unbound(_,_))) => 2
+          case TVar(Unbound(_,_)) => 2
           case _ => 1
           }
     }

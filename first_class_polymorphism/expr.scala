@@ -6,13 +6,12 @@ object Expr {
   type id = Int
   type level = Int
 
-  case class Ref[A](var a:A)
 
   sealed trait ty
   case class TConst(a:name) extends ty                    // type constant: `int` or `bool`
   case class TApp(a:ty, b: List[ty]) extends ty              // type application: `list[int]`
   case class TArrow(a:List[ty], b:ty) extends ty            // function type: `(int, int) -> int`
-  case class TVar(a:Ref[tval]) extends ty                 // type variable
+  case class TVar(var a:tval) extends ty                 // type variable
   case class TForall(a:List[id], b:ty) extends ty          // polymorphic type: `forall[a] a -> a`
 
   sealed trait tval
@@ -23,7 +22,7 @@ object Expr {
 
   def unlink(t:ty):ty = {
     t match {
-      case TVar(tvar@Ref(Link(ty))) =>
+      case tvar@TVar(Link(ty)) =>
         val ty1 = unlink(ty)
         tvar.a = Link(ty1)
         ty1
@@ -35,7 +34,7 @@ object Expr {
     t match {
       case TForall(_,_) => false
       case TConst(_) => true
-      case TVar(Ref(Link(ty))) => is_monomorphic(ty)
+      case TVar(Link(ty)) => is_monomorphic(ty)
       case TVar(_) => true
       case TApp(ty, ty_arg_list) =>
         is_monomorphic(ty) && ty_arg_list.forall(is_monomorphic)
@@ -92,7 +91,7 @@ object Expr {
           val (name_list, name_map1) = extend_name_map(name_map, var_id_list)
           val name_list_str = name_list.mkString(" ")
           "forall[" + name_list_str + "] " + complex(name_map1, ty)
-        case TVar(Ref(Link(ty))) => complex(name_map, ty)
+        case TVar(Link(ty)) => complex(name_map, ty)
         case ty => simple(name_map, ty)
       }
     }
@@ -103,10 +102,10 @@ object Expr {
           val ty_str = simple(name_map, ty)
           val ty_arg_list_str = ty_arg_list.map(complex(name_map,_)).mkString(", ")
           ty_str + "[" + ty_arg_list_str + "]"
-        case TVar(Ref(Unbound(id, _))) => "@unknown" + id
-        case TVar(Ref(Bound(id))) => name_map(id)
-        case TVar(Ref(Generic(id))) => "@generic" + id
-        case TVar(Ref(Link(ty))) => simple(name_map, ty)
+        case TVar(Unbound(id, _)) => "@unknown" + id
+        case TVar(Bound(id)) => name_map(id)
+        case TVar(Generic(id)) => "@generic" + id
+        case TVar(Link(ty)) => simple(name_map, ty)
         case ty => "(" + complex(name_map, ty) + ")"
       }
     }

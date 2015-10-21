@@ -15,18 +15,18 @@ object Infer {
     current_id = 0
   }
 
-  def new_var(level:level):Ty = TVar(Ref(Unbound(next_id(), level)))
+  def new_var(level:level):Ty = TVar(Unbound(next_id(), level))
 
-  def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
+  def new_gen_var():Ty = TVar(Generic(next_id()))
 
   def error(msg:String):Nothing = throw new Exception(msg)
 
   def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:Ty) {
     def f(ty:Ty) {
       ty match {
-        case TVar(Ref(Link(ty))) => f(ty)
-        case TVar(Ref(Generic(_))) => assert(false)
-        case TVar(other_tvar @ Ref(Unbound(other_id, other_level))) =>
+        case TVar(Link(ty)) => f(ty)
+        case TVar(Generic(_)) => assert(false)
+        case other_tvar @ TVar(Unbound(other_id, other_level)) =>
           if (other_id == tvar_id) error("recursive types")          
           if (other_level > tvar_level)
             other_tvar.a = Unbound(other_id, tvar_level)
@@ -55,14 +55,14 @@ object Infer {
             case(a,b) => unify(a, b)
           }
           unify(return_ty1, return_ty2)
-      case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
-      case (ty1, TVar(Ref(Link(ty2)))) => unify(ty1, ty2)
-      case (TVar(Ref(Unbound(id1, _))), TVar(Ref(Unbound(id2, _)))) if id1 == id2 =>
+      case (TVar(Link(ty1)), ty2) => unify(ty1, ty2)
+      case (ty1, TVar(Link(ty2))) => unify(ty1, ty2)
+      case (TVar(Unbound(id1, _)), TVar(Unbound(id2, _))) if id1 == id2 =>
           assert(false) // There is only a single instance of a particular type variable.
-      case (TVar(tvar @ Ref(Unbound(id, level))), ty) =>
+      case (tvar @ TVar(Unbound(id, level)), ty) =>
           occurs_check_adjust_levels(id, level, ty)
           tvar.a = Link(ty)
-      case (ty, TVar(tvar @ Ref(Unbound(id, level)))) =>
+      case (ty, tvar @ TVar(Unbound(id, level))) =>
           occurs_check_adjust_levels(id, level, ty)
           tvar.a = Link(ty)
       case (_, _) => error("cannot unify types " + string_of_ty(ty1) + " and " + string_of_ty(ty2))
@@ -71,14 +71,14 @@ object Infer {
 
   def generalize(level:level, ty:Ty):Ty = {
     ty match {
-      case TVar(Ref(Unbound(id, other_level))) if other_level > level =>
-        TVar(Ref(Generic(id)))
+      case TVar(Unbound(id, other_level)) if other_level > level =>
+        TVar(Generic(id))
       case TApp(ty, ty_arg_list) =>
         TApp(generalize(level, ty), ty_arg_list.map(generalize(level, _)))
       case TArrow(param_ty_list, return_ty) =>
         TArrow(param_ty_list.map(generalize(level, _)), generalize(level, return_ty))
-      case TVar(Ref(Link(ty))) => generalize(level, ty)
-      case TVar(Ref(Generic(_))) | TVar(Ref(Unbound(_, _))) | TConst(_) => ty
+      case TVar(Link(ty)) => generalize(level, ty)
+      case TVar(Generic(_)) | TVar(Unbound(_, _)) | TConst(_) => ty
     }
   }
 
@@ -87,8 +87,8 @@ object Infer {
     def f (ty:Ty):Ty = {
       ty match {
         case TConst(_) => ty
-        case TVar(Ref(Link(ty))) => f(ty)
-        case TVar(Ref(Generic(id))) =>
+        case TVar(Link(ty)) => f(ty)
+        case TVar(Generic(id)) =>
           id_var_map.get(id) match {
             case Some(a) => a
             case None =>
@@ -96,7 +96,7 @@ object Infer {
               id_var_map = id_var_map + (id -> var1)
               var1
           }
-        case TVar(Ref(Unbound(_,_))) => ty
+        case TVar(Unbound(_,_)) => ty
         case TApp(ty, ty_arg_list) =>
           TApp(f(ty), ty_arg_list.map(f))
         case TArrow(param_ty_list, return_ty) =>
@@ -112,17 +112,9 @@ object Infer {
         if (param_ty_list.length != num_params)
           error("unexpected number of arguments")
         (param_ty_list, return_ty)
-      case TVar(Ref(Link(ty))) => match_fun_ty(num_params, ty)
-      case TVar(tvar@Ref(Unbound(id, level))) =>
-        val param_ty_list = { 
-          def f(n:Int):List[Ty] = {
-            n match {
-              case 0 => List()
-              case n => new_var(level) :: f(n - 1)
-            }
-          }
-          f(num_params)
-        }
+      case TVar(Link(ty)) => match_fun_ty(num_params, ty)
+      case tvar@TVar(Unbound(id, level)) =>
+        val param_ty_list = List.fill(num_params){new_var(level)}
         val return_ty = new_var(level)
         tvar.a = Link(TArrow(param_ty_list, return_ty))
         (param_ty_list, return_ty)

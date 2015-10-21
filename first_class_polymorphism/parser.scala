@@ -8,7 +8,7 @@ object Parse extends RegexParsers {
 
   def replace_ty_constants_with_vars (var_name_list:List[String], ty: ty):(List[id], ty) = {
     var name_map = Map[String,Option[ty]]()
-    val var_id_list_rev_ref = Ref(List[id]())
+    var var_id_list_rev_ref = List[id]()
 
     var_name_list.foreach {
       (var_name) => name_map = name_map + (var_name -> None)
@@ -23,7 +23,7 @@ object Parse extends RegexParsers {
               case Some(v) => v
               case None =>
                 val (var_id, v) = new_bound_var()
-                var_id_list_rev_ref.a = var_id :: var_id_list_rev_ref.a
+                var_id_list_rev_ref = var_id :: var_id_list_rev_ref
                 name_map = name_map + (name -> Some(v))
                 v
             }
@@ -42,7 +42,7 @@ object Parse extends RegexParsers {
       }
     }
     val ty2 = f(ty)
-    (var_id_list_rev_ref.a.reverse, ty2)
+    (var_id_list_rev_ref.reverse, ty2)
   }
 
   def parse[T](p:Parser[T],s:String):T = parseAll(p, s) match {
