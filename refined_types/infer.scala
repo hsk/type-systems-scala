@@ -6,7 +6,7 @@ object Infer {
 
   // Utils
   // exception Error of string
-  def error[A](msg:String):A = throw new Exception(msg)
+  def error[A](msg:String):Nothing = throw new Exception(msg)
 
   val current_id = Ref(0)
   def reset_id() = {

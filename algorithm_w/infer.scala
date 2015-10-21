@@ -19,7 +19,7 @@ object Infer {
 
   def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
 
-  def error(msg:String) { throw new Exception(msg) }
+  def error(msg:String):Nothing = throw new Exception(msg)
 
   object Env {
     type env = Map[String,Ty]
@@ -119,7 +119,7 @@ object Infer {
     ty match {
       case TArrow(param_ty_list, return_ty) =>
         if (param_ty_list.length != num_params)
-          throw new Exception("unexpected number of arguments")
+          error("unexpected number of arguments")
         (param_ty_list, return_ty)
       case TVar(Ref(Link(ty))) => match_fun_ty(num_params, ty)
       case TVar(tvar@Ref(Unbound(id, level))) =>
@@ -135,7 +135,7 @@ object Infer {
         val return_ty = new_var(level)
         tvar.a = Link(TArrow(param_ty_list, return_ty))
         (param_ty_list, return_ty)
-      case _ => throw new Exception("expected a function")
+      case _ => error("expected a function")
     }
   }
 
@@ -145,7 +145,7 @@ object Infer {
         try {
           instantiate(level, (Env.lookup(env, name)))
         } catch {
-          case _:Throwable => throw new Exception("variable " + name + " not found")
+          case _:Throwable => error("variable " + name + " not found")
         }
       case Fun(param_list, body_expr) =>
         val param_ty_list = param_list.map{ _ => new_var(level)}

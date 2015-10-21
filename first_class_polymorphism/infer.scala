@@ -36,8 +36,7 @@ object Infer {
     (id, TVar(Ref(Bound(id))))
   }
   
-  def error[A](msg:String):A = { throw new Exception(msg) }
-
+  def error[A](msg:String):Nothing = throw new Exception(msg)
 
   object Env {
     type env = Map[String,ty]

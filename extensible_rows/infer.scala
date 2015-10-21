@@ -19,7 +19,7 @@ object Infer {
 
   def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
 
-  def error(msg:String) { throw new Exception(msg) }
+  def error(msg:String):Nothing = throw new Exception(msg)
 
   object Env {
     type env = Map[String,Ty]
@@ -86,17 +86,17 @@ object Infer {
           }
           val rest_row2 = rewrite_row(row2, label1, field_ty1)
           rest_row1_tvar_ref_option match {
-            case Some(Ref(Link(_))) => throw new Exception("recursive row types")
+            case Some(Ref(Link(_))) => error("recursive row types")
             case _ =>
           }
           unify(rest_row1, rest_row2)
-      case (_, _) => throw new Exception("cannot unify types " + string_of_ty(ty1) + " and " + string_of_ty(ty2))
+      case (_, _) => error("cannot unify types " + string_of_ty(ty1) + " and " + string_of_ty(ty2))
     }
   }
 
   def rewrite_row(row2: Ty, label1: String, field_ty1: Ty):Ty = {
     row2 match {
-      case TRowEmpty => throw new Exception("row does not contain label " + label1)
+      case TRowEmpty => error("row does not contain label " + label1)
       case TRowExtend(label2, field_ty2, rest_row2) if label2 == label1 =>
         unify(field_ty1, field_ty2)
         rest_row2
@@ -108,7 +108,7 @@ object Infer {
         val ty2 = TRowExtend(label1, field_ty1, rest_row2)
         tvar.a = Link(ty2)
         rest_row2
-      case _ => throw new Exception("row type expected")
+      case _ => error("row type expected")
     }
   }
 
@@ -161,7 +161,7 @@ object Infer {
     ty match {
       case TArrow(param_ty_list, return_ty) =>
         if (param_ty_list.length != num_params)
-          throw new Exception("unexpected number of arguments")
+          error("unexpected number of arguments")
         (param_ty_list, return_ty)
       case TVar(Ref(Link(ty))) => match_fun_ty(num_params, ty)
       case TVar(tvar@Ref(Unbound(id, level))) =>
@@ -177,7 +177,7 @@ object Infer {
         val return_ty = new_var(level)
         tvar.a = Link(TArrow(param_ty_list, return_ty))
         (param_ty_list, return_ty)
-      case _ => throw new Exception("expected a function")
+      case _ => error("expected a function")
     }
   }
 
@@ -187,7 +187,7 @@ object Infer {
         try {
           instantiate(level, (Env.lookup(env, name)))
         } catch {
-          case _:Throwable => throw new Exception("variable " + name + " not found")
+          case _:Throwable => error("variable " + name + " not found")
         }
       case Fun(param_list, body_expr) =>
         val param_ty_list = param_list.map{ _ => new_var(level)}
