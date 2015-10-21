@@ -16,7 +16,7 @@ instantiate 具体化
 
 <sup><sub>
 principal 主要な
-although であるが、だが
+although ですが、だが
 explicit 明確な、厳格な、自明の
 substitution 代入、置換
 permit 許可する,可能にする
@@ -152,7 +152,7 @@ _The function `unify`_ takes _two types_ and tries to *unify* _them_, i.e. deter
 > <sup><sub>
 _Type constants_ unify with _identical type constants_, and _arrow types and other structured types_ are unified by _unifying each of their components_.
 
-型定数は同じ型定数を単一化し、矢印型やその他の構造化型は、それぞれの部分をそれぞれ単一化することで単一化されています。
+型定数は同じ型定数を単一化し、Arrow型やその他の構造化型は、各要素をそれぞれ unify することで単一化されています。
 
         case (TConst(name1), TConst(name2)) if(name1 == name2) =>
         case (TApp(ty1, ty_arg_list1), TApp(ty2, ty_arg_list2)) =>
@@ -193,12 +193,12 @@ correctly 正しく
 
 > <sup><sub>
 The function `occurs_check_adjust_levels` makes sure that the type variable being unified doesn't occur within the type it is being unified with.
-This prevents the algorithm from inferring recursive types, which could cause naively-implemented type checking to diverge.
+_This_ prevents _the algorithm_ from _inferring recursive types_, which could cause naively-implemented type checking to diverge.
 While traversing the type tree, this function also takes care of updating the levels of the type variables appearing within the type, thus ensuring the type will be correctly generalized.
 
-`occurs_check_adjust_levels`関数は、型変数は、それが単一化されている型内で出現しないで単一化されていることを確認します。
-これは発散するチェック素朴に実装型を引き起こす可能性が再帰的な型を推論からアルゴリズムを防ぐことができます。
-タイプ・ツリーをトラバースしながら、この関数は、このように正確に一般化される型を確保し、型内に現れる型変数のレベルを更新するの面倒を見ます。
+`occurs_check_adjust_levels`関数は、型変数が、単一化されている型内で出現せずに単一化されていることを確認します。
+これは再帰的な型を推論する事で単純に実装すると型検査が停止しなくなることからアルゴリズムを防ぐことができます。
+この関数は、型の構文木をトラバースしながら、正確に一般化される型を確保し、場合によっては型内に現れる型変数のレベルの更新をします。
 
     def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:Ty) {
       def f(ty:Ty) {
@@ -224,7 +224,7 @@ While traversing the type tree, this function also takes care of updating the le
 > <sup><sub>
 _Function `generalize`_ takes _a level and a type_ and turns _all type variables within the type_ that have _level higher_ than _the input level into generalized (polymorphic) type variables_.
 
-`generalize`(一般化)関数は、レベルと型を取り、一般化（多相型）への入力レベルよりも高いレベルを持っている型内ですべての型変数の変数を入力をオンにします。
+`generalize`(一般化)関数は、レベルと型を取り、一般化された（多相的）型変数の入力レベルよりも高いレベルの型内ですべての型変数を一般化します。
 
     def generalize(level:level, ty:Ty):Ty = {
       ty match {
@@ -293,11 +293,11 @@ It also delays occurs checks and level adjustments.
 It can deal with recursive types, which arise often while type checking objects, by marking types during unification.
 _Oleg_ describes _a further optimization_ that could be performed by _condensing the sequences of type links as we follow them_, but _our `generalize` function_ takes care of _that problem_.
 
-この実装は適度に効率的であるが、HM型推論の最先端の実装では、明確にするために、この実装では回避されたいくつかのより高度なテクニックを使用します。
-オレグの記事で概説してあるように、OCamlでの型チェッカーは、インスタンス化中に非多相型の横断を避けるために、その中に現れる型変数の最大型レベルでの型レベル、とのすべての型をマークします。
+この実装は適度に効率的ですが、HM型推論の最先端の実装では、明確にするためにこの実装で回避されたいくつかのより高度なテクニックを使用します。
+Olegの記事で概説してあるように、OCamlでの型チェッカーは、インスタンス化中に非多相型の横断を避けるために、その中に現れる型変数の最大型レベルでの型レベル、とのすべての型をマークします。
 また、遅延がチェックおよびレベル調整を発生します。
 これは、型が単一化時に型をマークすることによって、オブジェクトを確認しながら、多くの場合、現れる再帰的な型を扱うことができます。
-オレグは、我々はそれに従うような型のリンクのシーケンスを凝縮させることによって実施することができる更なる最適化を説明していますが、私たちのgeneralize関数は、その問題が気になります。
+Olegは、我々がそれに従うような型のリンクのシーケンスを凝縮させることによって実施することができる更なる最適化を説明していますが、我々のgeneralize関数は、その問題が気になります。
 
 
 > <sup><sub>
