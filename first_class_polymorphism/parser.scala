@@ -17,17 +17,17 @@ object Parse extends RegexParsers {
     def f(ty:ty):ty = {
       ty match {
       case TConst(name) =>
-        try {
-          name_map(name) match {
-            case Some(v) => v
-            case None =>
-              val (var_id, v) = new_bound_var()
-              var_id_list_rev_ref.a = var_id :: var_id_list_rev_ref.a
-              name_map = name_map + (name -> Some(v))
-              v
-          }
-        } catch {
-          case _:Throwable => ty
+        name_map.get(name) match {
+          case Some(a) =>
+            a match {
+              case Some(v) => v
+              case None =>
+                val (var_id, v) = new_bound_var()
+                var_id_list_rev_ref.a = var_id :: var_id_list_rev_ref.a
+                name_map = name_map + (name -> Some(v))
+                v
+            }
+          case None => ty
         }
       case TVar(_) => ty
       case TApp(ty, ty_arg_list) =>

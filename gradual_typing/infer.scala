@@ -13,16 +13,16 @@ object Infer {
     freeze_dynamic = true
   )
 
-  val current_id = Ref(0)
+  var current_id = 0
 
   def next_id():Int = {
-    val id = current_id.a
-    current_id.a = id + 1
+    val id = current_id
+    current_id = id + 1
     id
   }
 
   def reset_id() {
-    current_id.a = 0
+    current_id = 0
   }
 
   def new_var(level:level, is_dynamic:Boolean):Ty =
@@ -31,14 +31,6 @@ object Infer {
   def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
 
   def error[A](msg:String):Nothing = throw new Exception(msg)
-
-  object Env {
-    type env = Map[String,Ty]
-
-    val empty : env = Map()
-    def extend (env:env, name:String, ty:Ty):env = env + (name -> ty)
-    def lookup (env:env, name:String):Ty = env(name)
-  }
 
   def occurs_check_adjust_levels_make_vars_dynamic(tvar_id:id, tvar_level:level, tvar_is_dynamic:Boolean, ty:Ty) {
     def f(ty:Ty) {
@@ -117,20 +109,16 @@ object Infer {
         case TConst(_) => ty
         case TVar(Ref(Link(ty))) => f(ty)
         case TVar(Ref(Generic(id))) =>
-          try {
-            id_var_map(id)
-          } catch {
-            case _:Throwable =>
+          id_var_map.get(id) match {
+            case Some(a) => a
+            case None =>
               val var1 = new_var(level, false)
               id_var_map = id_var_map + (id -> var1)
               var1
           }
         case TVar(Ref(Unbound(_,_,_))) => ty
         case TDynamic =>
-          if (instantiate_dynamic)
-            new_var(level, true)
-          else
-            TDynamic
+          if (instantiate_dynamic) new_var(level, true) else TDynamic
         case TApp(ty, ty_arg_list) =>
           TApp(f(ty), ty_arg_list.map(f))
         case TArrow(param_ty_list, return_ty) =>
@@ -184,11 +172,11 @@ object Infer {
     }
   }
 
-  def infer(env:Env.env, level:level, expr:Expr):Ty = {
+  def infer(env:Map[String,Ty], level:level, expr:Expr):Ty = {
     expr match {
       case Var(name) =>
         try {
-          instantiate(level, (Env.lookup(env, name)))
+          instantiate(level, env(name))
         } catch {
           case _:Throwable => throw new Exception("variable " + name + " not found")
         }
@@ -203,7 +191,7 @@ object Infer {
               case Some(ty_ann) =>
                 instantiate_ty_ann(level, ty_ann)
             }
-            fn_env_ref.a = Env.extend(fn_env_ref.a, param_name, param_ty)
+            fn_env_ref.a = fn_env_ref.a + (param_name -> param_ty)
             param_ty
         }
         val return_ty = infer(fn_env_ref.a, level, body_expr)
@@ -211,7 +199,7 @@ object Infer {
       case Let(var_name, None, value_expr, body_expr) =>
         val var_ty = infer(env, level + 1, value_expr)
         val generalized_ty = generalize(level, var_ty)
-        infer (Env.extend(env, var_name, generalized_ty), level, body_expr)
+        infer (env + (var_name -> generalized_ty), level, body_expr)
       case Let(var_name, Some(ty_ann), value_expr, body_expr) =>
         // equivalent to `let var_name = (value_expr : ty_ann) in body_expr`
         infer(env, level, Let(var_name, None, Ann(value_expr, ty_ann), body_expr))

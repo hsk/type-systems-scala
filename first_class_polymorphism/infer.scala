@@ -3,29 +3,16 @@ package fcp
 object Infer {
   import Expr._
 
-  //module IntMap = Map.Make (struct type t = int let compare = compare end)
-  //module StringMap = Map.Make (String)
-
-  def int_map_from_2_lists[A,B](key_list:List[A], value_list:List[B]):Map[A,B] = {
-    key_list.zip(value_list).foldLeft(Map[A,B]()) {
-      case (map, (key, value)) => map + (key -> value)
-    }
-  }
-  def int_map_remove_all[A,B](map:Map[A,B], key_list:List[A]):Map[A,B] = {
-    key_list.foldLeft(map) {
-      case (map, key) => map - key
-    }
-  }
-  val current_id = Ref(0)
+  var current_id = 0
 
   def next_id():Int = {
-    val id = current_id.a
-    current_id.a = id + 1
+    val id = current_id
+    current_id = id + 1
     id
   }
 
   def reset_id() {
-    current_id.a = 0
+    current_id = 0
   }
 
   def new_var(level:level):ty = TVar(Ref(Unbound(next_id(), level)))
@@ -37,15 +24,6 @@ object Infer {
   }
   
   def error[A](msg:String):Nothing = throw new Exception(msg)
-
-  object Env {
-    type env = Map[String,ty]
-
-    val empty : env = Map()
-    def extend (env:env, name:String, ty:ty):env = env + (name -> ty)
-    def lookup (env:env, name:String):ty = env(name)
-  }
-
 
   def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:ty) {
     def f(t:ty) {
@@ -69,12 +47,6 @@ object Infer {
     f(ty)
   }
 
-  def iter2[A,B](a:List[A],b:List[B],f:(A,B)=>Unit) {
-    a.zip(b).foreach {
-      case(a,b) => f(a,b)
-    }
-  }
-
   def substitute_bound_vars(var_id_list:List[id], ty_list:List[ty], ty:ty):ty = {
     def f(id_ty_map:Map[id,ty], ty:ty):ty = {
       ty match {
@@ -88,12 +60,11 @@ object Infer {
       case TArrow(param_ty_list, return_ty) =>
           TArrow(param_ty_list.map(f(id_ty_map, _)), f(id_ty_map, return_ty))
       case TForall(var_id_list, ty) =>
-          TForall(var_id_list, f(int_map_remove_all(id_ty_map, var_id_list), ty))
+          TForall(var_id_list, f(id_ty_map -- var_id_list, ty))
       }
     }
-    f(int_map_from_2_lists(var_id_list, ty_list), ty)
+    f(var_id_list.zip(ty_list).toMap, ty)
   }
-
 
   def free_generic_vars(ty:ty):Set[ty] = {
     var free_var_set = Set[ty]()
@@ -117,7 +88,6 @@ object Infer {
     f(ty)
     free_var_set
   }
-
 
   def escape_check(generic_var_list:List[ty], ty1:ty, ty2:ty):Boolean = {
     val free_var_set1 = free_generic_vars(ty1)
@@ -263,13 +233,12 @@ object Infer {
     }
   }
 
-  def infer(env:Env.env, level:level, expr:expr):ty = {
+  def infer(env:Map[String,ty], level:level, expr:expr):ty = {
     expr match {
     case Var(name) =>
-        try {
-          Env.lookup(env, name)
-        } catch {
-          case _:Throwable => error ("variable " + name + " not found")
+        env.get(name) match {
+          case Some(a) => a
+          case None => error ("variable " + name + " not found")
         }
     case Fun(param_list, body_expr) =>
         val fn_env_ref = Ref(env)
@@ -286,7 +255,7 @@ object Infer {
                   var_list_ref.a = var_list ::: var_list_ref.a
                   ty
             }
-            fn_env_ref.a = Env.extend(fn_env_ref.a, param_name, param_ty)
+            fn_env_ref.a = fn_env_ref.a + (param_name -> param_ty)
             param_ty
           }
         
@@ -301,7 +270,7 @@ object Infer {
           generalize(level, TArrow(param_ty_list, return_ty))
     case Let(var_name, value_expr, body_expr) =>
         val var_ty = infer(env, level + 1, value_expr)
-        infer(Env.extend(env, var_name, var_ty), level, body_expr)
+        infer(env + (var_name -> var_ty), level, body_expr)
     case Call(fn_expr, arg_list) =>
         val fn_ty = instantiate(level + 1, infer(env, level + 1, fn_expr))
         val (param_ty_list, return_ty) = match_fun_ty(arg_list.length, fn_ty)
@@ -314,7 +283,8 @@ object Infer {
         ty
     }
   }
-  def infer_args(env:Env.env, level:level, param_ty_list:List[ty], arg_list:List[expr]) {
+
+  def infer_args(env:Map[String,ty], level:level, param_ty_list:List[ty], arg_list:List[expr]) {
     
     val pair_list = param_ty_list.zip(arg_list)
     def get_ordering(ty:ty, arg:Any):Int = {

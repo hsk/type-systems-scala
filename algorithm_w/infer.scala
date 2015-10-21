@@ -3,16 +3,16 @@ package dhm
 object Infer {
 
   import Expr._
-  val current_id = Ref(0)
+  var current_id = 0
 
   def next_id():Int = {
-    val id = current_id.a
-    current_id.a = id + 1
+    val id = current_id
+    current_id = id + 1
     id
   }
 
   def reset_id() {
-    current_id.a = 0
+    current_id = 0
   }
 
   def new_var(level:level):Ty = TVar(Ref(Unbound(next_id(), level)))
@@ -20,14 +20,6 @@ object Infer {
   def new_gen_var():Ty = TVar(Ref(Generic(next_id())))
 
   def error(msg:String):Nothing = throw new Exception(msg)
-
-  object Env {
-    type env = Map[String,Ty]
-
-    val empty : env = Map()
-    def extend (env:env, name:String, ty:Ty):env = env + (name -> ty)
-    def lookup (env:env, name:String):Ty = env(name)
-  }
 
   def occurs_check_adjust_levels(tvar_id:id, tvar_level:level, ty:Ty) {
     def f(ty:Ty) {
@@ -97,10 +89,9 @@ object Infer {
         case TConst(_) => ty
         case TVar(Ref(Link(ty))) => f(ty)
         case TVar(Ref(Generic(id))) =>
-          try {
-            id_var_map(id)
-          } catch {
-            case _:Throwable =>
+          id_var_map.get(id) match {
+            case Some(a) => a
+            case None =>
               val var1 = new_var(level)
               id_var_map = id_var_map + (id -> var1)
               var1
@@ -139,11 +130,11 @@ object Infer {
     }
   }
 
-  def infer(env:Env.env, level:level, expr:Expr):Ty = {
+  def infer(env:Map[String,Ty], level:level, expr:Expr):Ty = {
     expr match {
       case Var(name) =>
         try {
-          instantiate(level, (Env.lookup(env, name)))
+          instantiate(level, env(name))
         } catch {
           case _:Throwable => error("variable " + name + " not found")
         }
@@ -151,14 +142,14 @@ object Infer {
         val param_ty_list = param_list.map{ _ => new_var(level)}
         val fn_env =
           param_list.zip(param_ty_list).foldLeft(env) {
-            case(env, (param_name, param_ty)) => Env.extend(env, param_name, param_ty)
+            case(env, (param_name, param_ty)) => env + (param_name -> param_ty)
           }
         val return_ty = infer(fn_env, level, body_expr)
         TArrow(param_ty_list, return_ty)
       case Let(var_name, value_expr, body_expr) =>
         val var_ty = infer(env, level + 1, value_expr)
         val generalized_ty = generalize(level, var_ty)
-        infer (Env.extend(env, var_name, generalized_ty), level, body_expr)
+        infer (env + (var_name -> generalized_ty), level, body_expr)
       case Call(fn_expr, arg_list) =>
         val (param_ty_list, return_ty) =
           match_fun_ty(arg_list.length, infer(env, level, fn_expr))

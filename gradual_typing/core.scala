@@ -6,11 +6,10 @@ object Core {
   import Infer._
 
   val core = {
-    val core_ref = Ref(Env.empty)
+    var map = Map[String,Ty]()
 
     def assume(name:String, ty_str:String) {
-      val ty = parse.ty_forall_eof(ty_str)
-      core_ref.a = Env.extend(core_ref.a, name, ty)
+      map = map + (name -> parse.ty_forall_eof(ty_str))
     }
 
     assume("head", "forall[a] list[a] -> a")
@@ -49,6 +48,6 @@ object Core {
     assume("test", "(? -> int, int -> ?) -> int")
     assume("test_curry", "(? -> int) -> (int -> ?) -> int")
 
-    core_ref.a
+    map
   }
 }

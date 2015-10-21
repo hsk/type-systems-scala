@@ -6,18 +6,14 @@ object parse extends RegexParsers {
   import Infer._
 
   def replace_ty_constants_with_vars (var_name_list:List[String], ty:Ty):Ty = {
-    val env = var_name_list.foldLeft(Env.empty) {
-      case(env, var_name) => Env.extend(env, var_name, new_gen_var())
+    val env = var_name_list.foldLeft(Map[String, Ty]()) {
+      case(env, var_name) => env + (var_name -> new_gen_var())
     }
     
     def f(ty:Ty):Ty = {
       ty match {
         case TConst(name) =>
-          try {
-            Env.lookup(env, name)
-          } catch {
-            case _:Throwable => ty
-          }
+          env.getOrElse(name, ty)
         case TVar(_) => ty
         case TApp(ty, ty_arg_list) =>
           TApp(f(ty), ty_arg_list.map(f))

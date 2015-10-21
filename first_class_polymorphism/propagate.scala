@@ -44,11 +44,11 @@ object Propagate {
     }
   }
 
-  def infer(env:Env.env, level:level, maybe_expected_ty:Option[ty], generalized:generalized, e:expr):ty = {
+  def infer(env:Map[String,ty], level:level, maybe_expected_ty:Option[ty], generalized:generalized, e:expr):ty = {
     e match {
     case Var(name) =>
         try {
-          maybe_instantiate(generalized, level, Env.lookup(env, name))
+          maybe_instantiate(generalized, level, env(name))
         } catch {
           case _:Throwable => 
             error ("variable " + name + " not found")
@@ -86,7 +86,7 @@ object Propagate {
                   var_list_ref.a = var_list ::: var_list_ref.a
                   ty
               }
-            fn_env_ref.a = Env.extend(fn_env_ref.a, param_name, param_ty)
+            fn_env_ref.a = fn_env_ref.a + (param_name -> param_ty)
             param_ty
           }
 
@@ -100,7 +100,7 @@ object Propagate {
         maybe_generalize(generalized, level, TArrow(param_ty_list, return_ty))
     case Let(var_name, value_expr, body_expr) =>
         val var_ty = infer(env, level + 1, None, Generalized, value_expr)
-        infer (Env.extend(env, var_name, var_ty), level, maybe_expected_ty, generalized, body_expr)
+        infer (env + (var_name -> var_ty), level, maybe_expected_ty, generalized, body_expr)
     case Call(fn_expr, arg_list) =>
         val fn_ty = instantiate(level + 1, infer(env, level + 1, None, Instantiated, fn_expr))
         val (param_ty_list, return_ty) = match_fun_ty(arg_list.length, fn_ty)
@@ -121,7 +121,7 @@ object Propagate {
     }
   }
 
-  def infer_args(env:Env.env, level:level, param_ty_list:List[ty], arg_list:List[expr]) {
+  def infer_args(env:Map[String,ty], level:level, param_ty_list:List[ty], arg_list:List[expr]) {
     val pair_list = param_ty_list.zip(arg_list)
     def get_ordering(ty:ty, arg:expr):Int = {
       // subsume annotated arguments first, type variables last

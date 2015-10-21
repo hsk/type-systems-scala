@@ -54,11 +54,11 @@ object Core {
       "special : ((forall[a] a -> a) -> (forall[a] a -> a)) -> (forall[a] a -> a)"
     )
         
-    declaration_list.foldLeft(Env.empty) {
+    declaration_list.foldLeft(Map[String,ty]()) {
       case (env, declaration_str) =>
         val expr = Parse.expr_eof(declaration_str)
         expr match {
-          case Ann(Var(name), (List(), ty)) => Env.extend(env, name, ty)
+          case Ann(Var(name), (List(), ty)) => env + (name -> ty)
           case _ => throw new Exception("expected a variable annotated by a complete type")
         }
     }
