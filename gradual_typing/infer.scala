@@ -63,12 +63,6 @@ object Infer {
     f(ty)
   }
 
-  def iter2[A,B](a:List[A],b:List[B],f:(A,B)=>Unit) {
-    a.zip(b).foreach {
-      case(a,b) => f(a,b)
-    }
-  }
-
   def unify(ty1:Ty, ty2:Ty) {
     if (ty1 == ty2) return
     (ty1, ty2) match {

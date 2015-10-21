@@ -70,23 +70,17 @@ object Infer {
     f(ty)
   }
 
-  def iter2[A,B](a:List[A],b:List[B],f:(A,B)=>Unit) {
-    a.zip(b).foreach {
-      case(a,b) => f(a,b)
-    }
-  }
-
   def unify(ty1:t_ty, ty2:t_ty) {
     if (ty1 == ty2) return
     (ty1, ty2) match {
       case (TConst(name1), TConst(name2)) if(name1 == name2) =>
       case (TApp(name1, ty_arg_list1), TApp(name2, ty_arg_list2)) if (name1 == name2) =>
-          iter2(ty_arg_list1, ty_arg_list2, unify)
+          ty_arg_list1.zip(ty_arg_list2).foreach{ case (a, b)=> unify(a, b) }
       case (TArrow(param_r_ty_list1, return_r_ty1), TArrow(param_r_ty_list2, return_r_ty2)) =>
           def unify_r_ty(r_ty1:t_refined_ty, r_ty2:t_refined_ty) {
             unify(plain_ty(r_ty1), plain_ty(r_ty2))
           }
-          iter2(param_r_ty_list1, param_r_ty_list2, unify_r_ty) 
+          param_r_ty_list1.zip(param_r_ty_list2).foreach{ case (a, b)=> unify_r_ty(a, b) }
           unify_r_ty(return_r_ty1, return_r_ty2)
       case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
       case (ty1, TVar(Ref(Link(ty2)))) => unify(ty1, ty2)

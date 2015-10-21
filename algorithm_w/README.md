@@ -298,10 +298,10 @@ It can deal with recursive types, which arise often while type checking objects,
 _Oleg_ describes _a further optimization_ that could be performed by _condensing the sequences of type links as we follow them_, but _our `generalize` function_ takes care of _that problem_.
 
 この実装は適度に効率的であるが、HM型推論の最先端の実装では、明確にするために、この実装では回避されたいくつかのより高度なテクニックを使用します。
-オレグの記事で概説してあるように、OCamlでの型チェッカーは、インスタンス化中に非多型型を横断避けるために、その中に起きて型変数の最大型レベルで型レベル、とのすべてのタイプをマーク。
+オレグの記事で概説してあるように、OCamlでの型チェッカーは、インスタンス化中に非多相型の横断を避けるために、その中に現れる型変数の最大型レベルでの型レベル、とのすべての型をマークします。
 また、遅延がチェックおよびレベル調整を発生します。
-これは、タイプが統一時に型をマークすることによって、オブジェクトを確認しながら、多くの場合、発生する再帰的な型を扱うことができます。
-オレグは、我々はそれに従うようなタイプのリンクのシーケンスを凝縮させることによって実施することができる更なる最適化を説明していますが、私たちのgeneralize関数は、その問題を解決します。
+これは、型が単一化時に型をマークすることによって、オブジェクトを確認しながら、多くの場合、現れる再帰的な型を扱うことができます。
+オレグは、我々はそれに従うような型のリンクのシーケンスを凝縮させることによって実施することができる更なる最適化を説明していますが、私たちのgeneralize関数は、その問題が気になります。
 
 
 > <sup><sub>
@@ -380,7 +380,7 @@ OCamlからの移植なので、プログラムは上からボトムアップ的
 
 ここに来るまでの詳しい話は、[oleg](http://okmij.org/ftp/ML/generalization.html)が詳しいです。
 
-
+https://github.com/a-nikolaev/hindley-milner/blob/master/main.ml
 
 
 ## EBNF

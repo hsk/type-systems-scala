@@ -200,7 +200,6 @@ so far これまでの
 as well as だけでなく
 </sub></sup>
 
-
 > <sup><sub>
 __The solution so far__ is however __only partial__ in that __data structures__ that are passed to __foreign functions__ must be allocated in __a special non-moving area__.
 
@@ -275,8 +274,6 @@ familiar おなじみの
 anyone 誰でも
 interacts 相互作用
 </sub></sup>
-
-
 
 > <sup><sub>
 __This problem__ should be __painfully familiar to anyone__ who has tried __to write a functional program__ that interacts with __a foreign library__ that requires __callbacks or locally stores object pointers passed from the caller__.
@@ -409,7 +406,7 @@ boundary 境界
     > <sup><sub>
     Due to this property, __the heap space__ becomes fragmented __very quickly__, resulting in __slow allocation and reclamation__.
 
-    この性質を起因にして、_ヒープ空間_は_とても素早く_分断され、結果_アロケーションと再利用_はおそくなります。
+    この性質を起因にして、__ヒープ空間__は__とても素早く__分断され、結果__アロケーションと再利用__はおそくなります。
 
     > <sup><sub>
     To __avoid this problem__, __practical variant of mark-and-sweep GC algorithms sometimes__ perform __costly compaction at sweep phase__.
@@ -528,8 +525,8 @@ __The following__ is __a summary of the features of our GC algorithm__.
     so __we__ prepare __a series of sub-heaps {Hi | c ≤ i} of exponentially increasing allocation block sizes__,
     i.e. __each Hi consists of allocation blocks of 2i bytes__.
 
-    もちろん、私たちは別々の十分な大きさの準備ができません
-    すべての可能なオブジェクトサイズのヒープは、私たちは一連の準備
+    もちろん、我々は別々の十分な大きさの準備ができません
+    すべての可能なオブジェクトサイズのヒープは、我々は一連の準備
     サブヒープの{こんにちは| C≤I}指数関数的にすなわち、アロケーションブロックサイズを増やすの各こんにちは2Iバイトのアロケーションブロックで構成されています。
 
     > <sup><sub>
@@ -617,7 +614,7 @@ __The following__ is __a summary of the features of our GC algorithm__.
     > <sup><sub>
     Since __the special sub-heap M__ occupies __a very small portion of the entire heap__ and can be managed by __any non-copying GC method__, __we__ do not consider __this further__.
 
-    特殊なサブヒープMはヒープ全体のごく一部を占め、non-copying GC法で管理することができるので、私たちはこれをさらに考慮していません。
+    特殊なサブヒープMはヒープ全体のごく一部を占め、non-copying GC法で管理することができるので、我々はこれをさらに考慮していません。
 
 2.  > <sup><sub>
     __Efficient allocation__.
@@ -629,8 +626,7 @@ __The following__ is __a summary of the features of our GC algorithm__.
     proportional 比例します
     Perhaps おそらく
     due に起因します
-    to
-     hierarchically organized tree 階層的に組織化されたツリー
+    to hierarchically organized tree 階層的に組織化されたツリー
     ordinary 普通
     intermediate 中間の
     corresponding 対応します
@@ -728,12 +724,12 @@ __The following__ is __a summary of the features of our GC algorithm__.
     ビットマップの作成GCの総回収コストは、ビットマップをクリアライブオブジェクトを追跡し、ビットマップのビットを設定するためのコストの合計です。
     その中でも、ビットマップのクリアは、Nが割り当てブロックの総数であるN/32の手順が必要です。
     クリアタイムをビットマップ我々の広範な評価のショーは無視できる（GC時間の約1％）であるため、実際には我々のGCの総コストを追跡し、マーキングコストによって支配されています。
-    だから、実際には私たちのGCアルゴリズムはコピーGCのと同様に動作します。
+    だから、実際には我々のGCアルゴリズムはコピーGCのと同様に動作します。
 
     > <sup><sub>
     In __most of the benchmark tests we performed__, __the total GC cost__ was __smaller than those of simple copying collector and generational copying collector__.
 
-    私たちが実施したベンチマークテストのほとんどでは、総GCコストは、単純なコピーコレクターと世代コピーコレクターのそれよりも小さかったです。
+    我々が実施したベンチマークテストのほとんどでは、総GCコストは、単純なコピーコレクターと世代コピーコレクターのそれよりも小さかったです。
 
 4.  > <sup><sub>
     __Non-moving generational GC__.
@@ -764,7 +760,7 @@ __The following__ is __a summary of the features of our GC algorithm__.
 
     デマーズet.al.によって提案された部分集合の概念を適応させることによって、 [10]、GCのマーキング当社のビットマップオブジェクトを移動することなく、世代別GCまで拡張可能。
 
-    これは、ビットマップは、ヒープ内のオブジェクトの集合の部分集合を表す私たちの観察に基づいています。
+    これは、ビットマップは、ヒープ内のオブジェクトの集合の部分集合を表す我々の観察に基づいています。
 
     世代別GCは、各世代のために別個のビットマップを維持することによって実現することができます。
 
@@ -802,13 +798,13 @@ __The proposed method__ has __additional advantage of supporting multiple native
 > <sup><sub>
 __Our segment-based heap organization__ allows __each concurrent thread to allocate objects in a shared global heap without any locking__.
 
-私たちは、標準的なMLコンパイラのデータ構造とアルゴリズムを実装しており、大規模なベンチマークテストを行っています。
+我々は、標準的なMLコンパイラのデータ構造とアルゴリズムを実装しており、大規模なベンチマークテストを行っています。
 
 我々は評価し、比較して、簡単なチェイニーのコピーGCに対して、および[29]に記載されている機能の言語の世代コピーGC、以下の結果を得ているしています：
 
 （ⅰ）セグメントベースのダイナミックサブヒープサイズの調整が自動的に（ii）のビ​​ットマップマーキングGCはチェイニーのコピーGCほど効率的で、最適な手にチューニングされたサブヒープサイズの割り当てを達成し、および（iii）世代の拡張は、非よりも性能が優れています世代ビットマップGC、および世代コピーGCと比べて、同等以上の性能の結果を示しています。
 
-これらの結果は、私たちの開発は関数型言語のために動かないGC法を開発するという目標を達成していることを示しています。
+これらの結果は、我々の開発は関数型言語のために動かないGC法を開発するという目標を達成していることを示しています。
 
 提案された方法は、非常に追加の機械ことなく、複数のネイティブスレッドをサポートする追加の利点を有します。
 
@@ -872,10 +868,10 @@ we use C like syntax in describing the algorithms.
 ビットマップの効率的な割り当てを達成するために、
 我々は、それが基本的な詳細のデータ構造及びアルゴリズムを設計が分かりました。
 
-それらを正確に報告すること、時にはビットレベルの操作を参照して、詳細にそれらを提示するために私たちを必要とします。
+それらを正確に報告すること、時にはビットレベルの操作を参照して、詳細にそれらを提示するために我々を必要とします。
 
 このために、
-我々はアルゴリズムを記述する際に構文のようにCを使用しています。
+我々はアルゴリズムを記述する際にCのような構文を使用しています。
 
 ### 2.1 The GC-mutator interface
 
@@ -887,17 +883,17 @@ For this purpose, the implementation of our GC provides a function for the mutat
 At the beginning of each GC, the collector calls all the registered root set enumerators with an appropriate trace fn function.
 In the case of Cheney collector, for example, this would be a function to move an object from one semi-space to the other; in our GC, this is a function that marks the bit corresponding to an object.
 
-私たちのGCは、関数型言語のための正確なトレースGCです。
+我々のGCは、関数型言語のための正確なトレースGCです。
 
 それは、そのレイアウト情報とオブジェクトを生成し、正確なルートのセットを維持する任意のコンパイラで使用することができます。
 
-他のGCアルゴリズムとの正確な比較を行うために、我々は、コンパイラへの統一されたインタフェースで、私たちのGCアルゴリズムを設計します。
+他のGCアルゴリズムとの正確な比較を行うために、我々は、コンパイラへの統一されたインタフェースで、我々のGCアルゴリズムを設計します。
 
-この目的のために、私たちのGCの実装では、（void**）は、次の型がvoidトレースFNのヒープオブジェクトのポインタに関数を受け取り、ルートセットの列挙子を登録するミューテータのための関数を提供します。ルートセット内の各オブジェクトには、この関数が適用されます。
+この目的のために、我々のGCの実装では、fn(void**)は、次の型がvoidトレースのヒープオブジェクトのポインタに関数を受け取り、ルートセットの列挙子を登録するミューテータのための関数を提供します。ルートセット内の各オブジェクトには、この関数が適用されます。
 
 各GCの開始時に、コレクタは、適切なトレースは、fn関数で登録されているすべてのルートセットの列挙子を呼び出します。
 
-チェイニーコレクタの場合、例えば、これは、他の1つの半空間からオブジェクトを移動させる関数でしょう。私たちのGCで、このビットは、オブジェクトに対応するマーク関数です。
+チェイニーコレクタの場合、例えば、これは、他の1つの半空間からオブジェクトを移動させる関数でしょう。我々のGCで、このビットは、オブジェクトに対応するマーク関数です。
 
 ----
 
@@ -917,14 +913,14 @@ To make the compiler independent of GC methods, in this paper, we turn off the i
 
 自然なデータ表現のサイズは、その種類に応じて異なるため、多様関数で一部のレコードの大きさは、実行時にのみ決定することができます。
 
-* ' - たとえば、'> '型の関数を検討してください。
+たとえば、’a -> ’a * ’a 型の関数を検討しましょう。
 
 この関数は、int型の引数の8バイトのレコードと実引数のための16バイトのレコードを返します。
 
 もちろん、サイズは静的に知られている単形のケースのために、我々は、最適化された割り当てコードを生成するためにミューテータコードに割り当て関数をインライン展開することができます。
-インライン展開のために、しかし、コンパイラは、GCアルゴリズムに応じて異なる場合があります割り当て機能の詳細な知識が必要です。
+インライン展開のために、しかし、コンパイラは、GCアルゴリズムに応じて異なる場合があり割り当て機能の詳細な知識が必要です。
 
-GC法のコンパイラが依存しないようにするために、本稿では、インライン化をオフにします。
+GCメソッドにコンパイラが依存しないようにするために、本論文では、インライン化をオフにします。
 
 ### 2.2 The structure of the heap space and allocation strategy
 
@@ -935,9 +931,9 @@ We use a given allocation space as a pool of fixed size allocation areas, called
 
 以下では、一台のマシンワードは32ビット長であることを前提としています。
 これは、制限ではありません。他のワードサイズを均等に使用することができます。
-当社は、セグメントと呼ばれる固定サイズの割り当て領域のプールとして指定された割り当ての領域を使用し、次のようにヒープ全体を設定します。
+我々は、セグメントと呼ばれる固定サイズの割り当て領域のプールとして指定された割り当ての領域を使用し、次のようにヒープ全体を設定します。
 
-    heap = (M, S,(H3, . . . , H12))
+    heap = (M, S, (H3, ..., H12))
 
 > <sup><sub>
 `M` is a special sub-heap for large objects explained earlier.
@@ -1013,7 +1009,7 @@ The bitmap tree has the following structure
 
 ビットマップ・ツリーは、以下の構造をしており
 
-    BitMap i = (BM 0i, . . . , BM Li−1i)
+    BitMap i = (BM 0 i, ..., BM Li−1 i)
 
 > <sup><sub>
 where `BM j i` is the j-th level bitmap which is a sequence of bits organized as an array of 32 bit words.
@@ -1023,7 +1019,7 @@ where `BM j i` is the j-th level bitmap which is a sequence of bits organized as
 > <sup><sub>
 We write `BM j i (k)` to denote the k-th bit and `BM j i [k]` the k-th word in the j-th level bitmap.
 
-私たちは、k番目の単語を示すために`BM j i (k)`と記述し、j番目のレベルのビットマップ内のk番目のビットを`BM JI[k]`と
+我々は、k番目の単語を示すために`BM j i (k)`と記述し、j番目のレベルのビットマップ内のk番目のビットを`BM JI[k]`と
 記述します。
 
 > <sup><sub>
@@ -1091,9 +1087,9 @@ If this block is free then the allocator simply returns this next block and adva
 3. If the next block is live, then the allocator searches for the next free bit using the bitmap tree. To perform this search efficiently, we maintain the next bit position information for higher-level bitmaps.
 The allocation pointer Pi in Hi introduced in the previous subsection is for this purpose, whose structure is given below.
 
-1.私たちは、順次こんにちはにおける次の空きブロックを割り当てます。
+1.我々は、順次こんにちはにおける次の空きブロックを割り当てます。
 
-2.私たちは、アロケーションブロックの次の候補の位置情報を保持し、高速割り当ての典型的なケースを作るために。
+2.我々は、アロケーションブロックの次の候補の位置情報を保持し、高速割り当ての典型的なケースを作るために。
 
 このブロックが空いている場合には、アロケータは単純に、この次のブロックを返し、位置情報を進めます。
 
@@ -1157,7 +1153,7 @@ Our benchmark tests show the following average allocation ratio (in number of re
 
 一般的なケースでは、これは、様々なサイズのブロックの配分比に応じて設計された決定木を介して実装されます。
 
-私たちのベンチマークテストは、最初の4サイズの（要求数）以下の平均割当比率を示します。
+我々のベンチマークテストは、最初の4サイズの（要求数）以下の平均割当比率を示します。
 
     alloc(n) {
         Hi = findSubHeapBySize(n);
@@ -1190,8 +1186,196 @@ Our benchmark tests show the following average allocation ratio (in number of re
         incBitPtr(BitPtr(0, i) );
     }
 
+From them, we coded findSubHeapBySize(n) so that it determines Hi for about 93% of allocation requests by 2 comparisons.
+The algorithm then tries to allocate a block in Hi using tryAlloc(Hi).
+If it fails then it invokes the bitmap marking garbage collector.
+tryAlloc(Hi) first checks whether the block pointed by Pi is marked.
+If not, then it simply returns the block address stored in Pi and increment Pi by inc function.
+If the next block is already marked, then it searches for the next free bit in the active segment.
+If the search fails then it advances Pi to the first block of the next segment in the SegList i .
+If there is no next segment then it tries to dynamically allocate a new segment from the free segment pool by newSegment function.
+Then it tries to search a free bit in the next or new segment.
+The collection algorithm described later organizes SegList i so that the search in the next segment never fails.
+We note that under our strategy of sequentially allocating blocks in Hi, it is not needed to set any bit at allocation.
+The auxiliary functions used in Figure 3 such as nextSegment should be clear from their names.
+
+----
+
+The remaining thing is to define findNextFreeBlock as efficient as possible.
+For this purpose, we have examined and experimented a number of algorithms in detail.
+The following is the one that we found the fastest.
+
+----
+
+We implement BlkPtr i as a machine address of a block, similar to the allocation pointer in copying GC.
+So incBlkPtr just increments the address.
+BitPtr j i is an abstract data structure whose implementation is the following two word data
+
+    BitPtr j i = (Idx j i, Mask j i)
+
+where
+
+- Idx j i is an index into the bitmap array BM j i, and
+- Mask j i is a 32 bit word in which only one bit is set, indicating the bit position.
+
+For example, if BitPtr 0i = (1, 8) (in decimal notation) then it denotes the 3rd bit in the second bitmap word, and corresponds to the 35th block.
+
+For bit pointers, we define the following primitives.
+
+- incBitPtr(BitPtr j i) increments BitPtr j i.
+- indexToBitptr(x) converts a bit index x to a bit pointer.
+- bitptrToIndex(BitPtr j i) converts a bit pointer to a bit index.
+- isMarked(BitPtr j i) tests whether the bit in BM j i at BitPtr j i is 1.
+- blockAddress(BitPtr 0 i ) converts a bit pointer to the corresponding block address.
+
+The last two are used in the context of some particular Si.
+
+These primitives can be implemented through efficient bit manipulation
+(e.g. see [36] for bit manipulation techniques.)
+
+Similar primitives are defined for Pi, which contains BitPtr 0 i.
+
+In Figure 3 and the following, we also use these primitives for Pi as well as for BitPtr j i.
+
+----
+
+We implement findNextFreeBlock by using the bit pointers and their primitives.
+
+This function finds the next free bit in the bitmap tree of a segment and adjust BitPtrs i by performing the following steps.
+
+1.  Search for a 0 bit in the current bitmap word after BitPtr 0 i.
+
+    If one is found then advance BitPtr 0 i by setting its Mask 0 i accordingly, and return. Otherwise, perform the following two steps.
+
+2.  Compute the next free bitmap word index k after Idx 0 i at level 0 by traversing the bitmap trees at level 1 and above. Set Idx 0 i to k and Mask 0 i to 1.
+3.  Set Mask 0 i to the position of the first 0 bit in BM 0 i [Idx 0 i ].
+    This always succeeds and yields the new mask.
+
+The second step may in turn require to compute the free bitmap word indexes and the masks at level 1 and above.
+
+So we define the above operation as a procedure forwardBitPtr(j) that recursively computes the bit pointer of level j using the bitmaps of level j + 1 and above.
+
+Then the step 2 above can be implemented as follows.
+
+-   2.1 Calculate the j + 1 level bit pointer BitPtr j+1 i that points to the bit corresponding to the Idx j i -th word in the j level bitmap BM j i .
+
+-   2.2 Call forwardBitPtr(j + 1) to advance BitPtr j+1 i to the next free bit position.
+
+-   2.3 Set BitPtr j i to the first 0 bit in the bitmap word BM j i [k] where k = bitptrToIndex(BitPtr j+1 i ).
+
+Figure 4 shows the structure of the bit search algorithm, which uses the following operation.
+
+-   nextMask(BitPtr j i ) returns a bit mask Mask such that a bit pointer (Idx j i , Mask) points to the next free bit of BitPtr j i in the same word.
+    If no free bit is found, it returns Fail.
+    
+    This operation is used in the context of some particular Si.
+
+This operation can be implemented efficiently through bit manipulations as well as bit pointer primitives defined earlier.
+
+
+    findNextFreeBlock(Pi) {
+        Mask 0 i = nextMask(BitPtr 0 i );
+        if (Mask 0 i == Fail) {
+            if (forwardBitPtr(Pi, 0) == Fail) {
+                return Fail; } }
+        BlkPtr i = blockAddress(Si, BitPtr 0 i );
+        return Success;
+    }
+
+    forwardBitPtr(Pi, j) {
+        if (j + 1 ≥ Li) return Fail;
+        BitPtr j+1 i = indexToBitptr(Idx j i);
+        Mask j+1 i = nextMask(BitPtr j+1 i);
+        if (Mask j+1 i == Fail) {
+            if (forwardBitPtr(Pi, j + 1) == Fail) {
+                return Fail; } }
+        Idx j i = bitptrToIndex(BitPtr j+1 i);
+        Mask j i = 1;
+        Mask j i = nextMask(BitPtr j i);
+        return Success;
+    }
+
+Figure 4. Free bit search algorithm
+
 ### 2.5 The bitmap marking GC algorithm
 
+When tryAlloc fails to allocate a block in certain Hi, the garbage collector is invoked.
+
+In addition to standard marking collection, after marking phase, the collector rearranges the newly marked SegList i in such a way that every segment after the position Pi has at least one free block.
+
+This operation ensures that searching a free block in successive segments of the allocation pointer never fail.
+
+This arrangement also effectively performs compacting the bitmap tree in very low cost by moving all the filled sub-trees to the left of the allocation pointer.
+
+----
+
+1.  For each Hi, clear all the bitmaps in all the segments by writing 0 to each word of in their bitmap trees. 
+    This corresponds to sweeping the entire heap area.
+2.  For each object in the root set, mark the object, increment the live object count Count i, and record it to the trace stack. 
+    The trace stack is implemented as a linked list using Twork work areas.
+3.  While the trace stack is not empty, pop the trace stack. 
+    For each object reference stored in a field of the popped object, mark and push the referenced object to the trace stack, and increment the count.
+4.  When the marking is complete, then the algorithm reclaims empty segments, and reconstructs SegList by rearranging the remaining non-empty segment. 
+    The allocation pointer is put at the beginning of the first segment which has at least one free block.
+
+Figure 5 shows the bitmap marking collection algorithm.
+
+
+    bitmapMarkingGC() {
+        for each Hi { clearAllBitmapsAndCount(Hi); }
+        traceLiveObjects();
+        for each Hi { rearrangeSegList(Hi); }
+    }
+    traceLiveObjects() {
+        for each O in rootSet { markAndPush(O); }
+        while (stackIsNotEmpty()) {
+            O = pop();
+            for each O 0 in PointerFields(O) {
+                markAndPush(O 0); } }
+    }
+    markAndPush(O) {
+        Si, BitPtr 0 i = findBitptr(O);
+        if (not isMarked(BitPtr 0 i )) {
+        setBit(Pi, 0);
+        incrementSegmentCount(Si);
+        push(O); }
+    }
+    rearrangeSegList(Hi) {
+        empty = {S j i | S j i ∈ SegList i, Count j i = 0}
+        filled = {S j i | S j i ∈ SegList i , Count j i = Sizei}
+        unfilled = {S j i | S j i ∈ SegList i , 0 < Count j i < Sizei}
+        reclaim all segments in empty;
+        SegList i = concatSegList(filled, unfilled);
+        set Pi to the first S j i in SegList i such that Count j i < Sizei;
+    }
+    setBit(Pi, j) {
+
+        BM j i [Idx j i ] = BM j i [Idx j i ] | Mask j i ;
+        if (j + 1 < Li and BM j i [Idx j i] == 0xFFFFFFFF) {
+            BitPtr j+1 i = indexToBitptr(Idx j i );
+            setBit(Pi, j + 1); }
+    }
+
+Figure 5. Bitmap marking GC algorithm
+
+It performs the following.
+
+Marking an object involves the following operations.
+
+1.  Find the bit position corresponding to the object.
+2.  Check whether the bit has already been set.
+    If not, set the bit and propagate this change to upper levels in the bitmap tree.
+
+It uses the following auxiliary function.
+
+-   findBitptr(O) finds the segment Si in which O is allocated and the bit pointer corresponding to O as follows.
+    Let addr(X) be the starting address of X.
+    First, it computes addr(Si) by bit-level computation from addr(O).
+    Since every segment is aligned to power-of-2 boundary, this is done by masking lower bits of addr(O) to 0.
+    Second, it computes the block index k of O in the block array Blks i of Si by address arithmetic.
+    indexToBitptr(k) is the desired bit pointer.
+
+Any other auxiliary functions used in Figure 5 should be clear from their names.
 
 ## 3. Generational extension
 
@@ -1217,7 +1401,7 @@ We have implemented the bitmap marking GC algorithm presented in Section 2 and i
 For comparison purpose, we have also implemented a plain Cheney copying collector, and a generational copying GC algorithm for Standard ML described in [29].
 In this section, we outline our implementation and show the detailed evaluation results.
 
-私たちは、2章で提示したビットマップマーキングGCアルゴリズムを実装して、その世代の拡張子は3章で提示しました。
+我々は、2章で提示したビットマップマーキングGCアルゴリズムを実装して、その世代の拡張子は3章で提示しました。
 比較のために、我々はまた、プレーンチェイニーコピーコレクタを実装している、とStandard MLのための世代コピーGCアルゴリズムは[29]で説明。
 このセクションでは、我々の実装の概要を説明し、詳細な評価結果を示します。
 

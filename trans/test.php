@@ -1,13 +1,13 @@
 <?php
 function globRecursive($path, $find) {
-	$rc = array();
+    $rc = array();
     $dh = opendir($path);
     while (($file = readdir($dh)) !== false) {
         if (substr($file, 0, 1) == '.') continue;
         $rfile = "{$path}/{$file}";
         if (is_dir($rfile))
             foreach (globRecursive($rfile, $find) as $ret)
-            	$rc[] = $ret;
+                $rc[] = $ret;
         else if (fnmatch($find, $file)) $rc[] = $rfile;
     }
     closedir($dh);
@@ -32,7 +32,7 @@ preg_replace_callback("/\\n<sup><sub>\\n((.*\\n)+?)<\\/sub><\\/sup>\\n/",functio
 
 
     if(preg_match("/([\\w\\- +*,.'\"`’]+) (.*)/", $d, $m)>0){
-	    $out[$m[1]] = $m[2];
+        $out[$m[1]] = $m[2];
 
     } else {
     	echo $d;

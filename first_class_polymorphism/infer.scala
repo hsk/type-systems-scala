@@ -129,16 +129,15 @@ object Infer {
     }      
   }
 
-
   def unify(ty1:ty, ty2:ty) {
     if (ty1 == ty2) return
     (ty1, ty2) match {
       case (TConst(name1), TConst(name2)) if (name1 == name2) => ()
       case (TApp(ty1, ty_arg_list1), TApp(ty2, ty_arg_list2)) =>
           unify(ty1, ty2)
-          iter2(ty_arg_list1, ty_arg_list2, unify)
+          ty_arg_list1.zip(ty_arg_list2).foreach{case(a,b)=>unify(a,b)}
       case (TArrow(param_ty_list1, return_ty1), TArrow(param_ty_list2, return_ty2)) =>
-          iter2(param_ty_list1, param_ty_list2, unify)
+          param_ty_list1.zip(param_ty_list2).foreach{case(a,b)=>unify(a,b)}
           unify(return_ty1, return_ty2)
 
       case (TVar(Ref(Link(ty1))), ty2) => unify(ty1, ty2)
