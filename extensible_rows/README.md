@@ -3,6 +3,9 @@ Extensible records with scoped labels
 
 # スコープドラベル付きの拡張レコード
 
+TODO:
+- [ ] ソースコードの更新
+
 > <sup><sub>
 This is an implementation of type inference for safe, polymorphic and extensible records.
 
