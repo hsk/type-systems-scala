@@ -27,7 +27,7 @@ object Infer {
         case TVar(Link(ty)) => f(ty)
         case TVar(Generic(_)) => assert(false)
         case other_tvar @ TVar(Unbound(other_id, other_level)) =>
-          if (other_id == tvar_id) error("recursive types")          
+          if (other_id == tvar_id) error("recursive types")
           if (other_level > tvar_level)
             other_tvar.a = Unbound(other_id, tvar_level)
         case TApp(ty, ty_arg_list) =>
