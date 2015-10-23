@@ -16,12 +16,23 @@
 
 ## ソースの概要
 
-`expr.scala` で構文木や型の定義やプリティプリントがあります。
-`parser.scala`でパーサコンビネータを使った簡単なパーサが実装されています。
-`infer.scala`でメイン処理の型推論が実装されています。
-`core.scala`ではテスト用の環境が含まれていて、
-`test_parser.scala`がパーサーのテストを、`test_infer.scala`が型推論のテストを行います。
-`test.scala`にはメインのクラスがありテスト全体を扱います。
+- `expr.scala` で構文木や型の定義やプリティプリントがあります。
+- `parser.scala`でパーサコンビネータを使った簡単なパーサが実装されています。
+- `infer.scala`でメイン処理の型推論が実装されています。
+- `core.scala`ではテスト用の環境が含まれていて、
+- `test_parser.scala`がパーサーのテストを、`test_infer.scala`が型推論のテストを行います。
+- `test.scala`にはメインのクラスがありテスト全体を扱います。
+
+
+型推論のメインの処理は式を`infer`で推論して、
+２つの型を`unify`で同じ物であるとする単一化を行います。
+
+-`unify`をする際に、再帰的に現れる型があると固まってしまうので出現チェックが必要になります。
+    - `occurs_check_adjust_levels`で型の再入がないかを調べます。
+-`infer`内で、多相的な関数を扱うには、
+    - letバインドがあった場合に`generalize`で一般化し、
+    - 変数の参照があった場合に`instantiate`で具体化します。
+    - `infer`関数内の関数呼び出しは複雑なので補助関数の、`match_fun_ty`を使って引数と戻り値の処理をしています。
 
 それでは、メインの処理のinfer.scalaをざっと見てみましょう。
 
@@ -202,10 +213,21 @@ match\_fun\_tyは関数の型のマッチングを行うinfer関数の補助関�
       }
     }
 
-このアルゴリズムは大ざっぱに言うと、式を`infer`で推論して、２つの型を`unify`で同じ物であるとする単一化を行います。
-`unify`をする際に、再帰的に現れる型があると固まってしまうので出現チェックが必要になります。そこで`occurs_check_adjust_levels`で調べます。
-多相的な関数を扱うには、letバインドがあった場合に`generalize`で一般化して、変数の参照があった場合に`instantiate`で具体化します。
-`infer`関数内の関数呼び出しは複雑なので補助関数の、`match_fun_ty`を使って引数と戻り値の処理をしています。
+
+まとめると以下のような関数がありました。
+
+- next_id idを生成
+- reset_id idのカウンタをリセット
+- new_var 型変数を作成
+- new\_gen\_var 一般化型変数を作成
+
+- infer 型推論
+    - generalize 一般化
+    - instantiate 具体化
+    - match\_fun\_ty 関数の補助関数
+- unify 単一化
+    - occurs\_check\_adjust\_levels 出現チェック
+
 
 ## 最適化について
 
