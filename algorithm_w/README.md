@@ -224,7 +224,7 @@ While traversing the type tree, this function also takes care of updating the le
 > <sup><sub>
 _Function `generalize`_ takes _a level and a type_ and turns _all type variables within the type_ that have _level higher_ than _the input level into generalized (polymorphic) type variables_.
 
-`generalize`(一般化)関数は、レベルと型を取り、一般化された（多相的）型変数の入力レベルよりも高いレベルの型内ですべての型変数を一般化します。
+`generalize`(一般化)関数は、レベルと型を取り、一般化された（多相的）型変数の入力レベルよりも高い(深い)レベルの型内ですべての型変数を一般化します。
 
     def generalize(level:level, ty:Ty):Ty = {
       ty match {

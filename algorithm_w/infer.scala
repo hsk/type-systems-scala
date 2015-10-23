@@ -15,7 +15,7 @@ object Infer {
     current_id = 0
   }
 
-  def new_var(level:level):Ty = TVar(Unbound(next_id(), level))
+  def new_var(tvar_level:level):Ty = TVar(Unbound(next_id(), tvar_level))
 
   def new_gen_var():Ty = TVar(Generic(next_id()))
 
@@ -59,11 +59,11 @@ object Infer {
       case (ty1, TVar(Link(ty2))) => unify(ty1, ty2)
       case (TVar(Unbound(id1, _)), TVar(Unbound(id2, _))) if id1 == id2 =>
           assert(false) // There is only a single instance of a particular type variable.
-      case (tvar @ TVar(Unbound(id, level)), ty) =>
-          occurs_check_adjust_levels(id, level, ty)
+      case (tvar @ TVar(Unbound(id, tvar_level)), ty) =>
+          occurs_check_adjust_levels(id, tvar_level, ty)
           tvar.a = Link(ty)
-      case (ty, tvar @ TVar(Unbound(id, level))) =>
-          occurs_check_adjust_levels(id, level, ty)
+      case (ty, tvar @ TVar(Unbound(id, tvar_level))) =>
+          occurs_check_adjust_levels(id, tvar_level, ty)
           tvar.a = Link(ty)
       case (_, _) => error("cannot unify types " + string_of_ty(ty1) + " and " + string_of_ty(ty2))
     }
@@ -106,22 +106,6 @@ object Infer {
     f(ty)
   }
 
-  def match_fun_ty(num_params: Int, ty: Ty): (List[Ty], Ty) = {
-    ty match {
-      case TArrow(param_ty_list, return_ty) =>
-        if (param_ty_list.length != num_params)
-          error("unexpected number of arguments")
-        (param_ty_list, return_ty)
-      case TVar(Link(ty)) => match_fun_ty(num_params, ty)
-      case tvar@TVar(Unbound(id, level)) =>
-        val param_ty_list = List.fill(num_params){new_var(level)}
-        val return_ty = new_var(level)
-        tvar.a = Link(TArrow(param_ty_list, return_ty))
-        (param_ty_list, return_ty)
-      case _ => error("expected a function")
-    }
-  }
-
   def infer(env:Map[String,Ty], level:level, expr:Expr):Ty = {
     expr match {
       case Var(name) =>
@@ -143,6 +127,21 @@ object Infer {
         val generalized_ty = generalize(level, var_ty)
         infer (env + (var_name -> generalized_ty), level, body_expr)
       case Call(fn_expr, arg_list) =>
+        def match_fun_ty(num_params: Int, ty: Ty): (List[Ty], Ty) = {
+          ty match {
+            case TArrow(param_ty_list, return_ty) =>
+              if (param_ty_list.length != num_params)
+                error("unexpected number of arguments")
+              (param_ty_list, return_ty)
+            case TVar(Link(ty)) => match_fun_ty(num_params, ty)
+            case tvar@TVar(Unbound(id, tvar_level)) =>
+              val param_ty_list = List.fill(num_params){new_var(tvar_level)}
+              val return_ty = new_var(tvar_level)
+              tvar.a = Link(TArrow(param_ty_list, return_ty))
+              (param_ty_list, return_ty)
+            case _ => error("expected a function")
+          }
+        }
         val (param_ty_list, return_ty) =
           match_fun_ty(arg_list.length, infer(env, level, fn_expr))
         param_ty_list.zip(arg_list).foreach{
