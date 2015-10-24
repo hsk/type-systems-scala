@@ -35,7 +35,7 @@
     - 変数の参照があった場合に`instantiate`で具体化します。
     - `infer`関数内の関数呼び出しは複雑なので補助関数の、`match_fun_ty`を使って引数と戻り値の処理をしています。
 
-それでは、メインの処理のinfer.scalaをざっと見てみましょう。
+それでは、細かく見なくて良いので、どのような処理があるのか、メインの処理のinfer.scalaをざっと見てみましょう。
 
     package dhm
 
@@ -221,7 +221,6 @@ match\_fun\_tyは関数の型のマッチングを行うinfer関数の補助関�
 - reset_id idのカウンタをリセット
 - new_var 型変数を作成
 - new\_gen\_var 一般化型変数を作成
-
 - infer 型推論
     - generalize 一般化
     - instantiate 具体化
@@ -229,6 +228,8 @@ match\_fun\_tyは関数の型のマッチングを行うinfer関数の補助関�
 - unify 単一化
     - occurs\_check\_adjust\_levels 出現チェック
 
+
+式を受け取りトラバースし２つの型は単一化します。変数を定義したら一般化し、参照されたら具体化します。単一化では型の出現チェックを行います。
 
 ## 最適化について
 
@@ -279,6 +280,9 @@ new\_var は新しい未束縛の型変数をつくりますがそのときにtv
 
               if (other_level > tvar_level)
                 other_tvar.a = Unbound(other_id, tvar_level)
+
+----
+
             case TApp(ty, ty_arg_list) =>
               f(ty)
               ty_arg_list.foreach(f)
@@ -389,7 +393,7 @@ new\_var は新しい未束縛の型変数をつくりますがそのときにtv
             TArrow(param_ty_list, return_ty)
           case Let(var_name, value_expr, body_expr) =>
 
-Letのときは型推論呼び出す時にレベルを上げます。引数で文脈として引き回すので終わったら元に戻ります。
+Letのときは型推論呼び出す時にレベルを深くします。関数の引数でレベルを深くするので関数が終わればレベルは自動的に元に戻ります。
 
             val var_ty = infer(env, level + 1, value_expr)
             val generalized_ty = generalize(level, var_ty)
@@ -403,7 +407,7 @@ Letのときは型推論呼び出す時にレベルを上げます。引数で�
                   (param_ty_list, return_ty)
                 case TVar(Link(ty)) => match_fun_ty(num_params, ty)
 
-型変数の時は、そのレベルで、引数とリターン値用の新しい型変数をつくります。
+関数の型が型変数の時は、型変数のレベルで、引数とリターン値用の新しい型変数をつくります。
 
                 case tvar@TVar(Unbound(id, tvar_level)) =>
                   val param_ty_list = List.fill(num_params){new_var(tvar_level)}
@@ -423,6 +427,11 @@ Letのときは型推論呼び出す時にレベルを上げます。引数で�
         }
       }
     }
+
+レベルの処理だけ見るとあっさりした物です。
+
+型変数のレベルを浅くするのは型の出現チェックだけで、一般化関数はレベルの比較をして一般化出来るかどうかを判別してました。ネストが深まるとレベルが深くなり、型変数を作ると型レベルは保存されました。
+型変数にはレベルが保存してあり、型変数に関連する処理はそのレベルを使ってました。
 
 ## 発展について
 
