@@ -4,7 +4,19 @@
 
 http://www.pllab.riec.tohoku.ac.jp/papers/icfp2011UenoOhoriOtomoAuthorVersion.pdf
 
+こちらも参考になると思います。
 
+http://www.pllab.riec.tohoku.ac.jp/~katsu/slide-20110920.pdf
+
+smlsharpのソースコード：
+
+https://github.com/smlsharp/smlsharp/tree/master/src/runtime
+https://github.com/smlsharp/smlsharp/blob/master/src/runtime/heap_malloc.c 67行 mallocするだけ
+https://github.com/smlsharp/smlsharp/blob/master/src/runtime/heap_cheney.c 730行
+https://github.com/smlsharp/smlsharp/blob/master/src/runtime/heap_reppy.c 1095行
+https://github.com/smlsharp/smlsharp/blob/master/src/runtime/heap_otomo.c 1512行
+https://github.com/smlsharp/smlsharp/blob/master/src/runtime/heap_concurrent.c 2327行
+https://github.com/smlsharp/smlsharp/blob/master/src/runtime/heap_bitmap.c 2669
 Katsuhiro Ueno Atsushi Ohori Toshiaki Otomo ∗
 
 Research Institute of Electrical Communication
@@ -168,7 +180,7 @@ interoperability 相互運用性
 > <sup><sub>
 __This code__ dynamically links __glNormal3dv function in the OpenGL library as an ML function of type real * real * real -> unit__ and uses __it with other SML# code__.
 
-__このコード__は__型 real * real * real -> unit のML関数であるOpenGLライブラリ内のglNormal3dv関数__を直接リンクし、 そして__他のSML#コードで__使います。
+__このコード__は__型 real * real * real -> unit のML関数であるOpenGLライブラリ内のglNormal3dv関数__を動的にリンクし、 そして__他のSML#コードで__使います。
 
 > <sup><sub>
 __SML#__ compiles __(1.0, 0.0, 0.0)__ to __a pointer to a heap block containing 3 double precision floating point numbers__.
@@ -203,7 +215,7 @@ as well as だけでなく
 > <sup><sub>
 __The solution so far__ is however __only partial__ in that __data structures__ that are passed to __foreign functions__ must be allocated in __a special non-moving area__.
 
-__これまでのソリューション__はしかし__外部関数__は__特別なnon-movingエリア__内にアロケーションされる必要性があることから__データ構造__の中の部分的なもののみでした。
+__これまでのソリューション__ではしかしながら__外部関数__は__特別なnon-movingエリア__内にアロケーションされる必要性があることから__データ構造__の中の部分的なもののみでした。
 
 <sup><sub>
 commonly 一般的に
@@ -316,7 +328,7 @@ __the runtime system__ can only safely estimate that __the set of reachable obje
 including even _those_ that may be __created later by the call-back function__.
 
 なぜなら__C関数とコールバック関数の両方__は__配列を__自由に変える事が出来、
-__ランタイムシステム__は唯一安全に__C関数へ渡された配列から到達可能なオブジェクトの集合__ が __ヒープ全体の全てのいきたオブジェクト__となると推定出来て、__コールバック関数で後から作られた__ それらにも含まれている。
+__ランタイムシステム__は唯一安全に__C関数へ渡された配列から到達可能なオブジェクトの集合__ が __ヒープ全体の全てのいきたオブジェクト__となると推定出来て、__コールバック関数で後から作られた__ それらにも含まれています。
 
 ----
 
@@ -333,7 +345,7 @@ widely 広く
 > <sup><sub>
 To __solve this problem__, we would like __to develop a non-moving garbage collection algorithm suitable for functional languages__.
 
-__この問題をとく__には、我々は__関数型言語のための適切なnon-movingガーベジコレクションアルゴリズムを開発__しなければならない。
+__この問題をとく__には、我々は__関数型言語のための適切なnon-movingガーベジコレクションアルゴリズムを開発__しなければなりません。
 
 > <sup><sub>
 Since __functional programs__ rely __heavily on efficient allocation and collection__,
@@ -525,61 +537,59 @@ __The following__ is __a summary of the features of our GC algorithm__.
     so __we__ prepare __a series of sub-heaps {Hi | c ≤ i} of exponentially increasing allocation block sizes__,
     i.e. __each Hi consists of allocation blocks of 2i bytes__.
 
-    もちろん、我々は別々の十分な大きさの準備ができません
-    すべての可能なオブジェクトサイズのヒープは、我々は一連の準備
-    サブヒープの{こんにちは| C≤I}指数関数的にすなわち、アロケーションブロックサイズを増やすの各こんにちは2Iバイトのアロケーションブロックで構成されています。
-
+    もちろん、__我々__は__別々の十分な大きさのすべての可能なオブジェクトサイズのヒープ__を準備することはできません、
+    そう、__我々__は__指数関数的に増やしたアロケーションブロックサイズの一連のサブヒープ{Hi | c ≤ i}__すなわち、__各Hiで2iバイトのアロケーションブロック__を準備します。
+    
     > <sup><sub>
     Actual __allocation space of Hi__ is __dynamically maintained as a list of fixed-size segments__.
 
-    ハイの実際の割り当てスペースを動的固定サイズのセグメントのリストとして維持されます。
+    実際の__Hiの割り当てスペース__を動的固定サイズのセグメントのリストとして維持されます。
 
     > <sup><sub>
     __Each segment__ contains __an array of 2i-byte blocks__.
 
-    各セグメントは、配列が含まれています
-    2Iバイトのブロック。
+    __各セグメント__は、__2iバイトブロックの配列__が含まれています。
     
     > <sup><sub>
     __2c__ is __the minimum allocation block size in bytes__.
 
-    図2cは、バイト単位の最小割り振りブロックサイズです。
+    __図2c__は、__バイト単位の最小割り振りブロックサイズ__です。
 
     > <sup><sub>
     __In SML#__, __the minimum size of non-empty objects__ is __8(2 3) byte__, so __we__ fix __c to be 3 in this paper__.
 
-    SML＃では、非空のオブジェクトの最小サイズは8（23）バイトであるので、我々は、cは、本稿で3で固定します。
+    __SML＃では__、__非空のオブジェクトの最小サイズ__は__8（23）バイトである__ので、__我々__は、__cは、本論文の3章で補足します__。
 
     ----
 
     > <sup><sub>
     __These structures__ eliminate __the fragmentation problem associated with mark and sweep collection__.
 
-    これらの構造は、マークアンドスイープコレクションに関連付けられた断片化の問題を解消します。
+    __これらの構造__は、__マークアンドスイープコレクションに関連付けられた断片化の問題__を解消します。
 
     > <sup><sub>
     Since __a segment__ is __a fixed size array__,
-    __it__ is __efficiently maintained by a bitmap__ where __each bit corresponds to one block__.
+    __it__ is efficiently maintained __by a bitmap__ where __each bit corresponds to one block__.
 
-   セグメントは、固定サイズの配列であるので、効率的に、各ビットが一つのブロックに対応するビットマップによって維持されます。
+   なぜならば、__セグメント__は、__固定サイズの配列__だからで、__これ__は__各ビットが一つのブロックに対応する____ビットマップによって__効率的に維持されています。
 
     > <sup><sub>
-    Moreover, __size of each Hi__ is __dynamically adjusted through allocation and reclamation of segments__.
+    Moreover, __size of each Hi__ is dynamically adjusted __through allocation and reclamation of segments__.
 
-    また、各Hiのサイズを動的に配分し、セグメントの再利用を介して調整されます。
+    また、__各Hiのサイズ__は__アロケーションと、セグメントの再利用を介して__動的に調整されます。
 
     > <sup><sub>
     In __our scheme__, __an allocation block in Hi in general__ contains __an object smaller than 2i bytes__,
     and __some amount of memory__ is __unused__.
 
-    我々の方式では、一般的にハイでアロケーションブロックは2Iバイトより小さいオブジェクト含まれており、メモリのいくつかの量が使用されていません。
+    __我々の方式__では、__一般的にHiのアロケーションブロック__は__2iバイトより小さいオブジェクト__が含まれており、__メモリのいくつかの量__が__使用されていません__。
 
     > <sup><sub>
     __Our observation__ is that, __we__ can avoid costly compaction at __the expense of locally wasting space in each allocation block__,
     and that __this cost__ is __quite acceptable in practice__.
 
-    我々の観察では、我々はローカルに各割り当てブロック内のスペースを無駄にすることを犠牲にして高コスト圧縮を避けることができる、ということです
-    このコストは実際には非常に許容可能であること。
+    __我々の観察__では、__我々__はローカルに各アロケーションブロック内のスペースを無駄にすることを犠牲にして__高コストのコンパクション__を避けることができ、
+    __このコスト__は__実際には非常に許容可能__であるというということです。
 
     > <sup><sub>
     __Our evaluation__ shows that __the space usage__ is better than __that of copying GC in most cases__.
@@ -639,21 +649,41 @@ __The following__ is __a summary of the features of our GC algorithm__.
     > <sup><sub>
     __A bitmap__ can be used not only __for marking__ but also __for allocation by searching for a free bit in a bitmap__.
 
+    ビットマップはマークなしに使う事が出来ますが、ビットマップ中にフリービットを検索するためにアロケーションします。
+
+    ビットマップは、ビットマップ内の空きビットを検索することにより、マーキングのためだけでなく、割り当てのために使用できるだけでなく。
+
     > <sup><sub>
     __Simple search for a free bit in a bitmap__ takes,
     __in the worst case__,
     __the time proportional to the number of busy bits__.
 
+    ビットマップのフリービットのシンプルな検索は、
+    ワーストケースでは、
+    ビジービットの数に比例した時間がかかります。
+
     > <sup><sub>
     Perhaps __due to this problem__, __most of bitmap based GC algorithms__ use __some form of free list for allocation__.
 
-    おそらく、この問題に起因して、
+    おそらく、この問題に起因して、更なるビットマップGCアルゴリズムはアロケーションのフリーリストの形から、使われます。
+
+    おそらく、この問題のため、ビットマップの最もベースのGCアルゴリズムは、割り当てのために空きリストのいくつかのフォームを使用します。
+
 
     > <sup><sub>
     __We__ solve __this problem by adding meta-level bitmaps__ that __summarize the contents of bitmaps__.
 
+    我々はこの問題をビットマップのコンテンツのサマライズのメタレベルビットマップの追加によって解決します。
+
+    我々は、ビットマップの内容を要約するメタレベルのビットマップを追加することによって、この問題を解決します。
+
     > <sup><sub>
-    __The set of all bitmaps form a hierarchically__ organized __tree__.
+    __The set of all bitmaps__ form __a hierarchically organized tree__.
+
+    全てのビットマップの集合は階層的に組織されたツリーを形成します。
+
+
+    すべてのビットマップのセットが階層的に組織ツリーを形成します。
 
     > <sup><sub>
     __The sequence of bits at the leaf level in the tree__ is __the ordinary bitmap representing liveness of the set of allocation blocks__,
@@ -675,15 +705,7 @@ __The following__ is __a summary of the features of our GC algorithm__.
     __the next free bit__ can be found __in a small constant time for most cases__,
     and __in log32(segmentSize) time in the worst case__.
 
-    ビットマップは、ビットマップ内の空きビットを検索することにより、マーキングのためだけでなく、割り当てのために使用できるだけでなく。
 
-    ビットマップ内の空きビットのための簡単​​な検索では、最悪の場合には、忙しいビット数に比例する時間がかかります。
-
-    おそらく、この問題のため、ビットマップの最もベースのGCアルゴリズムは、割り当てのために空きリストのいくつかのフォームを使用します。
-
-    我々は、ビットマップの内容を要約するメタレベルのビットマップを追加することによって、この問題を解決します。
-
-    すべてのビットマップのセットが階層的に組織ツリーを形成します。
 
     ツリーのリーフレベルでのビットのシーケンスは、アロケーションブロックのセットの生存性を表す一般的なビットマップです
     中間レベルでのビットのシーケンスは、以下のビットマップ1のレベルをまとめたものです。
@@ -935,6 +957,18 @@ We use a given allocation space as a pool of fixed size allocation areas, called
 
     heap = (M, S, (H3, ..., H12))
 
+    H3 8
+    H4 16
+    H5 32
+    H6 64
+    H7 128
+    H8 256
+    H9 512
+    H10 1024
+    H11 2048
+    H12 4096
+
+
 > <sup><sub>
 `M` is a special sub-heap for large objects explained earlier.
 `S` is a free segment pool, i.e. set of unused segments.
@@ -1019,7 +1053,7 @@ where `BM j i` is the j-th level bitmap which is a sequence of bits organized as
 > <sup><sub>
 We write `BM j i (k)` to denote the k-th bit and `BM j i [k]` the k-th word in the j-th level bitmap.
 
-我々は、k番目の単語を示すために`BM j i (k)`と記述し、j番目のレベルのビットマップ内のk番目のビットを`BM JI[k]`と
+我々は、k番目の単語を示すために`BM j i (k)`と記述し、j番目のレベルのビットマップ内のk番目のビットを`BM j i [k]`と
 記述します。
 
 > <sup><sub>
@@ -1068,15 +1102,15 @@ In addition, we need to make average allocation as efficient as possible so that
 To this end, we observe that in most cases the block array Blks i is very sparsely used after GC.
 So we adopt the following strategy.
 
-上記構成により、こんにちはでSegListiは、ビットマップの1（仮想）階層的に組織木で管理される単一の割り当て領域を形成しています。
+上記構成により、HiでSegListiは、ビットマップの1（仮想）階層的に組織木で管理される単一の割り当て領域を形成しています。
 
 リスト自体は、各ビットが各セグメントが満杯かどうかであり、リスト内の各セグメントは、ルートビットマップの即時のサブツリーとみなされるか否かを示すビットマップ全体のツリーのルートビットマップとみなされます。
 
-この構造は、こんにちはで次の空きブロックが最悪の場合、log32（Sizei）時間で見つけることができることを保証します。
+この構造は、Hiで次の空きブロックが最悪の場合、log32（Sizei）時間で見つけることができることを保証します。
 
-また、我々はそれがチェイニーGCの「割り当てをバンプ」に匹敵することができるようにできるだけ平均配分が効率的にする必要があります。
+また、我々はそれがチェイニーGCの「アロケーションのバンプ」に匹敵することができるようにできるだけ平均配分が効率的にする必要があります。
 
-この目的のために、我々は、ほとんどの場合、ブロックアレイは、BLKS私は非常にまばらにGC後に使用されることを確認します。
+この目的のために、我々は、ほとんどの場合、ブロック配列は、BLKS私は非常にまばらにGC後に使用されることを確認します。
 
 だから我々は、次の戦略を採用。
 
@@ -1087,7 +1121,7 @@ If this block is free then the allocator simply returns this next block and adva
 3. If the next block is live, then the allocator searches for the next free bit using the bitmap tree. To perform this search efficiently, we maintain the next bit position information for higher-level bitmaps.
 The allocation pointer Pi in Hi introduced in the previous subsection is for this purpose, whose structure is given below.
 
-1.我々は、順次こんにちはにおける次の空きブロックを割り当てます。
+1.我々は、順次Hiにおける次の空きブロックを割り当てます。
 
 2.我々は、アロケーションブロックの次の候補の位置情報を保持し、高速割り当ての典型的なケースを作るために。
 
@@ -1095,7 +1129,7 @@ The allocation pointer Pi in Hi introduced in the previous subsection is for thi
 
 次のブロックが実稼働中である場合3.その後、アロケータは、ビットマップ・ツリーを使用して、次の空きビットを検索します。効率的にこの検索を実行するために、我々は、より高いレベルのビットマップの次のビット位置情報を保持します。
 
-前節で導入こんにちはにおけるアロケーションポインタPiがその構造が以下に与えられる、この目的のためのものです。
+前節で導入HiにおけるアロケーションポインタPiがその構造が以下に与えられる、この目的のためのものです。
 
     Pi = (Si, BitPtrs i, BlkPtr i)
     BitPtrs i = (BitPtr 0i, . . . , BitPtr Li−1i)
@@ -1108,17 +1142,17 @@ For each `0 ≤ j ≤ Li − 2, BitPtr j+1i` points to the parent bit representi
 BlkPtr i is a block pointer indicating the block address corresponding to the bit pointed by BitPtr 0i.
 Using these pointers, allocation is done as fast as “bump allocation” when the next block is free.
 
-Siはブロックが割り当てられているされているセグメント、すなわちハイでアクティブなセグメントへのポインタです。
+Siはブロックが割り当てられているされているセグメント、すなわちHiでアクティブなセグメントへのポインタです。
 
 BitPtrs iがSi中の次のビット位置を示すビットポインタが検討されるべきです。
 
 BitPtr0Iは、リーフレベルのビットマップのBM0Iでテストされる次のビット位置を示します。
 
-各`0≤j個の≤のリチウムの場合 - 2、BitPtr JIの指すビットを含むビットマップ単語を表す親ビットにBitPtrのJ +1i`ポイント。
+各`0≤j≤li - 2,BitPtr j +1i`の場合、BitPtr JIの指すビットを含むビットマップ単語を表す親ビットに`ポイント。
 
 BlkPtr私はBitPtr0Iが指し示すビットに対応するブロックアドレスを示すブロックポインタです。
 
-これらのポインタを使用して、割り当てが次のブロックが空いているとき、「割り当てバンプ」と同じくらい高速で実行されます。
+これらのポインタを使用して、割り当てが次のブロックが空いているとき、「バンプアロケーション」と同じくらい高速で実行されます。
 
 
 _Figure 1 and 2_ shows _the structures of the set of sub-heaps and a segment, respectively_.
@@ -1147,7 +1181,7 @@ Our benchmark tests show the following average allocation ratio (in number of re
 
 同様の表記は`BitMap i`を含む他のすべての要素、`BM j i`などに使用されています。
 
-割り当てアルゴリズムの構造は、ALLOC（n）は第一findSubHeapBySize機能によってサブヒープハイの位置を、図3に示されています。
+割り当てアルゴリズムの構造は、ALLOC（n）は第一findSubHeapBySize機能によってサブヒープHiの位置を、図3に示されています。
 
 ターゲットCPUは、（例えば、x86のマシンのBSR命令のような）整数の0ビットを後続ネイティブ命令カウントを持っている場合、この関数は、いくつかの一連の命令によって実施することができます。
 
@@ -1155,34 +1189,64 @@ Our benchmark tests show the following average allocation ratio (in number of re
 
 我々のベンチマークテストは、最初の4サイズの（要求数）以下の平均割当比率を示します。
 
+    // サイズnのアロケーションする関数
     alloc(n) {
+        // サブヒープを探す
         Hi = findSubHeapBySize(n);
+
+        // アロケーションを試す
         temp = tryAlloc(Hi);
         if (temp == Fail) {
+            // 失敗したらGCをして
             bitmapMarkingGC();
+            // もう一度アロケーションする
             temp = tryAlloc(Hi); }
         return temp;
     }
+
+    // アロケーションする
     tryAlloc(Hi) {
+        // Piがマークされていれば
         if (isMarked(Pi)) {
+            // 次のフリーブロックを探す
             if (findNextFreeBlock(Pi) == Fail) {
+                // なかったら次のセグメントを探す
                 if (nextSegment(SegList i, Pi) == Fail) {
+                    // なかったら、Hiの次のセグメントを作る
                     if (newSegment(Hi) == Fail) {
+                        // 作れなければエラー
                         return Fail; } }
+                // 次のフリーブロックを探す
                 findNextFreeBlock(Pi); } }
+        // ブロックを取得して
         temp = BlkPtr i;
+        // ポインタを進め
         inc(Pi);
+        // 返す
         return temp;
     }
+
+    // セグメント
     newSegment(Hi) {
+        // セグメントをアロケーションし
         S = allocSegment(i);
+        // 失敗したら終わる
         if (S == Fail) return Fail;
+
+        // SegListにSを追加し
         append S to SegList i;
+
+        // 最後のセグメントの最初のブロックのポインタを設定し
         Pi = firstBlockOfLastSegment(SegList i);
+        //帰る
         return Success;
     }
+
+    // ポインタを進める
     inc(Pi) {
+        // ブロックのポインタを進め
         incBlkPtr(BlkPtr(i) );
+        // 0のブロックのポインタも進める
         incBitPtr(BitPtr(0, i) );
     }
 
@@ -1273,23 +1337,37 @@ Figure 4 shows the structure of the bit search algorithm, which uses the followi
 This operation can be implemented efficiently through bit manipulations as well as bit pointer primitives defined earlier.
 
 
+    // ポインタを受け取って、次のフリーなブロックを探す
     findNextFreeBlock(Pi) {
+        // 次のマスクを探し
         Mask 0 i = nextMask(BitPtr 0 i );
+
+        // なかった
         if (Mask 0 i == Fail) {
+            // ポインタを進める
             if (forwardBitPtr(Pi, 0) == Fail) {
                 return Fail; } }
+        // ブロックアドレスを取り出す。
         BlkPtr i = blockAddress(Si, BitPtr 0 i );
         return Success;
     }
 
+    // ポインタを進める
     forwardBitPtr(Pi, j) {
+        // j + 1がLiを超えてたら失敗
         if (j + 1 ≥ Li) return Fail;
+        // インデックスを求める
         BitPtr j+1 i = indexToBitptr(Idx j i);
+        // 次のマスクを探す
         Mask j+1 i = nextMask(BitPtr j+1 i);
+        // なかった
         if (Mask j+1 i == Fail) {
+            // ポインタを進める
             if (forwardBitPtr(Pi, j + 1) == Fail) {
                 return Fail; } }
+        // ビットのポインタからインデックスにする
         Idx j i = bitptrToIndex(BitPtr j+1 i);
+        // 次のマスクを求める
         Mask j i = 1;
         Mask j i = nextMask(BitPtr j i);
         return Success;

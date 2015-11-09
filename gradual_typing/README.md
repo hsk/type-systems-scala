@@ -279,7 +279,7 @@ We extend the expressions of `algorithm_w` by adding type annotations to functio
 The setting `dynamic_parameters` controls whether function parameters without type annotations are treated as having dynamic types (as in dynamically-typed languages) or as statically-typed variables with yet-unknown types.
 For examples, `fun g -> g(true)` can be treated as `fun (g : ?) -> g(true)` or as `fun (g : some[a] a) -> g(true)` (syntax sugar allows the latter to be written as `fun (g : _) -> g(true)`), for which the system infers the type `forall[a] (bool -> a) -> a`.
 
-`algorithm_w`とこの実装間の主な変更点は、ファイル`infer.ml`[こちら][git-diff]で見ることができます。
+`algorithm_w`とこの実装間の主な変更点は、ファイル`infer.ml`[こちら][git-diff]で見られる。
 私たちは、パラメータを機能するように型注釈を追加することにより、`algorithm_w`の表現を拡張(`fun (x : int) -> x + 1`)、
 letバインドされた変数 (`let x : ? = 1`) とスタンドアロンの式 (`f(x) : int`)。
 型注釈のない関数のパラメータは、まだ未知のタイプで（動的型付け言語のように）動的な型として、または静的に型付けされた変数持つものとして扱われているかどうかを制御するdynamic_parameters`設定`。
