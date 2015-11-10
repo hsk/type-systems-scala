@@ -201,8 +201,8 @@ Function `f2` should be rejected by the algorithm, because no statically-typed v
 In particular, inferring `x : ?` for function `f2` is not a desired outcome of the type inference algorithm.
 However, it should infer type `? -> int` for function `f3`, deferring the type-checks to runtime (at runtime, `f3(true)` will not result in a type error).
 
-型推論アルゴリズムが正しく、パラメータの型`x`が関数`f1`は`int`であることを推論する必要があり、`+`演算子の引数としての使用に基づきます。
-静的に型付けされた値が `bool` と `int` の両方として使用することはできないので、関数 `f2`は、アルゴリズムによって拒否されるべきです。
+型推論アルゴリズムは正しく、`+`演算子の引数としての使用に基づいて、関数`f1`のパラメータ`x`の型が`int`であることを推論する必要があります。
+静的に型付けされた値が `bool` と `int` の両方として使用することはできないので、関数 `f2` は、アルゴリズムによって拒否されるべきです。
 具体的には、関数`f2`の推論`x : ?`は型推論アルゴリズムの望ましい結果ではありません。
 しかし、ランタイムに型チェックを遅延して(実行時に、f3(true)は型エラーにはなりません)、`f3`関数の型`? -> int`を推論する必要があります。
 
@@ -279,10 +279,10 @@ We extend the expressions of `algorithm_w` by adding type annotations to functio
 The setting `dynamic_parameters` controls whether function parameters without type annotations are treated as having dynamic types (as in dynamically-typed languages) or as statically-typed variables with yet-unknown types.
 For examples, `fun g -> g(true)` can be treated as `fun (g : ?) -> g(true)` or as `fun (g : some[a] a) -> g(true)` (syntax sugar allows the latter to be written as `fun (g : _) -> g(true)`), for which the system infers the type `forall[a] (bool -> a) -> a`.
 
-`algorithm_w`とこの実装間の主な変更点は、ファイル`infer.ml`[こちら][git-diff]で見られる。
-私たちは、パラメータを機能するように型注釈を追加することにより、`algorithm_w`の表現を拡張(`fun (x : int) -> x + 1`)、
-letバインドされた変数 (`let x : ? = 1`) とスタンドアロンの式 (`f(x) : int`)。
-型注釈のない関数のパラメータは、まだ未知のタイプで（動的型付け言語のように）動的な型として、または静的に型付けされた変数持つものとして扱われているかどうかを制御するdynamic_parameters`設定`。
+`algorithm_w`とこの実装間の主な変更点は、ファイル`infer.ml`[こちら][git-diff]で見られます。
+我々は、関数パラメータ(`fun (x : int) -> x + 1`)、letバインドされた変数 (`let x : ? = 1`) そしてスタンドアロンの式 (`f(x) : int`)へ型注釈を追加することにより、`algorithm_w`の式を拡張しました。
+
+`dynamic_parameters`の設定は、型注釈のない関数のパラメータが、まだ未知の型で（動的型付け言語のように）動的な型として、または静的に型付けされた変数持つものとして扱われているかどうかを制御します。
 
 <sup><sub>
 introduce 紹介します
@@ -303,8 +303,8 @@ We also introduce type constructor `TDynamic`, used to represent `?`.
 However, `TDynamic` is only used to represent type `?` for variables in type environment; as soon as the variable is used, `TDynamic` is instantiated and replaced with a fresh *dynamic type variable*, which is represented by constructor `Unbound` but distinguished from an *ordinary type variable* with a boolean flag.
 This is not unlike the treatment of polymorphic types in Algorithm W; indeed, when a variable with a polymorphic type is used, its type is instantiated by replacing all occurrences of generic type variables with fresh ordinary type variables. Conversely, just as polymorphic types can be recovered at let-bindings by generalizing free ordinary type variables, so can dynamic type variables be *frozen* at let-bindings by replacing them with `TDynamic` types (this is controlled by the setting `freeze_dynamic`).
 
-また、型コンストラクタの`TDynamic`を導入、`?`を表すために使用されます。
-しかし、`TDynamic`は、タイプが環境における変数の型TTTを表すために使用されます; すぐに変数を使用するように、`TDynamic`がインスタンス化され、新鮮な*ダイナミック型変数*に置き換えられ、ブールフラグと*通常の型変数*から`Unbound`が、著名なコンストラクタによって表されます。
+我々は、また、`?`を表すために使用される、型コンストラクタ`TDynamic`を導入します。
+しかしながら、`TDynamic`は、型が環境における変数の型TTTを表すために使用されます; すぐに変数を使用するように、`TDynamic`がインスタンス化され、新鮮な*ダイナミック型変数*に置き換えられ、ブールフラグと*通常の型変数*から`Unbound`が、著名なコンストラクタによって表されます。
 これは、アルゴリズムW中の多型の型の処置と似ていなくもではありません; ポリモーフィック型の変数が使用されている場合、実際に、その型は、新鮮な通常の型変数でジェネリック型変数のすべての出現を置換することにより、インスタンス化されます。
 逆に、ポリモーフィック型は自由通常タイプの変数を一般化してみましょうバインディングで回収することができるので、ダイナミック型の変数は、（これは設定`freeze_dynamicによって制御されている` TDynamic`タイプに置き換えることにより、レットバインディングで*凍結*することができます同じように`）。
 
