@@ -12,8 +12,8 @@ denote 示す
 This is a rather small extension of the Damas-Hindley-Milner unification-based type inference algorithm, which allows programmers to combine static and dynamic types in a single language.
 In addition to standard types and type schemes (polymorphic types), it supports a special *dynamic* type, which is automatically cast to any other type as necessary.
 
-これは、プログラマは、単一の言語で静的および動的なタイプの組み合わせることができダマ・ヒンドリー - ミルナー統一ベース型推論アルゴリズムのかなり小さい拡張したものです。
-標準タイプと型スキーム（多相型）に加えて、必要に応じて自動的に他の型にキャストされた特別な*動的*型をサポートしています。
+これは、プログラマが、単一の言語で静的型か動的型の組み合わせを許す、ダマ・ヒンドリー - ミルナ単一化ベース型推論アルゴリズムのかなり小さな拡張です。
+標準型と型スキーム(多相型)に加えて、必要に応じて自動的に他の型にキャストされた特別な*動的*型をサポートします。
 
 
 > <sup><sub>
@@ -35,7 +35,7 @@ In the recent years, there has been a surge of interest in combining their benef
 The general idea is to give the programmers the benefits of static typing (earlier detection of errors and faster execution speed) while allowing them to bypass the static type system when necessary or convenient (e.g. when protoyping new functionality or handling dynamic data formats such as JSON). 
 
 静的および動的型付け言語の両方が、その紛れもない長所と短所があり、両方の巨大な、複雑なソフトウェアシステム構築するために使用されます。
-近年では、その利点を組み合わせることへの関心の高まりがあった：型 `dynamic` は `invokedynamic` 命令がJVMに追加された、C#のに加え、JavaScriptが活字とダートは、オプションの型注釈を提供後継者、...
+近年では、その利点を組み合わせることへの関心の高まりがありました：型 `dynamic` はC#に追加され、`invokedynamic` 命令がJVMに追加され、JavaScriptの後継であるTypeScriptとDartは、オプションの型注釈を提供する、...
 一般的な考え方は、静的型システムをバイパスするためにそれらを可能にしながら、プログラマに静的型付け（エラーや実行速度の早期検出）の恩恵を与えることであるときに（必要または便利な例えば、新しい機能をprotoypingや、JSONなどの動的データ・フォーマットを処理するとき）。
 
 <sup><sub>
@@ -51,7 +51,7 @@ The notation `?` will be used to denote the dynamic type.
 
 この実装は、ジェレミーG. Siek氏と共同研究者の仕事に続いて、型理論的な視点から静的および動的型付けのユニオンについて検討します。
 まず、*gradual type-checking*と*gradual type-inference*のトピックは gradual 型推論アルゴリズムの説明と関連研究についての議論が続く、議論されています。
-表記 `?` はダイナミック型を示すために使用されます。
+表記 `?` は動的型を示すために使用されます。
 
 
 > <sup><sub>
@@ -89,10 +89,11 @@ This means that implicit casts from type `?` to static types (e.g. `int`, `bool`
 One way to achieve this is to use subtyping; this was attempted by Satish Thatte in his paper Quasi-static typing [1].
 However, subtyping is a transitive relation, meaning that if `int <: ?` and `? <: bool`, then `int <: bool`, which is not something we want.
 
-緩やかな型チェックの述べた目標は非常に簡単です：
-完全に注釈を付けている(すべての項は、静的な型を持つ)プログラムは完全に(静的に)タイプセーフです。
-ダイナミック型の存在で、この目的を果たすことは非常にとらえどころのないことが判明しました。
-動的型付け言語の感覚を達成するために、我々はシームレスに静的におよび動的型付けの値との間で移行できるようにします。
+漸進型チェックの目標は非常にシンプルです:
+完全に注釈付けられた(すべての項が、静的な型を持つ)プログラムは完全に(静的に)型安全です。
+動的型の存在で、この目的を果たすことは非常にとらえどころのないことが判明しました。
+動的型付け言語の感覚を達成するために、我々は静的な型の値と動的型の値の間でシームレスに変換できるようにします。
+この意味は`?`型から静的型(例えば`int`、`bool`そして`int -> int`)への暗黙的型変換、及び静的型から`?`型へ戻す暗黙的型変換が許される必要があります。
 
 <sup><sub>
 their 彼らの
@@ -107,8 +108,8 @@ themselves それら自身
 In their paper [Gradual Typing for Functional Languages][gradual], Jeremy G. Siek and Walid Taha propose a different way of treating `?` based on *type consistency* (`~`), which is *not* a transitive relation.
 In short, `?` is consistent with everything, base types are consistent only with themselves, and function types are consistent if their parameter and return types are consistent.
 
-彼らの論文では、[関数型言語のための段階的タイピング][gradual]、ジェレミーG. Siek氏とWalid Tahaは、(`~`)`？`*に基づく型の一貫性*を治療する別の方法を提案し、これは推移的関係では*ありません*。
-要するに、 `?` すべてと一致して、ベースのタイプは自分自身だけで一致しており、それらのパラメータと戻り値の型が一致している場合、関数の型は一致しています。
+彼らの論文では、[関数型言語のための段階的タイピング][gradual]、Jeremy G. Siek と Walid Tahaは、`?` に基づく 推移的関係では*ない* *型の一貫性*(`~`) を維持する別の方法を提案しました。
+要するに、`?`は すべてと一致し、ベースの型は自分自身だけで一致しており、関数の型はパラメータと戻り値の型が一致している場合、一致します。
 
 ```
 ? ~ int
@@ -134,8 +135,8 @@ compared 比べ
 Note that since `~` is not transitive, we do not have `int -> int ~ bool -> int` even though `int -> int ~ ? -> int` and `? -> int ~ bool -> int`.
 Furthermore, type consistency is symmetric, which makes the type-checking algorithm considerably simpler (compared to subtyping).
 
-`~` は推移的ではないので`int -> int ~ ? -> int`かつ`? -> int ~ bool -> int`であるにもかかわらず、我々は、`int -> int ~ bool -> int`を持っていないことに注意してください。
-また、型の一貫性は対称なため、（サブタイプと比較して）型チェックアルゴリズムはかなり簡単になります。
+`~` は推移的ではないので注意が必要で、`int -> int ~ ? -> int`かつ`? -> int ~ bool -> int`だとしても、`int -> int ~ bool -> int`ではありません。
+また、型の一貫性は対称なため、（サブタイプと比較して）型チェックアルゴリズムはかなり簡単です。
 
 <sup><sub>
 compatibility 互換性
@@ -148,8 +149,8 @@ occurrence 出現
 Using type compatibility, we can type-check a gradually-typed program by implicitly converting a type into any consistent type as necessary.
 This is quite similar to the way unbound type variables are treated, except that each occurrence of type `?` is treated as a fresh type variable.
 
-型の互換性を使用して、我々は、暗黙のうちに、必要な一貫性のある型に型変換することによって徐々に型付けされたプログラムを型検査することができます。
-これは、結合していない型変数を処理する方法と非常によく似ており、その以外のタイプ`?`の各出現は、新鮮な型の変数として扱われます。
+型の互換性を使用して、我々は、暗黙のうちに、必要な一貫性のある型に型変換することによって前進的型付けされたプログラムを型検査することができます。
+これは、結合していない型変数を処理する方法と非常によく似ており、それ以外の`?`型の各出現は、新鮮な型の変数として扱われます。
 
 
 > <sup><sub>
@@ -172,9 +173,9 @@ To make this type system practical, we must extend the gradual type-checking alg
 The type inference algorithm should do what type inference algorithms usually do: allow the programmer to omit most, if not all, type annotations in programs that do not use dynamic types (i.e. that have no variables and parameters with type `?` and call no functions returning `?`).
 Meanwhile, the algorithm should not obstruct the programmer when he or she wants to use dynamic types.
 
-このタイプのシステムを実用的にするために、我々は緩やかな型推論アルゴリズムで緩やかな型チェックアルゴリズムを拡張する必要があります。
+この型システムを実用的にするために、我々は漸進型推論アルゴリズムで漸進型チェックアルゴリズムを拡張する必要があります。
 型推論アルゴリズムは、通常プログラマがほとんど省略することができ、すべてではないが、動的なタイプの使用しないプログラムに型注釈をかける(つまり、型`?`とは変数とパラメータを持たず、`?`を返す関数を呼び出さない)型推論アルゴリズムである必要があります。
-一方、彼または彼女は動的な型を使用したい場合、アルゴリズムは、プログラマを邪魔してはいけません。
+一方、彼または彼女が動的な型を使用したい場合、アルゴリズムは、プログラマを邪魔してはいけません。
 
 ```
 let f1(x) = x + 1
@@ -235,7 +236,7 @@ essence エッセンス
 In the type inference algorithm, this requirement is satisfied by a very simple rule: an ordinary (non-dynamic) type variable unified with a dynamic type becomes a dynamic type variable, and an ordinary or dynamic type variable unified with a type other than `?` is substituted for that type.
 In essence, the type inference algorithm tracks the lower bound of a type variable, which can only move from less informative to more informative.
 
-型推論アルゴリズムでは、この要件は、非常に単純なルールによって満たされます：ダイナミック型は、ダイナミック型変数になると一体化し、変数の型、通常の（非動的）、および以外の型で単一化普通またはダイナミック型の変数は`?`その型に代入されます。
+型推論アルゴリズムでは、この要件は、非常に単純なルールによって満たされます：動的型は、動的型変数になると一体化し、変数の型、通常の（非動的）、および以外の型で単一化普通または動的型の変数は`?`その型に代入されます。
 本質的には、型推論アルゴリズムは、下型変数のバインドを追跡し、唯一のより多くの情報を小さい有益から移動することができます。
 
 > <sup><sub>
@@ -304,9 +305,9 @@ However, `TDynamic` is only used to represent type `?` for variables in type env
 This is not unlike the treatment of polymorphic types in Algorithm W; indeed, when a variable with a polymorphic type is used, its type is instantiated by replacing all occurrences of generic type variables with fresh ordinary type variables. Conversely, just as polymorphic types can be recovered at let-bindings by generalizing free ordinary type variables, so can dynamic type variables be *frozen* at let-bindings by replacing them with `TDynamic` types (this is controlled by the setting `freeze_dynamic`).
 
 我々は、また、`?`を表すために使用される、型コンストラクタ`TDynamic`を導入します。
-しかしながら、`TDynamic`は、型が環境における変数の型TTTを表すために使用されます; すぐに変数を使用するように、`TDynamic`がインスタンス化され、新鮮な*ダイナミック型変数*に置き換えられ、ブールフラグと*通常の型変数*から`Unbound`が、著名なコンストラクタによって表されます。
+しかしながら、`TDynamic`は、型が環境における変数の型TTTを表すために使用されます; すぐに変数を使用するように、`TDynamic`がインスタンス化され、新鮮な*動的型変数*に置き換えられ、ブールフラグと*通常の型変数*から`Unbound`が、著名なコンストラクタによって表されます。
 これは、アルゴリズムW中の多型の型の処置と似ていなくもではありません; ポリモーフィック型の変数が使用されている場合、実際に、その型は、新鮮な通常の型変数でジェネリック型変数のすべての出現を置換することにより、インスタンス化されます。
-逆に、ポリモーフィック型は自由通常タイプの変数を一般化してみましょうバインディングで回収することができるので、ダイナミック型の変数は、（これは設定`freeze_dynamicによって制御されている` TDynamic`タイプに置き換えることにより、レットバインディングで*凍結*することができます同じように`）。
+逆に、ポリモーフィック型は自由通常タイプの変数を一般化してみましょうバインディングで回収することができるので、動的型の変数は、（これは設定`freeze_dynamicによって制御されている` TDynamic`タイプに置き換えることにより、レットバインディングで*凍結*することができます同じように`）。
 
 <sup><sub>
 duplicate 複製
@@ -317,8 +318,8 @@ The idea that makes polymorphic types polymorphic and dynamic types dynamic is t
 However, each type variable can only be unified once, with a single type.
 This can be a problem when using functions such as `duplicate : forall[a] a -> pair[a, a]`, which duplicate type variables. The following results in an error:
 
-アイデアは多相型の多相と動的型のダイナミックは、新鮮な型変数が他のタイプに単一化することができるということです。
-しかし、それぞれの型変数は、単一のタイプで、一度単一化することができます。
+アイデアは多相型の多相と動的型の動的は、新鮮な型変数が他のタイプに単一化することができるということです。
+しかし、それぞれの型変数は、単一の型で、一度単一化することができます。
 型変数を複製するような`duplicate : forall[a] a -> pair[a, a]`などの関数を使用する場合に問題となり得ます。
 エラーで以下の結果が得られます：
 
@@ -337,7 +338,7 @@ equivalent 同等の
 > <sup><sub>
 To avoid this issue with dynamic types, we duplicate dynamic type variables after every function call, which is equivalent to first generalizing and then instantiating the result type, the trick used in `first_class_polymorphism`.
 
-ダイナミック型でこの問題を回避するには、我々は、すべての関数呼び出し後のダイナミック型の変数を複製し、これは最初の一般化に相当し、その結果タイプをインスタンス化、`first_class_polymorphism`で使用するトリック。
+動的型でこの問題を回避するには、我々は、すべての関数呼び出し後の動的型の変数を複製し、これは最初の一般化に相当し、その結果タイプをインスタンス化、`first_class_polymorphism`で使用するトリック。
 
 ```
 let x : ? = 1
@@ -396,10 +397,10 @@ However, if a dynamic function `fun (x : ?) -> not x` is cast to type `bool -> i
 The research into the topic of correctly assigning *blame* in gradually-typed programs has culminated in the *blame theorem*, which states that "well-typed programs cannot be blamed", meaning that blame is always assigned to the dynamically-typed portion of the program.
 A nice overview of this topic is provided in [5].
 
-緩やかな型推論は複雑されていませんが、徐々に型付けされた言語の実装では、動的に型付けされた関数は、静的な型にキャストされたときに、静的に型付けされた関数は、動的コードで使用されるか、または場合は特に、注意が必要です。
-1つの問題は、実行時エラーの正確な報告です。例えば、関数 `INC時：intは - > int`引数は`true`とダイナミック型にキャストと呼ばれている、システムは機能が*間違った型の引数を指定して*と呼ばれていたというエラーを報告する必要があります。
-しかし、動的関数`楽しく場合（X：？）は - > BOOL`型にキャストされたX 'ではない - > int`と引数は `true`に適用される、誤差関数が*返さことを言う必要があり*誤ったの値入力します。
-徐々に型付けされたプログラムで正しく割り当て*非難*のトピックの研究は、責任は常に動的に型付けされた部分に割り当てられていることを意味し、「よく型付けされたプログラムは非難することはできない」と述べている*の非難の定理*、で最高潮に達していますプログラムの。
+漸進型推論は複雑ではありませんが、前進的型付けされた言語の実装上で、動的型付けされた関数が静的な型にキャストされたとき、あるいは静的型付けされた関数が動的コードで使用されたときに、特に注意が必要です。
+1つの問題は、実行時エラーの正確な報告です; 例えば、関数 `inc : int -> int` が動的型にキャストして、引数`true`で呼ばれたときに、システムは関数が間違った型の引数を指定して*呼ばれた*というエラーを報告する必要があります。
+しかし、動的関数`fun (x : ?) -> not x`が`bool -> int`型にキャストされ、引数`true`を適用された場合は、関数が誤ったの値の型*返された*ことを報告する必要があります。
+前進的型付けされたプログラムで正しく割り当て*非難*のトピックの研究は、責任は常に動的に型付けされた部分に割り当てられていることを意味し、「よく型付けされたプログラムは非難することはできない」と述べている*の非難の定理*、で最高潮に達していますプログラムの。
 このトピックの素晴しい概要は[5]で設けられています。
 
 <sup><sub>
@@ -431,7 +432,7 @@ However, if we have two functions that call each other recursively (e.g. the [ba
 A related issue is how to implement casts such as `((inc : int -> int) : ?) : bool -> bool` - should the type error be reported immediately, or only when the function is first used?
 The first issue is touched upon in [5], while the second is elaborated more deeply in [6] and also explained in a [series of blog posts][blog-post].
 
-関連の問題は、適切なタイミングで効率的に型キャストを翻訳し、報告するエラーのことです。
+関連の問題は、適切なタイミングで効率的に型キャストを翻訳し、報告するエラーです。
 関数はキャスト実装の簡単な方法は、別々の引数と戻り値をキャストすることです：`f`が`? -> ?`型を持つ場合、その後、キャスト`f : int -> bool`は`fun (x : int) -> (f(x) : bool)`としてコンパイルすることができます。
 
 <sup><sub>
