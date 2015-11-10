@@ -35,13 +35,15 @@ In the recent years, there has been a surge of interest in combining their benef
 The general idea is to give the programmers the benefits of static typing (earlier detection of errors and faster execution speed) while allowing them to bypass the static type system when necessary or convenient (e.g. when protoyping new functionality or handling dynamic data formats such as JSON). 
 
 静的および動的型付け言語の両方が、その紛れもない長所と短所があり、両方の巨大な、複雑なソフトウェアシステム構築するために使用されます。
-近年では、その利点を組み合わせることへの関心の高まりがありました：型 `dynamic` はC#に追加され、`invokedynamic` 命令がJVMに追加され、JavaScriptの後継であるTypeScriptとDartは、オプションの型注釈を提供する、...
-一般的な考え方は、静的型システムをバイパスするためにそれらを可能にしながら、プログラマに静的型付け（エラーや実行速度の早期検出）の恩恵を与えることであるときに（必要または便利な例えば、新しい機能をprotoypingや、JSONなどの動的データ・フォーマットを処理するとき）。
+近年では、その利点を組み合わせることへの関心の高まりがありました： `dynamic` 型がC#に追加され、`invokedynamic` 命令がJVMに追加され、JavaScriptの後継であるTypeScriptとDartは、オプションの型注釈を提供する、など...
+一般的な考え方は、（例えば、新しい機能のプロトタイプを作るときや、JSONなどの動的データ・フォーマットを処理する）ときに必要または便利な、静的型システムをバイパスするためにそれらを可能にし、プログラマに静的型付け（エラーや実行速度の早期検出）の恩恵を与えます。
+
 
 <sup><sub>
 collaborators 共同研究者
 notation 表記
 denote 意味する
+explanation 説明
 </sub></sup>
 
 > <sup><sub>
@@ -49,8 +51,8 @@ This implementation explores the union of static and dynamic typing from a type-
 First, the topics of *gradual type-checking* and *gradual type-inference* are discussed, followed by an explanation of a gradual type-inference algorithm and a discussion of related research.
 The notation `?` will be used to denote the dynamic type.
 
-この実装は、ジェレミーG. Siek氏と共同研究者の仕事に続いて、型理論的な視点から静的および動的型付けのユニオンについて検討します。
-まず、*gradual type-checking*と*gradual type-inference*のトピックは gradual 型推論アルゴリズムの説明と関連研究についての議論が続く、議論されています。
+この実装は、Jeremy G. Siek氏と共同研究者の仕事に続いて、型理論的な視点から静的および動的型付けのユニオンについて検討します。
+まず、*gradual type-checking*と*gradual type-inference*の話題を考察し、gradual 型推論アルゴリズムの説明と関連研究について議論します。
 表記 `?` は動的型を示すために使用されます。
 
 
@@ -89,9 +91,9 @@ This means that implicit casts from type `?` to static types (e.g. `int`, `bool`
 One way to achieve this is to use subtyping; this was attempted by Satish Thatte in his paper Quasi-static typing [1].
 However, subtyping is a transitive relation, meaning that if `int <: ?` and `? <: bool`, then `int <: bool`, which is not something we want.
 
-漸進型チェックの目標は非常にシンプルです:
+漸進的型チェックの目標は非常にシンプルです:
 完全に注釈付けられた(すべての項が、静的な型を持つ)プログラムは完全に(静的に)型安全です。
-動的型の存在で、この目的を果たすことは非常にとらえどころのないことが判明しました。
+動的型の存在で、この目的を果たすことは非常にとらえどころのないことが分かりました。
 動的型付け言語の感覚を達成するために、我々は静的な型の値と動的型の値の間でシームレスに変換できるようにします。
 この意味は`?`型から静的型(例えば`int`、`bool`そして`int -> int`)への暗黙的型変換、及び静的型から`?`型へ戻す暗黙的型変換が許される必要があります。
 
@@ -109,7 +111,7 @@ In their paper [Gradual Typing for Functional Languages][gradual], Jeremy G. Sie
 In short, `?` is consistent with everything, base types are consistent only with themselves, and function types are consistent if their parameter and return types are consistent.
 
 彼らの論文では、[関数型言語のための段階的タイピング][gradual]、Jeremy G. Siek と Walid Tahaは、`?` に基づく 推移的関係では*ない* *型の一貫性*(`~`) を維持する別の方法を提案しました。
-要するに、`?`は すべてと一致し、ベースの型は自分自身だけで一致しており、関数の型はパラメータと戻り値の型が一致している場合、一致します。
+要するに、`?`は すべてと一致し、ベースの型は自分自身だけと一致して、関数の型はパラメータと戻り値の型が一致している場合に一致します。
 
 ```
 ? ~ int
@@ -173,7 +175,7 @@ To make this type system practical, we must extend the gradual type-checking alg
 The type inference algorithm should do what type inference algorithms usually do: allow the programmer to omit most, if not all, type annotations in programs that do not use dynamic types (i.e. that have no variables and parameters with type `?` and call no functions returning `?`).
 Meanwhile, the algorithm should not obstruct the programmer when he or she wants to use dynamic types.
 
-この型システムを実用的にするために、我々は漸進型推論アルゴリズムで漸進型チェックアルゴリズムを拡張する必要があります。
+この型システムを実用的にするために、我々は漸進的型推論アルゴリズムで漸進的型チェックアルゴリズムを拡張する必要があります。
 型推論アルゴリズムは、通常プログラマがほとんど省略することができ、すべてではないが、動的なタイプの使用しないプログラムに型注釈をかける(つまり、型`?`とは変数とパラメータを持たず、`?`を返す関数を呼び出さない)型推論アルゴリズムである必要があります。
 一方、彼または彼女が動的な型を使用したい場合、アルゴリズムは、プログラマを邪魔してはいけません。
 
@@ -221,7 +223,7 @@ In general, we want the inference algorithm to propagate `?`, but we do not want
 This idea was formalized by Jeremy G. Siek and Manish Vachharajani in their paper [Gradual Typing with Unification-based Inference][inference] using the *less or equally informative* relation and the requirement that the types assigned to unifiable type variables are at least as informative as any of the types constraining the type variable.
 
 一般的に、我々の推論アルゴリズムは、`?`を伝播したいのですが、我々はそれが任意の新鮮な`?`を導入したくはありません。
-このアイデアは、Jeremy G. SiekとManish Vachharajaniの論文[Gradual Typingの単一化ベース推論][inference]によって定式化され、単一化可能型変数に割り当てられたタイプは、少なくとも型変数を制約するタイプのいずれかのように情報を提供している*小さいか等しい有益な*関係と要件を使用。
+このアイデアは、Jeremy G. SiekとManish Vachharajaniの論文[Gradual Typingの単一化ベース推論][inference]によって定式化され、単一化可能型変数に割り当てられたタイプは、少なくとも型変数を制約するタイプのいずれかのように情報を提供している*小さいか等しい有益な*関係と要件を使用。　(TODO)
 
 <sup><sub>
 requirement 要件
@@ -397,7 +399,7 @@ However, if a dynamic function `fun (x : ?) -> not x` is cast to type `bool -> i
 The research into the topic of correctly assigning *blame* in gradually-typed programs has culminated in the *blame theorem*, which states that "well-typed programs cannot be blamed", meaning that blame is always assigned to the dynamically-typed portion of the program.
 A nice overview of this topic is provided in [5].
 
-漸進型推論は複雑ではありませんが、前進的型付けされた言語の実装上で、動的型付けされた関数が静的な型にキャストされたとき、あるいは静的型付けされた関数が動的コードで使用されたときに、特に注意が必要です。
+漸進的型推論は複雑ではありませんが、前進的型付けされた言語の実装上で、動的型付けされた関数が静的な型にキャストされたとき、あるいは静的型付けされた関数が動的コードで使用されたときに、特に注意が必要です。
 1つの問題は、実行時エラーの正確な報告です; 例えば、関数 `inc : int -> int` が動的型にキャストして、引数`true`で呼ばれたときに、システムは関数が間違った型の引数を指定して*呼ばれた*というエラーを報告する必要があります。
 しかし、動的関数`fun (x : ?) -> not x`が`bool -> int`型にキャストされ、引数`true`を適用された場合は、関数が誤ったの値の型*返された*ことを報告する必要があります。
 前進的型付けされたプログラムで正しく割り当て*非難*のトピックの研究は、責任は常に動的に型付けされた部分に割り当てられていることを意味し、「よく型付けされたプログラムは非難することはできない」と述べている*の非難の定理*、で最高潮に達していますプログラムの。
