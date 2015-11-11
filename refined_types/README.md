@@ -21,7 +21,7 @@ Although _the type-checker_ only allows _refined types_ on _function parameters 
 _it_ can prove _the absence of some of the most common software bugs_ .
 
 これは、別な*refined types*と呼ばれる依存型の限られたバージョンのヒンドリミルナ型推論をかね揃えた静的型検査の型システムの実験です。
-型検査器は(関数の契約のような)関数のパラメータと返り値の型にのみ*refined types* をゆるすのであるけど、それはおおくのソフトウェアに共通したバグのいくつかがないことを証明出来ます。
+型検査器は(関数の契約のような)関数のパラメータと返り値の型にのみ*refined types* を書くことが出来ますが、それは多くのソフトウェアに共通したバグのいくつかがないことを証明出来ます。
 
 <sup><sub>
 consider 考慮する
@@ -112,11 +112,11 @@ _The details of the implementation_,
 including _the tricks_ that allow _functions to be handled as first-class values_,
 are explained below.
 
-Refined型検査の実装は、実際には非常にすなおで、私の予想よりはるかに簡単であることが分かりました。
+Refined型検査の実装は、実際には非常に素直で、予想よりはるかに簡単であることが分かりました。
 基本的に、プログラムの式や関数のパラメータと戻り値の型の契約は、数学的な式や論理ステートメントの列に変換されたもので、
 その妥当性は外部自動定理証明[Z3][z3]を用いて評価されたものです。
 実装の詳細は、
-ファーストクラスの値として関数を扱えるようにするトリックを含んでおり、以下の説明である。
+ファーストクラスの値として関数を扱えるようにするトリックを含んでおり、以下で説明します。
 
 <sup><sub>
 should すべきです
@@ -129,7 +129,7 @@ its それの
 _These examples_ use _a syntax similar to JavaScript or TypeScript_ that should be _familiar to most programmers_, which is _different from the [ML][ml-language]-like syntax_ that _the type-checker and its test cases_ use.
 
 *構文に関する注意:*
-これらの例では多くのプログラマにとって親しみやすくするべきであることにより、JavaScriptかTypeScriptに似た構文を使っています。しかし[ML][ml-language]ライクな構文をつかってる型検査やテストケースとは違います。
+これらの例では多くのプログラマにとって親しみやすくする為に、JavaScriptかTypeScriptに似た構文を用いていますが、型検査やテストケースで使用している[ML][ml-language]ライクな構文とは違います。
 
 > <sup><sub>
 Overview
